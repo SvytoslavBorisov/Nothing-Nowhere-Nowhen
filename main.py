@@ -33,7 +33,6 @@ def main_page():
 
 def main():
     db_session.global_init("db/baseDate.sqlite")
-    app.run()
 
 
 if __name__ == '__main__':
