@@ -24,7 +24,6 @@ def main_page():
     param['title'] = 'Главная страница'
     param['style'] = '/static/css/styleForMainPage.css'
     param['script'] = '/static/scripts/scriptFor_main_page.js'
-    param['height_top_menu'] = '75px'
 
     if request.method == 'GET':
         return render_template('main_page.html', **param)
