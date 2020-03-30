@@ -35,5 +35,4 @@ def main():
     db_session.global_init("db/baseDate.sqlite")
 
 
-if __name__ == '__main__':
-    main()
+main()
