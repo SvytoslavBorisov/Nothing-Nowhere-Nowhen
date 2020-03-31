@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <link rel="shortcut icon" href="{{ icon }}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForHeader.css">
     <link rel="stylesheet" type="text/css" href="{{ style }}">
     <title>{{ title }}</title>
 </head>
@@ -12,9 +13,12 @@
                 <p class="heading">Что? Где? Когда?</p>
             </div>
             <div id="all_navigator_div">
-                <div class="navigator_div" id="navigator_div1">
+                <a href="/aboutUs">
+                    <div class="navigator_div" id="navigator_div1">
                     <p class="navigator_p">О сайте</p>
                 </div>
+                </a>
+
                 <div class="navigator_div" id="navigator_div2">
                     <p class="navigator_p">Играть</p>
                 </div>
@@ -24,8 +28,12 @@
                 {% if current_user.is_authenticated %}
                     <a class="navbar-brand" href="/user_info/{{ current_user.nickname }}">
                         <div class="navigator_div" id="navigator_div4">
-                            <img src="/{{ current_user.avatar }}" alt="" width="40px" height="40px" class="user_avatar_navigator">
-                            <p class="navigator_p">{{ current_user.nickname }}</p>
+                            <img src="/{{ current_user.avatar }}" alt="" width="40px" height="40px" id="user_avatar_navigator">
+                            {% if current_user.nickname[10] %}
+                            <p class="navigator_p" id="user_nickname_p">{{ current_user.nickname[:10] + '...' }}</p>
+                            {% else %}
+                            <p class="navigator_p" id="user_nickname_p">{{ current_user.nickname[:10] }}</p>
+                            {% endif %}
                         </div>
                     </a>
                 {% else %}
@@ -44,3 +52,4 @@
 
 </body>
 </html>
+<script src="/static/scripts/scriptForBase.js"></script>

@@ -13,7 +13,7 @@ class User(SqlAlchemyBase, UserMixin):
 
     surname = sqlalchemy.Column(sqlalchemy.String)
     name = sqlalchemy.Column(sqlalchemy.String)
-    nickname = sqlalchemy.Column(sqlalchemy.String)
+    nickname = sqlalchemy.Column(sqlalchemy.String, unique=True)
 
     email = sqlalchemy.Column(sqlalchemy.String, unique=True)
     password = sqlalchemy.Column(sqlalchemy.String, nullable=True)

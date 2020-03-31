@@ -159,4 +159,10 @@ def add_question(user):
     return render_template('add_question.html', form=form, **param)
 
 
-app.run()
+@app.route('/aboutUs', methods=['POST', 'GET'])
+def aboutUs():
+    param = {}
+
+    param['title'] = 'О сайте'
+    param['style'] = '/static/css/styleForAddQuestion.css'
+    return render_template('about_sait.html', **param)
