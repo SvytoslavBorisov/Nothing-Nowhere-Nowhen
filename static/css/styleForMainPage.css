@@ -1,6 +1,7 @@
 body {
-    background: rgb(45, 45, 45);
+    background: rgb(60, 60, 60);
     margin: 0px;
+    overflow-y: scroll;
     font-family: "Verdana", serif;
 }
 

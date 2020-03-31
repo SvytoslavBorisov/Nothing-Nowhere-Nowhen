@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="color: rgb(255, 255, 255); text-align: center; margin-top: 100px;">Авторизация</h1>
+
+    <div id="login_div">
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.email.label }}<br>
+                {{ form.email(class="form-control", type="email") }}<br>
+                {% for error in form.email.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.password.label }}<br>
+                {{ form.password(class="form-control", type="password") }}<br>
+                {% for error in form.password.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </p>
+            <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+            <p>{{ form.submit(type="submit", class="btn btn-primary", id='button_loginIN') }}</p>
+            <div>{{ message }}</div>
+            <div><a href="/register" id="a_for_register">Зарегистрироваться</a></div>
+        </form>
+    </div>
+
+{% endblock %}

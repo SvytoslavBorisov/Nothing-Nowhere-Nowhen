@@ -3,7 +3,7 @@
 {% block content %}
     <h1 style="color: rgb(255, 255, 255); text-align: center; margin-top: 100px;">Выбор темы</h1>
     {% for item in categories %}
-        <a href="/main_page" id="playCategory">
+        <a href="/categories" id="playCategory">
             <div id="categories">
                 <div id="categoriesName">{{ item.name }}</div>
                 <div id="categoriesDescription">{{ item.description }}</div>

@@ -2,6 +2,7 @@ import datetime
 import sqlalchemy
 from .db_session import SqlAlchemyBase
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(SqlAlchemyBase, UserMixin):
@@ -22,6 +23,12 @@ class User(SqlAlchemyBase, UserMixin):
     start_date = sqlalchemy.Column(sqlalchemy.Date, default=datetime.datetime.now)
 
     avatar = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    links = sqlalchemy.Column(sqlalchemy.String)
+    link_vk = sqlalchemy.Column(sqlalchemy.String)
 
     state = sqlalchemy.Column(sqlalchemy.String, unique=True)
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)

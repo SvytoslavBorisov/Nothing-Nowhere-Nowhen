@@ -22,8 +22,12 @@
                     <p class="navigator_p">Рейтинг</p>
                 </div>
                 <div class="navigator_div" id="navigator_div4">
-                    <img src="/static/img/users_avatars/1.png" alt="" width="40px" height="40px" class="user_avatar_navigator">
-                    <p class="navigator_p">Святослав Борисов</p>
+                    {% if current_user.is_authenticated %}
+                        <img src="{{ current_user.avatar }}" alt="" width="40px" height="40px" class="user_avatar_navigator">
+                        <p class="navigator_p">{{ current_user.nickname }}</p>
+                    {% else %}
+                        <a href="/login" class="navigator_p">Войти</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
