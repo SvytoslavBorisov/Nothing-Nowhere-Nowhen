@@ -18,5 +18,7 @@ class Question(SqlAlchemyBase):
 
     who_add = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
 
+    images = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+
     orm_with_category = orm.relation('Category')
     orm_with_users = orm.relation('User')

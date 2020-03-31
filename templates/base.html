@@ -1,45 +1,36 @@
-               <!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="shortcut icon" href="{{ icon }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ style }}">
     <title>{{ title }}</title>
-
 </head>
 <body>
     <div id="top_menuDiv">
-
-        <div class="title_div">
-            <p class="heading">Что? Где? Когда?</p>
-        </div>
-
-        <div id="all_navigator_div">
-            <div class="navigator_div" id="navigator_div1">
-                <p class="navigator_p">О сайте</p>
+        <div style="overflow: hidden; background: rgb(45,45,45);">
+            <div class="title_div">
+                <p class="heading">Что? Где? Когда?</p>
             </div>
-
-            <div class="navigator_div" id="navigator_div2">
-                <p class="navigator_p">Играть</p>
-            </div>
-
-            <div class="navigator_div" id="navigator_div3">
-                <p class="navigator_p">Рейтинг</p>
-            </div>
-
-            <div class="navigator_div" id="navigator_div4">
-                <img src="/static/img/users_avatars/1.png" alt="" width="40px" height="40px" class="user_avatar_navigator">
-                <p class="navigator_p">Святослав Борисов</p>
+            <div id="all_navigator_div">
+                <div class="navigator_div" id="navigator_div1">
+                    <p class="navigator_p">О сайте</p>
+                </div>
+                <div class="navigator_div" id="navigator_div2">
+                    <p class="navigator_p">Играть</p>
+                </div>
+                <div class="navigator_div" id="navigator_div3">
+                    <p class="navigator_p">Рейтинг</p>
+                </div>
+                <div class="navigator_div" id="navigator_div4">
+                    <img src="/static/img/users_avatars/1.png" alt="" width="40px" height="40px" class="user_avatar_navigator">
+                    <p class="navigator_p">Святослав Борисов</p>
+                </div>
             </div>
         </div>
-
+        <div id="top_fonLine"></div>
     </div>
 
-    {% block content %}
-
-
-
-    {% endblock %}
+    {% block content %}{% endblock %}
 
 </body>
 </html>
-<script src="static/scripts/scriptForBase.js"></script>

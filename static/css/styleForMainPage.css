@@ -1,68 +1,72 @@
 body {
-    background: green;
-    overflow: scroll;
-    background: white;
+    background: rgb(45, 45, 45);
     margin: 0px;
+    font-family: "Verdana", serif;
 }
 
 .title_div {
-   width: 20%;
-   height: 60x;
-   float:left;
+    width: 20%;
+    float: left;
 }
 
 #all_navigator_div {
-   width: 80%;
-   float: left;
+    width: 80%;
+    float: left;
 }
 
 p.heading {
-   margin: 0px;
-   padding-left: 10px;
-   padding-top: 10px;
-   text-align: left;
-   font-size: 40px;
-   color: white;
+    margin: 0px;
+    padding-left: 10px;
+    padding-top: 10px;
+    text-align: left;
+    font-size: 40px;
+    color: white;
 }
 
 .navigator_p {
-   font-size: 20px;
-   margin: 0px;
-   text-align: center;
-   vertical-align: bottom;
-   color: white;
+    font-size: 20px;
+    margin: 0px;
+    text-align: center;
+    vertical-align: bottom;
+    color: white;
 }
 
 .navigator_div {
-   width: 90px;
-   float: left;
-   padding-left: 10px;
-   padding-right: 10px;
-   padding-top: 25px;
-   padding-bottom: 3px;
-   text-align: center;
-   cursor: pointer;
+    width: 90px;
+    height: 47px;
+    max-height: 75px;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 25px;
+    padding-bottom: 3px;
+    text-align: center;
+    cursor: pointer;
 }
 
 #navigator_div4 {
-   float: right;
-   width: 180px;
-   padding-top: 15px;
+    float: right;
+    width: 180px;
+    height: 57px;
+    max-height: 75px;
+    padding-top: 15px;
 }
 
 .navigator_div:hover {
-   background: rgb(237, 238, 240);
+    background-color: rgb(237, 238, 240);
+    color: #000;
 }
 
 #top_menuDiv {
-   top: 0px;
-   left: 0px;
-   z-index: 101;
-   text-align: center;
-   font: 200% serif;
-   background: black;
-   margin: 0px;
-   padding: 0px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    font: 200% serif;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    position: fixed;
 }
 
 .user_avatar_navigator {
@@ -70,4 +74,37 @@ p.heading {
     border: 2px solid gray;
     box-shadow: 0 0 7px #666;
     float: left;
+}
+
+#top_fonLine {
+    width: 100%;
+    height: 4px;
+    background-color: rgba(0,0,0,0.1);
+}
+
+#categories {
+    margin-left: 30%;
+    width: 40%;
+    background: rgb(255, 255, 255);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1%;
+}
+
+#categoriesName {
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 3%;
+    margin-top: 2.5%;
+}
+
+#categoriesDescription {
+    margin-left: 3%;
+    margin-top: 0.5%;
+    margin-bottom: 2.5%;
+}
+
+#playCategory {
+    text-decoration: none;
+    color: black;
 }
