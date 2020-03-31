@@ -7,6 +7,10 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.categories import Category
+from data.questions import Question
+from forms.register import RegisterForm
+from forms.login import LoginForm
+from forms.add_question import AddQuestionForm
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -44,25 +48,6 @@ def load_user(user_id):
     return session.query(users.User).get(user_id)
 
 
-class LoginForm(FlaskForm):
-    email = PasswordField('Почта', validators=[DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    remember_me = BooleanField('Запомнить меня')
-    submit = SubmitField('Войти')
-
-
-class RegisterForm(FlaskForm):
-    surname = StringField('Фамилия', validators=[DataRequired()])
-    name = StringField('Имя', validators=[DataRequired()])
-    nickname = StringField('Под каким именем вас видят другие пользователи', validators=[DataRequired()])
-
-    email = StringField('Почта', validators=[DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
-
-    submit = SubmitField('Зарегистрироваться')
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     session = db_session.create_session()
@@ -98,7 +83,6 @@ def register():
 
     param['title'] = 'Главная страница'
     param['style'] = '/static/css/styleForRegister.css'
-    param['script'] = ''
 
     form = RegisterForm()
     if form.validate_on_submit():
@@ -122,7 +106,6 @@ def register():
                 user.email = request.form['email']
                 user.set_password(request.form['password'])
                 session.add(user)
-                session.commit()
                 if request.files.get('file'):
                     f = request.files['file']
                     user.avatar = f'static/img/users_avatars/{user.id}.png'
@@ -134,3 +117,46 @@ def register():
                 return redirect('/categories')
 
     return render_template('register.html', form=form, **param)
+
+
+@app.route('/user_info/<string:user>')
+@login_required
+def user_info(user):
+    param = {}
+
+    param['title'] = 'Профиль'
+    param['style'] = '/static/css/styleForUserInfo.css'
+
+    return render_template('user_info.html', **param)
+
+
+@app.route('/add_question/<string:user>', methods=['POST', 'GET'])
+@login_required
+def add_question(user):
+    session = db_session.create_session()
+    param = {}
+
+    param['title'] = 'Создать вопрос'
+    param['style'] = '/static/css/styleForAddQuestion.css'
+
+    form = AddQuestionForm()
+    if form.validate_on_submit():
+        question = Question()
+        question.text = request.form['text']
+        question.category = session.query(Category).filter(Category.name == request.form['category']).first().id
+        question.answers = "!@#$%".join([request.form['answer'], request.form['wrong_answer1'], request.form['wrong_answer2'], request.form['wrong_answer3']])
+        question.right_answer = request.form['answer']
+        question.who_add = current_user.id
+        if current_user.state == "admin":
+            question.is_promoted = True
+        else:
+            question.is_promoted = False
+        session.add(question)
+        session.commit()
+
+        return redirect(f'/user_info/{user}')
+
+    return render_template('add_question.html', form=form, **param)
+
+
+app.run()
