@@ -2,74 +2,63 @@
 
 {% block content %}
     <h1 style="color: rgb(255, 255, 255); text-align: center; margin-top: 100px;">Регистрация</h1>
-
-    <div id="login_div">
+    <div id="register_div">
         <form action="" method="post" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    {{ form.csrf_token }}
-    <p>
-        {{ form.email.label }}<br>
-        {{ form.email(class="form-control", type="email") }}<br>
-        {% for error in form.email.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.password.label }}<br>
-        {{ form.password(class="form-control", type="password") }}<br>
-        {% for error in form.password.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.password_again.label }}<br>
-        {{ form.password_again(class="form-control", type="password") }}<br>
-        {% for error in form.password_again.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.surname.label }}<br>
-        {{ form.surname(class="form-control") }}<br>
-        {% for error in form.surname.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.name.label }}<br>
-        {{ form.name(class="form-control") }}<br>
-        {% for error in form.name.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.nickname.label }}<br>
-        {{ form.nickname(class="form-control") }}<br>
-        {% for error in form.nickname.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p> Выберите аватар
-        <div class="form-group">
-            <input type="file" id="photo" name="file">
-        </div>
-    </p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary", id='button_register') }}</p>
-    <p>{{message}}</p>
-    <div><a href="/login" id="a_for_register">Войти</a></div>
-</form>
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+            <div class="register_label" id="register_label_top">{{ form.email.label }}</div>
+            <div class="register_input_div">{{ form.email(class="register_input", type="email") }}</div>
+            {% for error in form.email.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+            <div class="register_label">{{ form.surname.label }}</div>
+            <div class="register_input_div">{{ form.surname(class="register_input") }}</div>
+            {% for error in form.surname.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+            <div class="register_label">{{ form.name.label }}</div>
+            <div class="register_input_div">{{ form.name(class="register_input") }}</div>
+            {% for error in form.name.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+            <div class="register_label">{{ form.nickname.label }}</div>
+            <div class="register_input_div">{{ form.nickname(class="register_input") }}</div>
+            {% for error in form.nickname.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+            <div class="register_label">Выберите аватар</div>
+            <div id="photo_div">
+                <input type="file" id="photo" name="file">
+                <label for="photo" class="input__file-button">Выберите файл</label>
+            </div>
+            <div class="register_label" id="top_from_photo">{{ form.password.label }}</div>
+            <div class="register_input_div">{{ form.password(class="register_input", type="password") }}</div>
+            {% for error in form.password.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+            <div class="register_label">{{ form.password_again.label }}</div>
+            <div class="register_input_div">{{ form.password_again(class="register_input", type="password", id="register_input_bottom") }}</div>
+            {% for error in form.password_again.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+            <div id="register_button">{{ form.submit(type="submit", id="button_registerIN") }}</div>
+            <div id="login_div">Уже с нами? <a href="/login" id="a_for_login">Войти</a></div>
+            {% if message != "" %}
+                <div id="message" >{{ message }}</div>
+            {% endif %}
+        </form>
     </div>
 
 {% endblock %}

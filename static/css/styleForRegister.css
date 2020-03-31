@@ -83,18 +83,109 @@ p.heading {
     background-color: rgba(0,0,0,0.1);
 }
 
-#login_div {
-    text-align: center;
+#register_div {
     font-size: 20px;
     color: rgb(200, 200, 200);
+    background-color: rgb(70, 70, 70);
+    margin: 0 auto;
+    width: 700px;
+    padding-top: 40px;
+    padding-bottom: 30px;
+    border-radius: 35px;
+    box-shadow: 0 3px 0 rgb(55, 55, 55);
+    margin-bottom: 100px;
 }
 
-#button_register {
-    width: 10%;
-    font-size: 18px;
+#button_registerIN {
+    width: 40%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
 }
 
-#a_for_register {
-    color: rgb(200, 200, 200);
-    font-size: 16px;
+#button_registerIN:active {
+    background-color: rgb(190, 0, 0);
+}
+
+#register_button {
+    margin-top: 15px;
+    text-align: center;
+}
+
+#a_for_login {
+    text-decoration: none;
+    color: red;
+}
+
+.register_label {
+    background-color: rgb(60, 60, 60);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 600px;
+    margin: 0 auto;
+}
+
+.register_input {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 20px;
+    width: 606px;
+    border-radius: 1px;
+    outline: none;
+}
+
+.register_input_div {
+    margin-left: 40px;
+}
+
+#login_div {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#register_label_top {
+    border-radius: 10px 10px 0 0;
+}
+
+#register_input_bottom {
+    border-radius: 0 0 10px 10px;
+}
+
+#photo {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+#photo_div {
+    width: 619px;
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    margin: 0 auto;
+}
+
+#photo_div:active {
+    background-color: rgb(190, 0, 0);
+}
+
+#top_from_photo {
+    margin-top: 5px;
+}
+
+#message {
+    text-align: center;
 }
