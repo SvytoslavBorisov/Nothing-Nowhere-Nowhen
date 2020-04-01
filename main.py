@@ -215,5 +215,3 @@ def start_game(id_):
     param['questions'] = selected
 
     return render_template('start_game.html', **param)
-
-app.run()
