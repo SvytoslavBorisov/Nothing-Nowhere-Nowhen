@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, url_for
 from data import db_session, users, questions
+from datetime import datetime
 from flask_wtf import FlaskForm
 from flask_ngrok import run_with_ngrok
 import datetime
@@ -102,9 +103,13 @@ def register():
                 user.name = request.form['name']
                 user.surname = request.form['surname']
                 user.nickname = request.form['nickname']
-
                 user.email = request.form['email']
                 user.set_password(request.form['password'])
+                user.rating = 0
+                user.wins = 0
+                user.defeats = 0
+                user.add_questions = 0
+                user.games = 0
                 session.add(user)
                 session.commit()
                 if request.files.get('file'):
@@ -131,9 +136,8 @@ def user_info(user):
         param['procent_win'] = int((current_user.wins / current_user.games) * 100)
         param['procent_def'] = int(100 - param['procent_win'])
     else:
-        param['procent_win'] = 50
-        param['procent_def'] = 50
-
+        param['procent_win'] = 100
+        param['procent_def'] = 100
 
     return render_template('user_info.html', **param)
 
@@ -168,9 +172,45 @@ def add_question(user):
 
 
 @app.route('/about_site', methods=['POST', 'GET'])
-def aboutUs():
+def about_site():
     param = {}
 
     param['title'] = 'О сайте'
     param['style'] = '/static/css/styleForAboutSite.css'
     return render_template('about_site.html', **param)
+
+
+@app.route('/game/<int:id_>')
+def game(id_):
+    session = db_session.create_session()
+    param = {}
+
+    param['title'] = 'Начать игру'
+    param['style'] = '/static/css/styleForGame.css'
+    param['category'] = session.query(Category).filter(Category.id == id_).first()
+
+    return render_template('game.html', **param)
+
+
+@app.route('/start_game/<int:id_>')
+def start_game(id_):
+    session = db_session.create_session()
+    param = {}
+
+    param['title'] = 'Игра'
+    param['style'] = '/static/css/styleForStartGame.css'
+    quests = []
+    for question in session.query(Question).filter(Question.category == id_):
+        quests.append(question)
+    selected = []
+    for _ in range(min(len(quests), 6)):
+        k = choice(quests)
+        while k in selected:
+            k = choice(quests)
+        selected.append(k)
+    param['questions'] = selected
+
+    return render_template('start_game.html', **param)
+
+
+app.run()

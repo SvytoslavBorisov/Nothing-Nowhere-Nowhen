@@ -1,11 +1,11 @@
 function showDiagramm(procent_def, procent_win) {var dataset = [
   {
     value: procent_def,
-    color: 'rgb(137, 200, 211)'
+    color: 'white'
   },
   {
     value: procent_win,
-    color: 'white'
+    color: 'rgb(255, 70, 0)'
   }
 ];
 

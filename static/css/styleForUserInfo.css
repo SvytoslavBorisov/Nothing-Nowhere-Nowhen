@@ -34,6 +34,7 @@ h1 {
     background: rgb(70, 70, 70);
     color: white;
     border-radius: 10px;
+    box-shadow: 0 3px 0 rgb(55, 55, 55);
 }
 
 #user_info_p_name {
@@ -55,16 +56,11 @@ h1 {
 }
 
 #p_statistic {
-    font-size: 20px;
-    float: left;
-    width: 473px;
-    padding-left: 10px;
-    padding-bottom: 10px;
-    margin: 0px;
+    font-size: 30px;
 }
 
 .top_line_user_info {
-   width: 300px;
+   width: 460px;
    color: rgb(70, 70, 70);
    margin-left: 5px;
    margin-top: 5px;
@@ -140,4 +136,55 @@ h1 {
   border-radius: 50%;
   top: 25%;
   left: 25%;
+}
+
+#addQuestion {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    width: 200px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+}
+
+#addQuestion:active {
+    background-color: rgb(190, 0, 0);
+}
+
+#addQuestionLink {
+    text-decoration: none;
+    color: #FFF;
+}
+
+#logout {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    width: 200px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+}
+
+#logout:active {
+    background-color: rgb(190, 0, 0);
+}
+
+
+#logoutLink {
+    text-decoration: none;
+    color: #FFF;
+}
+
+#allLinks {
+    margin-top: 200px;
 }
