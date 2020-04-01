@@ -6,4 +6,21 @@ h1 {
 
 #addQuestion {
     text-align: center;
+    color: red;
+}
+
+#logout {
+    margin-top: 30px;
+    text-align: center;
+    color: red;
+}
+
+#addQuestionLink {
+    text-decoration: none;
+    color: red;
+}
+
+#logoutLink {
+    text-decoration: none;
+    color: red;
 }

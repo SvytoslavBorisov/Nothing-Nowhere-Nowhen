@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="text-align: center; color: #FFF; margin-top: 100px;">Игра</h1>
+    {% for quest in questions %}
+        <h3 style="text-align: center; color: #FFF;">{{ quest.text }}</h3>
+    {% endfor %}
+{% endblock %}

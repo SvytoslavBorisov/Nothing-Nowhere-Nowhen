@@ -1,3 +1,4 @@
+from random import choice
 from flask import Flask, render_template, redirect, request, url_for
 from data import db_session, users, questions
 from flask_wtf import FlaskForm
@@ -159,10 +160,47 @@ def add_question(user):
     return render_template('add_question.html', form=form, **param)
 
 
-@app.route('/aboutUs', methods=['POST', 'GET'])
-def aboutUs():
+@app.route('/about_site', methods=['POST', 'GET'])
+def about_site():
     param = {}
 
     param['title'] = 'О сайте'
     param['style'] = '/static/css/styleForAddQuestion.css'
-    return render_template('about_sait.html', **param)
+
+    return render_template('about_site.html', **param)
+
+
+@app.route('/game/<int:id_>')
+def game(id_):
+    session = db_session.create_session()
+    param = {}
+
+    param['title'] = 'Начать игру'
+    param['style'] = '/static/css/styleForGame.css'
+    param['category'] = session.query(Category).filter(Category.id == id_).first()
+
+    return render_template('game.html', **param)
+
+
+@app.route('/start_game/<int:id_>')
+def start_game(id_):
+    session = db_session.create_session()
+    param = {}
+
+    param['title'] = 'Игра'
+    param['style'] = '/static/css/styleForStartGame.css'
+    quests = []
+    for question in session.query(Question).filter(Question.category == id_):
+        quests.append(question)
+    selected = []
+    for _ in range(min(len(quests), 6)):
+        k = choice(quests)
+        while k in selected:
+            k = choice(quests)
+        selected.append(k)
+    param['questions'] = selected
+
+    return render_template('start_game.html', **param)
+
+
+app.run()
