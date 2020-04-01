@@ -27,6 +27,12 @@ class User(SqlAlchemyBase, UserMixin):
 
     state = sqlalchemy.Column(sqlalchemy.String, unique=True)
 
+    wins = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    defeats = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    games = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+
+    add_questions = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
 

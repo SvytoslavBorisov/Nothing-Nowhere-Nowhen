@@ -1,9 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ current_user.nickname }}</h1>
+
+    <div id="main_div_user_info">
+        <div id="user_avatar">
+            <img src="/{{ current_user.avatar }}" alt="" id="user_avatar_img">
+        </div>
+        <div id="user_info">
+            <p id="user_info_p_name">{{ current_user.surname + ' ' + current_user.name + ' "' + current_user.nickname + '" ' }}</p>
+            <hr class="top_line_user_info">
+            <p id="user_info_p_rating">Рейтинг: {{ current_user.rating }}</p>
+            <p id="user_info_p_email">Email: {{ current_user.email }}</p>
+            <hr class="top_line_user_info">
+            <div id="statistic_user">
+                <p id="p_statistic">Статистика</p>
+                <script src="/static/scripts/scriptForUserInfo.js"></script>
+                <div id="wins_cont">
+                    <p>Побед</p>
+                    <div class="container" ><p style="position: relative; z-index:1;" class="p_procent">{{ procent_win }}%</p></div>
+
+                </div>
+                <div id="defeats_cont">
+                    <p>Поражений</p>
+                    <div class="container1" ><p style="position: relative; z-index:1;" class="p_procent">{{ procent_def }}%</p></div>
+                </div>
+                <script>
+                    showDiagramm1({{ procent_win }}, {{ procent_def }});
+                    showDiagramm({{ procent_win }}, {{ procent_def }})
+                </script>
+            </div>
+
+        </div>
+
+<div id="addQuestion">
+
+            <a href="/add_question/{{ current_user.nickname }}">Добавить вопрос</a></div>
+    </div>
 
     <!-- Информация о пользователе -->
 
-    <div id="addQuestion"><a href="/add_question/{{ current_user.nickname }}">Добавить вопрос</a></div>
+
 {% endblock %}

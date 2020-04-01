@@ -127,6 +127,8 @@ def user_info(user):
 
     param['title'] = 'Профиль'
     param['style'] = '/static/css/styleForUserInfo.css'
+    param['procent_win'] = int((current_user.wins / current_user.games) * 100)
+    param['procent_def'] = int(100 - param['procent_win'])
 
     return render_template('user_info.html', **param)
 
@@ -167,3 +169,5 @@ def aboutUs():
     param['title'] = 'О сайте'
     param['style'] = '/static/css/styleForAboutSite.css'
     return render_template('about_site.html', **param)
+
+app.run()

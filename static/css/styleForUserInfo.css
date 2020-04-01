@@ -7,3 +7,137 @@ h1 {
 #addQuestion {
     text-align: center;
 }
+
+#main_div_user_info {
+    margin:auto;
+    margin-top: 124px;
+    width: 700px;
+    background: rgb(60, 60, 60);
+}
+
+#user_avatar {
+    width:217px;
+    float:left;
+
+}
+
+#user_avatar_img {
+    width: 185px;
+    height: 185px;
+    border-radius: 100px;
+    border: 5px solid gray;
+}
+
+#user_info {
+    float: left;
+    width: 473px;
+    background: rgb(70, 70, 70);
+    color: white;
+    border-radius: 10px;
+}
+
+#user_info_p_name {
+    margin: 0px;
+    padding: 0px;
+    font-size: 25px;
+    padding-left: 10px;
+    padding-top: 15px;
+}
+
+#user_info_p_rating, #user_info_p_email {
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+    padding-left: 10px;
+    width: 473px;
+    float: left;
+    padding-top: 2px;
+}
+
+#p_statistic {
+    font-size: 20px;
+    float: left;
+    width: 473px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    margin: 0px;
+}
+
+.top_line_user_info {
+   width: 300px;
+   color: rgb(70, 70, 70);
+   margin-left: 5px;
+   margin-top: 5px;
+   float: left;
+}
+
+#statistic_user {
+   text-align:center;
+   margin: auto;
+   width: 100%;
+}
+
+.p_procent {
+   padding-left: 0px;
+   padding-top: 16px;
+   font-size: 14px;
+}
+
+.container {
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  margin: auto;
+}
+
+.container1 {
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  margin: auto;
+}
+
+#wins_cont, #defeats_cont {
+  margin: auto;
+  padding-left: 20px;
+  float:left;
+}
+
+#wins_cont {
+  margin-left: 28%;
+}
+
+.sector {
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform-origin: left bottom;
+}
+
+.container:after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: rgb(60, 60, 60);
+  border-radius: 50%;
+  top: 25%;
+  left: 25%;
+}
+
+.container1:after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: rgb(60, 60, 60);
+  border-radius: 50%;
+  top: 25%;
+  left: 25%;
+}
