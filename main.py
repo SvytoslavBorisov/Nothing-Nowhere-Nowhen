@@ -162,7 +162,7 @@ def add_question(user):
     return render_template('add_question.html', form=form, **param)
 
 
-@app.route('/aboutUs', methods=['POST', 'GET'])
+@app.route('/about_site', methods=['POST', 'GET'])
 def aboutUs():
     param = {}
 
