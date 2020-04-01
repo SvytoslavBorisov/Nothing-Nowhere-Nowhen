@@ -95,3 +95,6 @@ dataset.reduce(function (prev, curr) {
     }, angle, true));
   })(curr, prev);
 }, 0);}
+
+document.getElementById('main_div_user_info').style.height = String(document.documentElement.clientHeight - 124) + 'px';
+document.getElementById('user_avatar_and_root').style.height = String(document.documentElement.clientHeight - 124) + 'px';

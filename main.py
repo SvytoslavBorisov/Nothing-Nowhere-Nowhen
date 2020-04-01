@@ -12,6 +12,7 @@ from data.questions import Question
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
+from random import choice
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -211,6 +212,3 @@ def start_game(id_):
     param['questions'] = selected
 
     return render_template('start_game.html', **param)
-
-
-app.run()

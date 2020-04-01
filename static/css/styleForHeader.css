@@ -8,11 +8,13 @@ body {
 .title_div {
     width: 400px;
     float: left;
+    background: rgb(45,45,45);
 }
 
 #all_navigator_div {
     width: 70%;
     float: left;
+    background: rgb(45,45,45);
 }
 
 p.heading {
@@ -56,7 +58,10 @@ p.heading {
 
 .navigator_div:hover {
     background-color: rgb(237, 238, 240);
-    color: black;
+}
+
+.navigator_div:hover p{
+    color: #000;
 }
 
 #navigator_div5 {

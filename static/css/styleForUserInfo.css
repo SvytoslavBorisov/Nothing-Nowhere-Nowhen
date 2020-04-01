@@ -9,32 +9,44 @@ h1 {
 }
 
 #main_div_user_info {
-    margin:auto;
-    margin-top: 124px;
-    width: 700px;
-    background: rgb(60, 60, 60);
+    margin: auto;
+    margin-top: 110px;
+    width: 740px;
+    background: rgb(70, 70, 70);
+    border-radius: 10px;
+    height: 0px;
 }
 
 #user_avatar {
-    width:217px;
-    float:left;
+    width: 217px;
+}
 
+#user_root {
+    width: 217px;
+    padding-left: 7px;
+    float: left;
 }
 
 #user_avatar_img {
     width: 185px;
     height: 185px;
     border-radius: 100px;
+    margin-left: 20px;
+    margin-top: 10px;
     border: 5px solid gray;
+    float: left;
 }
 
 #user_info {
-    float: left;
+    margin-top: 10px;
+    margin-left: 25px;
+    padding-bottom: 5px;
     width: 473px;
-    background: rgb(70, 70, 70);
+    background: rgb(60, 60, 60);
     color: white;
     border-radius: 10px;
     box-shadow: 0 3px 0 rgb(55, 55, 55);
+    float: left;
 }
 
 #user_info_p_name {
@@ -56,7 +68,16 @@ h1 {
 }
 
 #p_statistic {
-    font-size: 30px;
+    font-size: 20px;
+    width: 473px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    margin: 0px;
+}
+
+.p_windef {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .top_line_user_info {
@@ -65,6 +86,23 @@ h1 {
    margin-left: 5px;
    margin-top: 5px;
    float: left;
+}
+
+#user_avatar_and_root {
+   width: 217px ;
+   background: rgb(70, 70, 70);
+   float:left;
+   border-radius: 10px;
+   margin-right: 0px;
+}
+
+#user_root {
+   float:left;
+   border-radius: 10px;
+   margin-left: 10px;
+   margin-top: 10px;
+   box-shadow: 0 3px 0 rgb(55, 55, 55);
+   background: rgb(60, 60, 60);
 }
 
 #statistic_user {
@@ -173,6 +211,7 @@ h1 {
     border: none;
     box-shadow: 0 3px 0 rgb(190, 0, 0);
     outline: none;
+    text-align: center;
 }
 
 #logout:active {
@@ -186,5 +225,5 @@ h1 {
 }
 
 #allLinks {
-    margin-top: 200px;
+    margin-top: 10px;
 }
