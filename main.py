@@ -169,5 +169,3 @@ def aboutUs():
     param['title'] = 'О сайте'
     param['style'] = '/static/css/styleForAboutSite.css'
     return render_template('about_site.html', **param)
-
-app.run()
