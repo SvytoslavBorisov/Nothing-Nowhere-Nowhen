@@ -6,7 +6,7 @@ body {
 }
 
 .title_div {
-    width: 350px;
+    width: 400px;
     float: left;
 }
 
@@ -56,7 +56,16 @@ p.heading {
 
 .navigator_div:hover {
     background-color: rgb(237, 238, 240);
-    color: #000;
+    color: black;
+}
+
+#navigator_div5 {
+    float: right;
+    width: 180px;
+    height: 57px;
+    max-height: 75px;
+    padding-top: 15px;
+    box-sizing: content-box;
 }
 
 #top_menuDiv {
@@ -69,6 +78,7 @@ p.heading {
     padding: 0px;
     overflow: hidden;
     position: fixed;
+    font-family: "Verdana", serif;
 }
 
 #user_avatar_navigator {
@@ -86,6 +96,5 @@ p.heading {
 
 #user_nickname_p {
     padding-top: 10px;
-    padding-left: 10px;
-    float: left;
+    text-align: center;
 }

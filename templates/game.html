@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="color: #FFF; text-align: center; margin-top: 100px;">Выбрана категория:</h1>
+    <h3 style="color: #FFF; text-align: center;">{{ category.name }}</h3>
+    <div id="links">
+        <a class="link" href="/start_game/{{ category.id }}">Начать игру</a>
+        <a class="link" href="/categories">Вернуться к категориям</a>
+    </div>
+{% endblock %}
