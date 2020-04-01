@@ -127,8 +127,13 @@ def user_info(user):
 
     param['title'] = 'Профиль'
     param['style'] = '/static/css/styleForUserInfo.css'
-    param['procent_win'] = int((current_user.wins / current_user.games) * 100)
-    param['procent_def'] = int(100 - param['procent_win'])
+    if current_user.games:
+        param['procent_win'] = int((current_user.wins / current_user.games) * 100)
+        param['procent_def'] = int(100 - param['procent_win'])
+    else:
+        param['procent_win'] = 50
+        param['procent_def'] = 50
+
 
     return render_template('user_info.html', **param)
 
