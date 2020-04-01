@@ -106,6 +106,7 @@ def register():
                 user.email = request.form['email']
                 user.set_password(request.form['password'])
                 session.add(user)
+                session.commit()
                 if request.files.get('file'):
                     f = request.files['file']
                     user.avatar = f'static/img/users_avatars/{user.id}.png'
@@ -164,5 +165,5 @@ def aboutUs():
     param = {}
 
     param['title'] = 'О сайте'
-    param['style'] = '/static/css/styleForAddQuestion.css'
-    return render_template('about_sait.html', **param)
+    param['style'] = '/static/css/styleForAboutSite.css'
+    return render_template('about_site.html', **param)
