@@ -61,6 +61,10 @@
     margin-left: 40px;
 }
 
+#category {
+width: 620px;
+}
+
 #register_div {
     margin-top: 10px;
     text-align: center;

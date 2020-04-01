@@ -28,7 +28,7 @@
                 </div>
             {% endfor %}
             <div class="login_label">{{ form.category.label }}</div>
-            <div class="login_input_div">{{ form.category(class="login_input") }}</div>
+            <div class="login_input_div">{{ form.category(class="login_input")}}</div>
             {% for error in form.category.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}

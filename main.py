@@ -151,8 +151,11 @@ def add_question(user):
 
     param['title'] = 'Создать вопрос'
     param['style'] = '/static/css/styleForAddQuestion.css'
+    param['categories'] = session.query(Category).all()
 
     form = AddQuestionForm()
+    form.category.choices = [(x.name, x.name) for x in param['categories']]
+    form.category.default = param['categories'][0].name
     if form.validate_on_submit():
         question = Question()
         question.text = request.form['text']
@@ -212,3 +215,5 @@ def start_game(id_):
     param['questions'] = selected
 
     return render_template('start_game.html', **param)
+
+app.run()
