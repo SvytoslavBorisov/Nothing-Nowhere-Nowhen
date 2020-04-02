@@ -32,11 +32,7 @@
                 {% if current_user.is_authenticated %}
                     <a class="navbar-brand" href="/user_info/{{ current_user.nickname }}">
                         <div class="navigator_div" id="navigator_div4">
-                            {% if current_user.avatar != None %}
-                                <img src="/{{ current_user.avatar }}" alt="" width="40px" height="40px" id="user_avatar_navigator">
-                            {% else %}
-                                <img src="/static/img/users_avatars/no_photo.png" alt="" width="40px" height="40px" id="user_avatar_navigator">
-                            {% endif %}
+                            <img src="/{{ current_user.avatar }}" alt="" width="40px" height="40px" id="user_avatar_navigator">
                             {% if current_user.nickname[10] %}
                                 <p class="navigator_p" id="user_nickname_p">{{ current_user.nickname[:10] + '...' }}</p>
                             {% else %}

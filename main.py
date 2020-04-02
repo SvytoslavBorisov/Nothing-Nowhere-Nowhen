@@ -134,6 +134,8 @@ def register():
                     user.avatar = f'static/img/users_avatars/{user.id}.png'
                     with open(user.avatar, 'wb') as f1:
                         f1.write(f.read())
+                else:
+                    user.avatar = f'static/img/users_avatars/no_photo.png'
                 session.commit()
                 login_user(user)
 
