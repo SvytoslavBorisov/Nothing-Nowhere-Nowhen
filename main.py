@@ -215,7 +215,6 @@ def game(id_):
 
 @app.route('/start_game/<int:id_>')
 def start_game(id_):
-    print(1)
     session = db_session.create_session()
 
     quests = []
@@ -240,6 +239,7 @@ def current_game(quests):
     param['title'] = 'Начать игру'
     param['style'] = '/static/css/styleForCurrentGame.css'
     param['question'] = session.query(Question).filter(Question.id == int(questions[int(questions[-2])])).first()
+    param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
     param['answers'] = param['question'].answers.split('!@#$%')
     param['current_number_quest'] = int(questions[-2])
     param['count_quests'] = len(quests.split('!@$')) - 2
