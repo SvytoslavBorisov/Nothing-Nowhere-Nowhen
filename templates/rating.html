@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <script src="/static/scripts/scriptForRating.js"></script>
     <h1>Рейтинг</h1>
     <div>
         <table id="rating_div">
@@ -11,12 +12,14 @@
                 <th>Рейтинг</th>
             </tr>
             {% for user in users %}
-                <tr class="user_div">
+
+                <tr class="user_div" onclick="toUser('{{ user.nickname }}')">
                     <td>{{ loop.index }}</td>
                     <td>{{ user.nickname }}</td>
                     <td>{{ user.surname }} {{user.name}}</td>
                     <td>{{ user.rating }}</td>
                 </tr>
+
             {% endfor %}
         </table>
     </div>

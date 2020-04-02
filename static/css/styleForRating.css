@@ -12,6 +12,7 @@ h1 {
     padding-bottom: 10px;
     padding-left: 20px;
     width: 600px;
+    cursor: pointer;
 }
 
 #rating_div {
