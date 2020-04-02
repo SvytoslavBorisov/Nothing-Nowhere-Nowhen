@@ -4,24 +4,26 @@
     <div id="main_div_user_info">
         <div id="user_avatar_and_root">
             <div id="user_avatar">
-                <img src="/{{ current_user.avatar }}" alt="" id="user_avatar_img">
+                <img src="/{{ user.avatar }}" alt="" id="user_avatar_img">
             </div>
-            <div id="user_root">
-                <div id="allLinks">
-                    <a id="addQuestionLink" href="/add_question/{{ current_user.nickname }}">
-                        <div id="addQuestion">Создать вопрос</div>
-                    </a>
-                    <a id="logoutLink" href="/logout">
-                        <div id="logout">Выйти</div>
-                    </a>
+            {% if current_user.id == user.id %}
+                <div id="user_root">
+                    <div id="allLinks">
+                        <a id="addQuestionLink" href="/add_question/{{ user.nickname }}">
+                            <div id="addQuestion">Создать вопрос</div>
+                        </a>
+                        <a id="logoutLink" href="/logout">
+                            <div id="logout">Выйти</div>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
         <div id="user_info">
-            <p id="user_info_p_name">{{ current_user.surname + ' ' + current_user.name + ' "' + current_user.nickname + '" ' }}</p>
+            <p id="user_info_p_name">{{ user.surname + ' ' + user.name + ' "' + user.nickname + '" ' }}</p>
             <hr class="top_line_user_info">
-            <p id="user_info_p_rating">Рейтинг: {{ current_user.rating }}</p>
-            <p id="user_info_p_email">Почта: {{ current_user.email }}</p>
+            <p id="user_info_p_rating">Рейтинг: {{ user.rating }}</p>
+            <p id="user_info_p_email">Почта: {{ user.email }}</p>
             <hr class="top_line_user_info">
             <div id="statistic_user">
                 <p id="p_statistic">Статистика</p>

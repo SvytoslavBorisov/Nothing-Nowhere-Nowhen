@@ -9,6 +9,7 @@ from wtforms.validators import DataRequired
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.categories import Category
 from data.questions import Question
+from data.users import User
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
@@ -47,7 +48,7 @@ def main_page():
 @login_manager.user_loader
 def load_user(user_id):
     session = db_session.create_session()
-    return session.query(users.User).get(user_id)
+    return session.query(User).get(user_id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -61,7 +62,7 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = session.query(users.User).filter(users.User.email == form.email.data).first()
+        user = session.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
             return redirect('/categories')
@@ -88,19 +89,19 @@ def register():
 
     form = RegisterForm()
     if form.validate_on_submit():
-        user = session.query(users.User).filter(users.User.email == form.email.data).first()
+        user = session.query(User).filter(User.email == form.email.data).first()
         if user:
             return render_template('register.html',
                                    message="Пользователь с такой почтой уже есть",
                                    form=form, **param)
         else:
-            user = session.query(users.User).filter(users.User.nickname == form.nickname.data).first()
+            user = session.query(User).filter(User.nickname == form.nickname.data).first()
             if user:
                 return render_template('register.html',
                                        message="Пользователь с таким ником уже есть",
                                        form=form, **param)
             else:
-                user = users.User()
+                user = User()
                 user.name = request.form['name']
                 user.surname = request.form['surname']
                 user.nickname = request.form['nickname']
@@ -127,14 +128,15 @@ def register():
 
 
 @app.route('/user_info/<string:user>')
-@login_required
 def user_info(user):
+    session = db_session.create_session()
     param = {}
 
     param['title'] = 'Профиль'
     param['style'] = '/static/css/styleForUserInfo.css'
-    if current_user.games:
-        param['procent_win'] = int((current_user.wins / current_user.games) * 100)
+    param['user'] = session.query(User).filter(User.nickname == user).first()
+    if param['user'].games:
+        param['procent_win'] = int((param['user'].wins / param['user'].games) * 100)
         param['procent_def'] = int(100 - param['procent_win'])
     else:
         param['procent_win'] = 100
@@ -215,3 +217,20 @@ def start_game(id_):
     param['questions'] = selected
 
     return render_template('start_game.html', **param)
+
+
+@app.route('/rating')
+def rating():
+    session = db_session.create_session()
+    param = {}
+
+    param['title'] = 'Рейтинг'
+    param['style'] = 'static/css/styleForRating.css'
+    all_users = session.query(User).all()
+    all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))
+    param['users'] = all_users
+
+    return render_template('rating.html', **param)
+
+
+app.run()

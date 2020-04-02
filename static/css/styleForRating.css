@@ -1,0 +1,30 @@
+h1 {
+    text-align: center;
+    color: #FFF;
+    margin-top: 100px;
+}
+
+.user_div {
+    text-align: center;
+    color: #FFF;
+    background-color: rgb(60, 60, 60);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 600px;
+}
+
+#rating_div {
+    font-size: 20px;
+    color: rgb(200, 200, 200);
+    background-color: rgb(70, 70, 70);
+    margin: 0 auto;
+    width: 700px;
+    padding: 40px;
+    border-radius: 35px;
+    box-shadow: 0 3px 0 rgb(55, 55, 55);
+}
+
+td {
+    padding: 10px;
+}

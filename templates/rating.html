@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Рейтинг</h1>
+    <div>
+        <table id="rating_div">
+            <tr class="user_div">
+                <th>Место</th>
+                <th>Ник</th>
+                <th>Имя</th>
+                <th>Рейтинг</th>
+            </tr>
+            {% for user in users %}
+                <tr class="user_div">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ user.nickname }}</td>
+                    <td>{{ user.surname }} {{user.name}}</td>
+                    <td>{{ user.rating }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
