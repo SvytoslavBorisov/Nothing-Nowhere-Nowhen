@@ -1,0 +1,1 @@
+document.getElementById('game_div').style.height = String(document.documentElement.clientHeight - 124) + 'px';

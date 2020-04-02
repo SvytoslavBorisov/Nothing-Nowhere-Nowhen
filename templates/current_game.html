@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="game_div">
+        <p id='p_game'>Игра</p>
+        <p id="p_level">Уровень: {{ current_number_quest + 1 }} из {{ count_quests }}</p>
+        <p id="p_question">Вопрос:</p>
+        <p id="p_time">Осталось:</p>
+        <div id="div_question_text">
+            <p id="p_question_text">
+                {{ question.text }}
+            </p>
+        </div>
+        <div id="div_question_time">
+            <p id="p_question_time">
+                {{ 60 - current_time }}
+            </p>
+            <script>
+                    var time = {{ 60 - current_time }};
+
+                    function minusSec() {
+                        time--;
+                        if (time < 0) {
+                            document.getElementById('p_question_time').innerHTML = "Закончилось";
+                        } else {
+                            document.getElementById('p_question_time').textContent = time;
+                        }
+                    };
+
+                    setInterval(minusSec, 1000);
+                </script>
+        </div>
+        <p id="p_answers"> Варианты: </p>
+        <div id="div_questions_answers">
+            <div id='div_questions_answers_up'>
+                <div class="div_questions_answer" id="div_questions_answer1">
+                    <p class="p_questions_answer"> {{ answers[0] }} </p>
+                </div>
+                <div class="div_questions_answer" id="div_questions_answer2">
+                    <p class="p_questions_answer"> {{ answers[1] }} </p>
+                </div>
+            </div>
+            <div id='div_questions_answers_down'>
+                <div class="div_questions_answer" id="div_questions_answer3">
+                    <p class="p_questions_answer"> {{ answers[2] }} </p>
+                </div>
+                <div class="div_questions_answer" id="div_questions_answer4">
+                    <p class="p_questions_answer"> {{ answers[3] }} </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/scripts/scriptForCurrentGame.js"></script>
+{% endblock %}

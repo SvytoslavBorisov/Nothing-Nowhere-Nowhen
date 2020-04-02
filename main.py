@@ -4,6 +4,9 @@ from datetime import datetime
 from flask_wtf import FlaskForm
 from flask_ngrok import run_with_ngrok
 import datetime
+import socket
+import struct
+import time
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -20,6 +23,18 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db_session.global_init("db/baseDate.sqlite")
+
+
+def get_time():
+    address = ('pool.ntp.org', 123)
+    msg = '\x1b' + '\0' * 47
+
+    client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    client.sendto(bytes(msg, encoding='utf-8'), address)
+    msg, _ = client.recvfrom(1024)
+
+    secs = struct.unpack("!12I", msg)[10] - 2208988800
+    return secs
 
 
 @app.route('/')
@@ -200,11 +215,9 @@ def game(id_):
 
 @app.route('/start_game/<int:id_>')
 def start_game(id_):
+    print(1)
     session = db_session.create_session()
-    param = {}
 
-    param['title'] = 'Игра'
-    param['style'] = '/static/css/styleForStartGame.css'
     quests = []
     for question in session.query(Question).filter(Question.category == id_):
         quests.append(question)
@@ -214,9 +227,26 @@ def start_game(id_):
         while k in selected:
             k = choice(quests)
         selected.append(k)
-    param['questions'] = selected
+    return redirect(f'/current_game/{"!@$".join([str(x.id) for x in selected]) + "!@$" + "0" + "!@$" + str(get_time())}')
 
-    return render_template('start_game.html', **param)
+
+@app.route('/current_game/<quests>')
+def current_game(quests):
+    session = db_session.create_session()
+    param = {}
+    questions = quests.split('!@$')
+    param['current_time'] = get_time() - int(questions[-1])
+
+    param['title'] = 'Начать игру'
+    param['style'] = '/static/css/styleForCurrentGame.css'
+    param['question'] = session.query(Question).filter(Question.id == int(questions[int(questions[-2])])).first()
+    param['answers'] = param['question'].answers.split('!@#$%')
+    param['current_number_quest'] = int(questions[-2])
+    param['count_quests'] = len(quests.split('!@$')) - 2
+    if param['current_time'] > 60:
+        temp = quests.split('!@$')[:-2]
+        return redirect(f'/current_game/{"!@$".join([x for x in temp]) + "!@$" + str(param["current_number_quest"] + 1) + "!@$" + str(get_time())}')
+    return render_template('current_game.html', **param)
 
 
 @app.route('/rating')
@@ -231,6 +261,3 @@ def rating():
     param['users'] = all_users
 
     return render_template('rating.html', **param)
-
-
-app.run()
