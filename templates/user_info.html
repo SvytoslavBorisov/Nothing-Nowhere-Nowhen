@@ -4,7 +4,11 @@
     <div id="main_div_user_info">
         <div id="user_avatar_and_root">
             <div id="user_avatar">
-                <img src="/{{ user.avatar }}" alt="" id="user_avatar_img">
+                {% if user.avatar != None %}
+                    <img src="/{{ user.avatar }}" alt="" id="user_avatar_img">
+                {% else %}
+                    <img src="/static/img/users_avatars/no_photo.png" alt="" id="user_avatar_img">
+                {% endif %}
             </div>
             {% if current_user.id == user.id %}
                 <div id="user_root">
