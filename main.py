@@ -16,7 +16,7 @@ from data.users import User
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
-from random import choice
+from random import choice, shuffle
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -228,27 +228,72 @@ def start_game(id_):
         while k in selected:
             k = choice(quests)
         selected.append(k)
-    return redirect(f'/current_game/{"!@$".join([str(x.id) for x in selected]) + "!@$" + "0" + "!@$" + str(get_time())}')
+    temp_data = ['0', '1', '2', '3']
+    shuffle(temp_data)
+    return redirect(f'/current_game/{"!@$".join([str(x.id) for x in selected]) + "!@$" +  "".join(temp_data) + "!@$" + "0" + "!@$" + str(get_time())}')
 
 
-@app.route('/current_game/<quests>')
+@app.route('/current_game/<quests>', methods=['POST', 'GET'])
 def current_game(quests):
     session = db_session.create_session()
     param = {}
     questions = quests.split('!@$')
     param['current_time'] = get_time() - int(questions[-1])
 
-    param['title'] = 'Начать игру'
+    param['title'] = 'Идёт игра'
     param['style'] = '/static/css/styleForCurrentGame.css'
     param['question'] = session.query(Question).filter(Question.id == int(questions[int(questions[-2])])).first()
     param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
-    param['answers'] = param['question'].answers.split('!@#$%')
+    param['answers'] = ['', '', '', '']
+    param['answers'][0] = param['question'].answers.split('!@#$%')[int(questions[-3][0])]
+    param['answers'][1] = param['question'].answers.split('!@#$%')[int(questions[-3][1])]
+    param['answers'][2] = param['question'].answers.split('!@#$%')[int(questions[-3][2])]
+    param['answers'][3] = param['question'].answers.split('!@#$%')[int(questions[-3][3])]
     param['current_number_quest'] = int(questions[-2])
-    param['count_quests'] = len(quests.split('!@$')) - 2
-    if param['current_time'] > 60:
-        temp = quests.split('!@$')[:-2]
-        return redirect(f'/current_game/{"!@$".join([x for x in temp]) + "!@$" + str(param["current_number_quest"] + 1) + "!@$" + str(get_time())}')
-    return render_template('current_game.html', **param)
+    if request.method == 'GET':
+        if param['current_time'] > 60:
+            temp = quests.split('!@$')[:-3]
+            result = False
+            return redirect(f'/next_quest/{"!@$".join([x for x in temp]) + "!@$" + questions[-3] + "!@$" + str(param["current_number_quest"]) + "!@$" + str(result)}')
+        return render_template('current_game.html', **param)
+    elif request.method == 'POST':
+        if request.form.get('option'):
+            if request.form['option'] == param['question'].right_answer:
+                result = True
+            else:
+                result = False
+        temp = quests.split('!@$')[:-3]
+        return redirect(f'/next_quest/{"!@$".join([x for x in temp]) + "!@$" + questions[-3] + "!@$" + str(param["current_number_quest"]) + "!@$" + str(result)}')
+
+
+@app.route('/next_quest/<quests>', methods=['POST', 'GET'])
+def next_quest(quests):
+    session = db_session.create_session()
+    param = {}
+    questions = quests.split('!@$')
+
+    param['result'] = 'Правильно' if questions[-1] == 'True' else "Неправильно"
+
+    param['title'] = 'Ответ'
+    param['style'] = '/static/css/styleForCurrentGame.css'
+    param['question'] = session.query(Question).filter(Question.id == int(questions[int(questions[-2])])).first()
+    param['answers'] = ['', '', '', '']
+    param['answers'][0] = param['question'].answers.split('!@#$%')[int(questions[-3][0])]
+    param['answers'][1] = param['question'].answers.split('!@#$%')[int(questions[-3][1])]
+    param['answers'][2] = param['question'].answers.split('!@#$%')[int(questions[-3][2])]
+    param['answers'][3] = param['question'].answers.split('!@#$%')[int(questions[-3][3])]
+    param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
+    param['current_number_quest'] = int(questions[-2])
+    temp = quests.split('!@$')[:-3]
+    if request.method == 'GET':
+        return render_template('next_game.html', **param)
+    elif request.method == 'POST':
+        temp_data = ['0', '1', '2', '3']
+        shuffle(temp_data)
+        if param["current_number_quest"] + 1 < len(temp):
+            return redirect(f'/current_game/{"!@$".join([x for x in temp]) + "!@$" + "".join(temp_data) + "!@$" + str(param["current_number_quest"] + 1) + "!@$" + str(get_time())}')
+        else:
+            return redirect('/categories')
 
 
 @app.route('/rating')

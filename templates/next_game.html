@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="game_div">
+        <p id='p_game'>Игра</p>
+        {% if current_user.is_authenticated %}
+            <div id="player">
+                <img id="player_icon" src="/{{ current_user.avatar }}" width="40px" height="40px">
+                {{ current_user.nickname }}
+            </div>
+        {% else %}
+            <div id="player">
+                <img id="player_icon" src="/static/img/users_avatars/no_photo.png" width="40px" height="40px">
+                Гость
+            </div>
+        {% endif %}
+        <div id="opponent">
+            {{ user.nickname }}
+            <img id="opponent_icon" src="/{{ user.avatar }}" width="40px" height="40px">
+        </div>
+        <p id="p_question">Вопрос:</p>
+        <p id="p_time">Осталось:</p>
+        <div id="div_question_text">
+            <p id="p_question_text">
+                {{ question.text }}
+            </p>
+        </div>
+        <p>Вы ответили {{ result }}</p>
+        <form class="login_form" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="submit" value="Далее" id="b_answer_question">
+            </div>
+        </form>
+    </div>
+    <script src="/static/scripts/scriptForCurrentGame.js"></script>
+{% endblock %}

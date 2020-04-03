@@ -45,24 +45,29 @@
                 </script>
         </div>
         <p id="p_answers"> Варианты: </p>
-        <div id="div_questions_answers">
-            <div id='div_questions_answers_up'>
-                <div class="div_questions_answer" id="div_questions_answer1">
-                    <p class="p_questions_answer"> {{ answers[0] }} </p>
-                </div>
-                <div class="div_questions_answer" id="div_questions_answer2">
-                    <p class="p_questions_answer"> {{ answers[1] }} </p>
+        <form class="login_form" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <div id="div_questions_answers">
+                    <div id='div_questions_answers_up'>
+                        <div class="div_questions_answer" id="div_questions_answer1">
+                            <input type="radio" name="option" value="{{ answers[0] }}" id="checkbox1" onchange="changeRadioBox('checkbox1')"><p class="p_questions_answer"> {{ answers[0] }} </p>
+                        </div>
+                        <div class="div_questions_answer" id="div_questions_answer2">
+                            <input type="radio" name="option" value="{{ answers[1] }}" id="checkbox2"  onchange="changeRadioBox('checkbox2')"><p class="p_questions_answer"> {{ answers[1] }} </p>
+                        </div>
+                    </div>
+                    <div id='div_questions_answers_down'>
+                        <div class="div_questions_answer" id="div_questions_answer3">
+                            <input type="radio" name="option" value="{{ answers[2] }}" id="checkbox3"  onchange="changeRadioBox('checkbox3')"><p class="p_questions_answer"> {{ answers[2] }} </p>
+                        </div>
+                        <div class="div_questions_answer" id="div_questions_answer4">
+                            <input type="radio" name="option" value="{{ answers[3] }}" id="checkbox4"  onchange="changeRadioBox('checkbox4')"><p class="p_questions_answer"> {{ answers[3] }} </p>
+                        </div>
+                    </div>
+                    <input type="submit" value="Отправить" id="b_answer_question">
                 </div>
             </div>
-            <div id='div_questions_answers_down'>
-                <div class="div_questions_answer" id="div_questions_answer3">
-                    <p class="p_questions_answer"> {{ answers[2] }} </p>
-                </div>
-                <div class="div_questions_answer" id="div_questions_answer4">
-                    <p class="p_questions_answer"> {{ answers[3] }} </p>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
     <script src="/static/scripts/scriptForCurrentGame.js"></script>
 {% endblock %}

@@ -137,3 +137,46 @@
     border: 2px solid gray;
     box-shadow: 0 0 7px #666;
 }
+
+#checkbox1 {
+    margin-top: 0px;
+    cursor: pointer;
+    width: 170px;
+    height: 50px;
+    opacity: 0;
+    position: absolute;
+    z-index: 1;
+}
+
+#checkbox2 {
+    margin-top: 0px;
+    cursor: pointer;
+    width: 170px;
+    height: 50px;
+    opacity: 0;
+    position: absolute;
+    z-index: 1;
+}
+
+#checkbox3 {
+    margin-top: 0px;
+    cursor: pointer;
+    width: 170px;
+    height: 50px;
+    opacity: 0;
+    position: absolute;
+    z-index: 1;
+}
+
+#checkbox4 {
+    margin-top: 0px;
+    cursor: pointer;
+    width: 170px;
+    height: 50px;
+    opacity: 0;
+    position: absolute;
+    z-index: 1;
+}
+b_answer_question {
+    float: left;
+}
