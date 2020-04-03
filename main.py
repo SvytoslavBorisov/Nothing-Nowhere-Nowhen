@@ -250,9 +250,10 @@ def current_game(quests):
     param['answers'][2] = param['question'].answers.split('!@#$%')[int(questions[-3][2])]
     param['answers'][3] = param['question'].answers.split('!@#$%')[int(questions[-3][3])]
     param['current_number_quest'] = int(questions[-2])
+    temp = quests.split('!@$')[:-3]
+    param['path'] = f'/next_quest/{"!@$".join([x for x in temp]) + "!@$" + questions[-3] + "!@$" + str(param["current_number_quest"]) + "!@$" + "time"}'
     if request.method == 'GET':
         if param['current_time'] > 60:
-            temp = quests.split('!@$')[:-3]
             result = False
             return redirect(f'/next_quest/{"!@$".join([x for x in temp]) + "!@$" + questions[-3] + "!@$" + str(param["current_number_quest"]) + "!@$" + str(result)}')
         return render_template('current_game.html', **param)
@@ -262,7 +263,8 @@ def current_game(quests):
                 result = True
             else:
                 result = False
-        temp = quests.split('!@$')[:-3]
+        else:
+            result = False
         return redirect(f'/next_quest/{"!@$".join([x for x in temp]) + "!@$" + questions[-3] + "!@$" + str(param["current_number_quest"]) + "!@$" + str(result)}')
 
 
@@ -272,7 +274,7 @@ def next_quest(quests):
     param = {}
     questions = quests.split('!@$')
 
-    param['result'] = 'Правильно' if questions[-1] == 'True' else "Неправильно"
+    param['result'] = 'Вы ответиили правильно' if questions[-1] == 'True' else 'Вы не успели ответить' if questions[-1] == 'time' else 'Вы неправильно ответили'
 
     param['title'] = 'Ответ'
     param['style'] = '/static/css/styleForCurrentGame.css'

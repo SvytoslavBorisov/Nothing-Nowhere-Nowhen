@@ -36,6 +36,7 @@
                         time--;
                         if (time < 0) {
                             document.getElementById('p_question_time').innerHTML = "Закончилось";
+                            document.location.href = '{{ path }}';
                         } else {
                             document.getElementById('p_question_time').textContent = time;
                         }
