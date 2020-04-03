@@ -13,6 +13,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from data.categories import Category
 from data.questions import Question
 from data.users import User
+from data.games import Game
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
@@ -273,8 +274,7 @@ def next_quest(quests):
     session = db_session.create_session()
     param = {}
     questions = quests.split('!@$')
-
-    param['result'] = 'Вы ответиили правильно' if questions[-1] == 'True' else 'Вы не успели ответить' if questions[-1] == 'time' else 'Вы неправильно ответили'
+    param['result'] = 'Вы ответиили правильно' if questions[-1] == 'True' else 'Вы не успели ответить' if questions[-1] == 'time' else 'Вы ответили неправильно'
 
     param['title'] = 'Ответ'
     param['style'] = '/static/css/styleForCurrentGame.css'
@@ -295,6 +295,14 @@ def next_quest(quests):
         if param["current_number_quest"] + 1 < len(temp):
             return redirect(f'/current_game/{"!@$".join([x for x in temp]) + "!@$" + "".join(temp_data) + "!@$" + str(param["current_number_quest"] + 1) + "!@$" + str(get_time())}')
         else:
+            game_res = Game()
+            game_res.category = 1  # Изменить
+            game_res.result = 1  # Изменить
+            game_res.who_play = current_user.id
+            game_res.questions = '!@$'.join(quests.split('!@$')[0:-3])
+            game_res.result_questions = '111111'  # Изменить
+            session.add(game_res)
+            session.commit()
             return redirect('/categories')
 
 

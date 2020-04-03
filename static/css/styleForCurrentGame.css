@@ -1,90 +1,114 @@
 #game_div {
-    margin: auto;
+    margin: 0 auto;
     margin-top: 110px;
+    padding-bottom: 30px;
     width: 740px;
-    background: rgb(70, 70, 70);
-    border-radius: 10px;
-    height: 0px;}
-
-
-#p_game {
-    text-align: center;
+    background-color: rgb(70, 70, 70);
+    border-radius: 35px;
     color: #FFF;
-    padding-top: 10px;
-    margin: 0px;
+    overflow: hidden;
+}
+
+h1 {
+    text-align: center;
+    padding-top: 25px;
+}
+
+#opponent {
+    float: right;
+}
+
+#player_icon {
+    float: left;
+    margin-top: 15px;
+    margin-left: 15px;
+    border-radius: 100px;
+    border: 2px solid gray;
+    box-shadow: 0 0 7px #666;
+}
+
+#opponent_icon {
+    float: right;
+    margin-top: 15px;
+    margin-right: 15px;
+    border-radius: 100px;
+    border: 2px solid gray;
+    box-shadow: 0 0 7px #666;
+}
+
+#player_name {
+    float: left;
+    font-size: 23px;
+    padding-top: 35px;
+    padding-left: 15px;
+}
+
+#opponent_name {
+    float: right;
+    font-size: 23px;
+    padding-top: 35px;
+    padding-right: 15px;
+}
+
+.checkbox {
+    cursor: pointer;
+    width: 170px;
+    height: 50px;
+    opacity: 0;
+    position: absolute;
+}
+
+#question {
+    margin-top: 40px;
+    margin-left: 50px;
+    margin-right: 50px;
     font-size: 30px;
+    text-align: justify;
+    background-color: rgb(60, 60, 60);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 35px;
 }
 
-#p_level {
-    text-align: center;
-    color: rgb(200, 200, 200);
-    padding-top: 5px;
-    margin: 0px;
-    font-size: 18px;
-}
-
-#p_question, #p_time {
-    text-align: center;
-    color: rgb(200, 200, 200);
-    font-size: 18px;
-    margin: 0px;
-    margin-top:10px;
-    width: 50%;
-    float: left;
-}
-
-#p_question {
-    width: 30%;
-    margin-top: 57px;
-}
-
-#p_time {
-}
-
-#p_answers {
-    width: 100%;
-    text-align: center;
-    color: white;
-    margin-top: 150px;
-    font-size: 25px;
-}
-
-#div_question_text {
-    width: 45%;
-    margin: 0px;
-    background: rgb(70, 70, 70);
-    padding-left: 10px;
-    float: left;
+#b_answer_question {
+    width: 150px;
     margin-top: 10px;
-}
-
-#p_question_text {
- margin: 0px;
-    text-align: center;
-    color: #FFF;
-}
-
-#div_question_time {
-    width: 45%;
-    margin: 0px;
-    background: rgb(70, 70, 70);
-    text-align: center;
-    padding-left: 100px:
-    padding-top: 10px;
-    float: left;
-}
-
-#p_question_time {
-    margin: 0px;
-    text-align: center;
-    color: #FFF;
-    padding-top: 10px;
+    padding-top: 7px;
+    padding-bottom: 7px;
     font-size: 20px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+}
+
+#button {
+    text-align: center;
+}
+
+#result {
+    border: 3px solid red;
+    width: 40%;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 30%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 20px;
+    color: red;
+}
+
+#question_time {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 20px;
 }
 
 #div_questions_answers {
-
-    height: 500px;
     text-align: center;
     width: 50%;
     margin: auto;
@@ -103,80 +127,23 @@
 .div_questions_answer  {
     width: 170px;
     height: 50px;
-    background: rgb(60, 60, 60);
+    background-color: rgb(200, 200, 200);
     font-size: 15px;
-    color: rgb(220, 220, 220);
+    color: rgb(60, 60, 60);
     margin: 0px 5px 10px 5px;
     padding: 0px;
     float:left;
     border-radius: 10px;
 }
 
+#p_answers {
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 25px;
+}
+
 .p_questions_answer {
-    margin-top: 10px;
-}
-
-#player {
-    float: left;
-    color: #FFF;
-}
-
-#opponent {
-    float: right;
-    color: #FFF;
-}
-
-#player_icon {
-    border-radius: 100px;
-    border: 2px solid gray;
-    box-shadow: 0 0 7px #666;
-}
-
-#opponent_icon {
-    border-radius: 100px;
-    border: 2px solid gray;
-    box-shadow: 0 0 7px #666;
-}
-
-#checkbox1 {
-    margin-top: 0px;
-    cursor: pointer;
-    width: 170px;
-    height: 50px;
-    opacity: 0;
-    position: absolute;
-    z-index: 1;
-}
-
-#checkbox2 {
-    margin-top: 0px;
-    cursor: pointer;
-    width: 170px;
-    height: 50px;
-    opacity: 0;
-    position: absolute;
-    z-index: 1;
-}
-
-#checkbox3 {
-    margin-top: 0px;
-    cursor: pointer;
-    width: 170px;
-    height: 50px;
-    opacity: 0;
-    position: absolute;
-    z-index: 1;
-}
-
-#checkbox4 {
-    margin-top: 0px;
-    cursor: pointer;
-    width: 170px;
-    height: 50px;
-    opacity: 0;
-    position: absolute;
-    z-index: 1;
-}
-b_answer_question {
-    float: left;
+    font-size: 20px;
+    padding-top: 12px;
 }

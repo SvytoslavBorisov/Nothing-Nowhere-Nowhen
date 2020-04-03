@@ -2,67 +2,53 @@
 
 {% block content %}
     <div id="game_div">
-        <p id='p_game'>Игра</p>
         {% if current_user.is_authenticated %}
-            <div id="player">
-                <img id="player_icon" src="/{{ current_user.avatar }}" width="40px" height="40px">
-                {{ current_user.nickname }}
-            </div>
+            <img id="player_icon" src="/{{ current_user.avatar }}" width="70px" height="70px">
+            <div id="player_name">{{ current_user.nickname }}</div>
         {% else %}
-            <div id="player">
-                <img id="player_icon" src="/static/img/users_avatars/no_photo.png" width="40px" height="40px">
-                Гость
-            </div>
+            <img id="player_icon" src="/static/img/users_avatars/no_photo.png" width="40px" height="40px">
+            <div id="player_name">Гость</div>
         {% endif %}
-        <div id="opponent">
-            {{ user.nickname }}
-            <img id="opponent_icon" src="/{{ user.avatar }}" width="40px" height="40px">
-        </div>
-        <p id="p_question">Вопрос:</p>
-        <p id="p_time">Осталось:</p>
-        <div id="div_question_text">
-            <p id="p_question_text">
-                {{ question.text }}
-            </p>
-        </div>
+        <img id="opponent_icon" src="/{{ user.avatar }}" width="70px" height="70px">
+        <div id="opponent_name">{{ user.nickname }}</div>
+        <h1>Вопрос</h1>
+        <div id="question">{{ question.text }}</div>
         <div id="div_question_time">
-            <p id="p_question_time">
-                {{ 60 - current_time }}
-            </p>
+            <div id="question_time">{{ 60 - current_time }}</div>
             <script>
-                    var time = {{ 60 - current_time }};
+                var time = {{ 60 - current_time }};
 
-                    function minusSec() {
-                        time--;
-                        if (time < 0) {
-                            document.getElementById('p_question_time').innerHTML = "Закончилось";
-                            document.location.href = '{{ path }}';
-                        } else {
-                            document.getElementById('p_question_time').textContent = time;
-                        }
-                    };
+                function minusSec() {
+                    time--;
+                    if (time < 0) {
+                        document.getElementById('question_time').innerHTML = "Закончилось";
+                        document.location.href = '{{ path }}';
+                    } else {
+                        document.getElementById('question_time').textContent = time;
+                    }
+                };
 
-                    setInterval(minusSec, 1000);
-                </script>
+                setInterval(minusSec, 1000);
+            </script>
         </div>
-        <p id="p_answers"> Варианты: </p>
+        <p id="p_answers">Варианты:</p>
         <form class="login_form" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <div id="div_questions_answers">
                     <div id='div_questions_answers_up'>
                         <div class="div_questions_answer" id="div_questions_answer1">
-                            <input type="radio" name="option" value="{{ answers[0] }}" id="checkbox1" onchange="changeRadioBox('checkbox1')"><p class="p_questions_answer"> {{ answers[0] }} </p>
+                            <input type="radio" name="option" value="{{ answers[0] }}" class="checkbox" id="checkbox1" onchange="changeRadioBox('checkbox1')"><div class="p_questions_answer"> {{ answers[0] }} </div>
                         </div>
                         <div class="div_questions_answer" id="div_questions_answer2">
-                            <input type="radio" name="option" value="{{ answers[1] }}" id="checkbox2"  onchange="changeRadioBox('checkbox2')"><p class="p_questions_answer"> {{ answers[1] }} </p>
+                            <input type="radio" name="option" value="{{ answers[1] }}" class="checkbox" id="checkbox2" onchange="changeRadioBox('checkbox2')"><div class="p_questions_answer"> {{ answers[1] }} </div>
                         </div>
                     </div>
                     <div id='div_questions_answers_down'>
                         <div class="div_questions_answer" id="div_questions_answer3">
-                            <input type="radio" name="option" value="{{ answers[2] }}" id="checkbox3"  onchange="changeRadioBox('checkbox3')"><p class="p_questions_answer"> {{ answers[2] }} </p>
+                            <input type="radio" name="option" value="{{ answers[2] }}" class="checkbox" id="checkbox3" onchange="changeRadioBox('checkbox3')"><div class="p_questions_answer"> {{ answers[2] }} </div>
                         </div>
                         <div class="div_questions_answer" id="div_questions_answer4">
-                            <input type="radio" name="option" value="{{ answers[3] }}" id="checkbox4"  onchange="changeRadioBox('checkbox4')"><p class="p_questions_answer"> {{ answers[3] }} </p>
+                            <input type="radio" name="option" value="{{ answers[3] }}" class="checkbox" id="checkbox4" onchange="changeRadioBox('checkbox4')"><div class="p_questions_answer"> {{ answers[3] }} </div>
                         </div>
                     </div>
                     <input type="submit" value="Отправить" id="b_answer_question">
