@@ -377,5 +377,3 @@ def end_game():
     param['style'] = '/static/css/styleForEndGame.css'
 
     return render_template('end_game.html', **param)
-
-app.run()
