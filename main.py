@@ -343,9 +343,6 @@ def next_quest(quests):
                 game_res.who_play = current_user.id
                 game_res.questions = '!@$'.join(data_from_path[0:-4])
                 game_res.result_questions = '111111'  # Изменить
-
-                print(count_right_answers)
-
                 session.add(game_res)
                 session.commit()
             return redirect('/categories')
