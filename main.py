@@ -376,9 +376,15 @@ def next_quest(quests_hash):
             return redirect(f'/current_game/{str(encrypted_text)[2:-1]}')
         else:
             if current_user.is_authenticated:
+                user = session.query(User).filter(User.id == current_user.id).first()
+                user.games += 1
+                user.wins += param['defeat'] != 6
+                user.defeats += param['win'] != 6
+                user.rating += 100 if param['defeat'] != 6 else 0
+
                 game_res = Game()
                 game_res.category = 1  # Изменить
-                game_res.result = 1  # Изменить
+                game_res.result = param['defeat'] != 6  # Изменить
                 game_res.who_play = current_user.id
                 game_res.questions = '!@$'.join(data_from_path[0:-4])
                 game_res.result_questions = '111111'  # Изменить
