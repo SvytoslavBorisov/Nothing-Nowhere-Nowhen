@@ -414,5 +414,3 @@ def end_game():
 
 cipher_key = Fernet.generate_key()
 cipher = Fernet(cipher_key)
-
-app.run()
