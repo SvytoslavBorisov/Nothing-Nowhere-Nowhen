@@ -6,12 +6,12 @@
             <img id="player_icon" src="/{{ current_user.avatar }}" width="70px" height="70px">
             <div id="player_name">{{ current_user.nickname }}</div>
         {% else %}
-            <img id="player_icon" src="/static/img/users_avatars/no_photo.png" width="40px" height="40px">
+            <img id="player_icon" src="/static/img/users_avatars/no_photo.png" width="70px" height="70px">
             <div id="player_name">Гость</div>
         {% endif %}
         <img id="opponent_icon" src="/{{ user.avatar }}" width="70px" height="70px">
         <div id="opponent_name">{{ user.nickname }}</div>
-        <h1>Вопрос</h1>
+        <h1>Вопрос {{ current_number_quest + 1 }}</h1>
         <div id="question">{{ question.text }}</div>
         <div id="div_question_time">
             <div id="question_time">{{ 60 - current_time }}</div>

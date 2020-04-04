@@ -6,14 +6,18 @@
             <img id="player_icon" src="/{{ current_user.avatar }}" width="70px" height="70px">
             <div id="player_name">{{ current_user.nickname }}</div>
         {% else %}
-            <img id="player_icon" src="/static/img/users_avatars/no_photo.png" width="40px" height="40px">
+            <img id="player_icon" src="/static/img/users_avatars/no_photo.png" width="70px" height="70px">
             <div id="player_name">Гость</div>
         {% endif %}
         <img id="opponent_icon" src="/{{ user.avatar }}" width="70px" height="70px">
         <div id="opponent_name">{{ user.nickname }}</div>
-        <h1>Вопрос</h1>
+        <h1>Вопрос {{ current_number_quest + 1}}</h1>
         <div id="question">{{ question.text }}</div>
-        <div id="result">{{ result }}</div>
+        {% if result == 'Вы ответили правильно' %}
+            <div id="result" style="color: green; border: 3px solid green;">{{ result }}</div>
+        {% else %}
+            <div id="result" style="color: red; border: 3px solid red;">{{ result }}</div>
+        {% endif%}
         <form class="login_form" method="post" enctype="multipart/form-data">
             <div id="button">
                 <input type="submit" value="Далее" id="b_answer_question">

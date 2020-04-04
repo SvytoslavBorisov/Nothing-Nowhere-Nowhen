@@ -223,86 +223,131 @@ def start_game(id_):
     quests = []
     for question in session.query(Question).filter(Question.category == id_):
         quests.append(question)
+
     selected = []
     for _ in range(min(len(quests), 6)):
         k = choice(quests)
         while k in selected:
             k = choice(quests)
         selected.append(k)
-    temp_data = ['0', '1', '2', '3']
-    shuffle(temp_data)
-    return redirect(f'/current_game/{"!@$".join([str(x.id) for x in selected]) + "!@$" +  "".join(temp_data) + "!@$" + "0" + "!@$" + str(get_time())}')
+
+    temp_data = ['0', '1', '2', '3']  # порядок вариантов
+    shuffle(temp_data)  # рандомно изменяем его
+
+    return redirect(f'/current_game/{"!@$".join([str(x.id) for x in selected])}'  # id вопросов, которые будут в игре
+                    f'{"!@$" +  "0"}'  # сколько игрок правильно ответил
+                    f'{"!@$" +  "".join(temp_data)}'  # порядок вариантов ответов
+                    f'{"!@$" + "0"}'  # номер текущего вопроса
+                    f'{"!@$" + str(get_time())}')  # текущее время из интернета
 
 
 @app.route('/current_game/<quests>', methods=['POST', 'GET'])
 def current_game(quests):
     session = db_session.create_session()
-    param = {}
-    questions = quests.split('!@$')
-    param['current_time'] = get_time() - int(questions[-1])
+    data_from_path = quests.split('!@$')
 
+    param = {}
     param['title'] = 'Идёт игра'
     param['style'] = '/static/css/styleForCurrentGame.css'
-    param['question'] = session.query(Question).filter(Question.id == int(questions[int(questions[-2])])).first()
+
+    count_right_answers = int(data_from_path[-4])
+
+    param['current_time'] = get_time() - int(data_from_path[-1])  # Разница между текущим и тем, когда началась игра
+
+    param['question'] = session.query(Question).filter(Question.id == int(data_from_path[int(data_from_path[-2])])).first()
     param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
+
     param['answers'] = ['', '', '', '']
-    param['answers'][0] = param['question'].answers.split('!@#$%')[int(questions[-3][0])]
-    param['answers'][1] = param['question'].answers.split('!@#$%')[int(questions[-3][1])]
-    param['answers'][2] = param['question'].answers.split('!@#$%')[int(questions[-3][2])]
-    param['answers'][3] = param['question'].answers.split('!@#$%')[int(questions[-3][3])]
-    param['current_number_quest'] = int(questions[-2])
-    temp = quests.split('!@$')[:-3]
-    param['path'] = f'/next_quest/{"!@$".join([x for x in temp]) + "!@$" + questions[-3] + "!@$" + str(param["current_number_quest"]) + "!@$" + "time"}'
+    for i in range(4):
+        param['answers'][i] = param['question'].answers.split('!@#$%')[int(data_from_path[-3][i])]
+    """
+       Для каждого ответа заранее заготовлен номер ячейки, где он будет находиться
+    """
+
+    param['current_number_quest'] = int(data_from_path[-2])
+
+    questions = data_from_path[:-4]
+    param['path'] = f'/next_quest/{"!@$".join([x for x in questions])}' \
+                    f'{"!@$" + str(count_right_answers)}' \
+                    f'{"!@$" + data_from_path[-3]}' \
+                    f'{"!@$" + str(param["current_number_quest"])}' \
+                    f'{"!@$" + "time"}'  # Результат ответа на вопрос
+
     if request.method == 'GET':
-        if param['current_time'] > 60:
+        if param['current_time'] > 60:  # Время на вопрос закончилось
             result = False
-            return redirect(f'/next_quest/{"!@$".join([x for x in temp]) + "!@$" + questions[-3] + "!@$" + str(param["current_number_quest"]) + "!@$" + str(result)}')
+            return redirect(f'/next_quest/{"!@$".join([x for x in questions])}'
+                            f'{"!@$" + str(count_right_answers)}'
+                            f'{"!@$" + data_from_path[-3]}'
+                            f'{"!@$" + str(param["current_number_quest"])}'
+                            f'{"!@$" + str(result)}')
         return render_template('current_game.html', **param)
     elif request.method == 'POST':
         if request.form.get('option'):
-            if request.form['option'] == param['question'].right_answer:
-                result = True
-            else:
-                result = False
+            result = request.form['option'] == param['question'].right_answer
         else:
             result = False
-        return redirect(f'/next_quest/{"!@$".join([x for x in temp]) + "!@$" + questions[-3] + "!@$" + str(param["current_number_quest"]) + "!@$" + str(result)}')
+        return redirect(f'/next_quest/{"!@$".join([x for x in questions])}'
+                        f'{"!@$" + str(count_right_answers)}'
+                        f'{"!@$" + data_from_path[-3]}'
+                        f'{"!@$" + str(param["current_number_quest"])}'
+                        f'{"!@$" + str(result)}')
 
 
 @app.route('/next_quest/<quests>', methods=['POST', 'GET'])
 def next_quest(quests):
     session = db_session.create_session()
-    param = {}
-    questions = quests.split('!@$')
-    param['result'] = 'Вы ответиили правильно' if questions[-1] == 'True' else 'Вы не успели ответить' if questions[-1] == 'time' else 'Вы ответили неправильно'
 
+    param = {}
     param['title'] = 'Ответ'
     param['style'] = '/static/css/styleForCurrentGame.css'
-    param['question'] = session.query(Question).filter(Question.id == int(questions[int(questions[-2])])).first()
+
+    data_from_path = quests.split('!@$')
+    param['result'] = 'Вы ответили правильно' if data_from_path[-1] == 'True' \
+        else 'Вы не успели ответить' if data_from_path[-1] == 'time' else 'Вы ответили неправильно'
+
+    count_right_answers = int(data_from_path[-4])
+    if data_from_path[-1] == 'True':
+        count_right_answers += 1
+
+    param['question'] = session.query(Question).filter(
+        Question.id == int(data_from_path[int(data_from_path[-2])])).first()
+    param['current_number_quest'] = int(data_from_path[-2])
+
     param['answers'] = ['', '', '', '']
-    param['answers'][0] = param['question'].answers.split('!@#$%')[int(questions[-3][0])]
-    param['answers'][1] = param['question'].answers.split('!@#$%')[int(questions[-3][1])]
-    param['answers'][2] = param['question'].answers.split('!@#$%')[int(questions[-3][2])]
-    param['answers'][3] = param['question'].answers.split('!@#$%')[int(questions[-3][3])]
+    for i in range(4):
+        param['answers'][i] = param['question'].answers.split('!@#$%')[int(data_from_path[-3][i])]
+
     param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
-    param['current_number_quest'] = int(questions[-2])
-    temp = quests.split('!@$')[:-3]
+
+    questions = data_from_path[:-4]
+
     if request.method == 'GET':
         return render_template('next_game.html', **param)
     elif request.method == 'POST':
-        temp_data = ['0', '1', '2', '3']
+
+        temp_data = ['0', '1', '2', '3']  # порядок вариантов
         shuffle(temp_data)
-        if param["current_number_quest"] + 1 < len(temp):
-            return redirect(f'/current_game/{"!@$".join([x for x in temp]) + "!@$" + "".join(temp_data) + "!@$" + str(param["current_number_quest"] + 1) + "!@$" + str(get_time())}')
+
+        if param["current_number_quest"] + 1 < len(questions):
+            return redirect(f'/current_game/{"!@$".join([x for x in questions])}'
+                            f'{"!@$" + str(count_right_answers)}'
+                            f'{"!@$" + "".join(temp_data)}'
+                            f'{"!@$" + str(param["current_number_quest"] + 1)}'
+                            f'{"!@$" + str(get_time())}')
         else:
-            game_res = Game()
-            game_res.category = 1  # Изменить
-            game_res.result = 1  # Изменить
-            game_res.who_play = current_user.id
-            game_res.questions = '!@$'.join(quests.split('!@$')[0:-3])
-            game_res.result_questions = '111111'  # Изменить
-            session.add(game_res)
-            session.commit()
+            if current_user.is_authenticated:
+                game_res = Game()
+                game_res.category = 1  # Изменить
+                game_res.result = 1  # Изменить
+                game_res.who_play = current_user.id
+                game_res.questions = '!@$'.join(data_from_path[0:-4])
+                game_res.result_questions = '111111'  # Изменить
+
+                print(count_right_answers)
+
+                session.add(game_res)
+                session.commit()
             return redirect('/categories')
 
 

@@ -14,9 +14,9 @@ class Game(SqlAlchemyBase):
 
     who_play = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
 
-    questions = sqlalchemy.Column(sqlalchemy.String)
+    questions = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
-    result_questions = sqlalchemy.Column(sqlalchemy.String)
+    result_questions = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     orm_with_category = orm.relation('Category')
     orm_with_users = orm.relation('User')
