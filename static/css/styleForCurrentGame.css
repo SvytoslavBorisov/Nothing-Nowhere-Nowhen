@@ -54,8 +54,8 @@ h1 {
 
 .checkbox {
     cursor: pointer;
-    width: 170px;
-    height: 50px;
+    width: calc(50% - 10px);
+    height: 60px;
     opacity: 0;
     position: absolute;
 }
@@ -110,7 +110,7 @@ h1 {
 
 #div_questions_answers {
     text-align: center;
-    width: 50%;
+    width: calc(100% - 100px);
     margin: auto;
 }
 
@@ -125,8 +125,8 @@ h1 {
 }
 
 .div_questions_answer  {
-    width: 170px;
-    height: 50px;
+    width: calc(50% - 10px);
+    height: 60px;
     background-color: rgb(200, 200, 200);
     font-size: 15px;
     color: rgb(60, 60, 60);
@@ -153,4 +153,28 @@ h1 {
     text-align: center;
     margin-top: 10px;
     margin-bottom: -20px;
+}
+
+#div_progressbar {
+    margin: auto;
+}
+
+::-webkit-progress-value { // - изменение стилей индикатора
+    background: background: -webkit-linear-gradient(#4c4, #8f8 50%, #4c4); // - для chrome
+                background: -moz-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: -o-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: linear-gradient(#4c4, #8f8 50%, #4c4);
+    border-radius: 5px;
+}
+
+::-webkit-progress-bar { // - изменение стилей фона
+    border-radius: 0px;
+}
+
+
+#progressbar {
+    margin-top: 20px;
+    margin-left: 50px;
+    width: calc(100% - 100px);
+    background: white;
 }

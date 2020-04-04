@@ -12,21 +12,22 @@
         <img id="opponent_icon" src="/{{ user.avatar }}" width="70px" height="70px">
         <div id="opponent_name">{{ user.nickname }}</div>
         <h1>Вопрос</h1>
+        <div id="div_progressbar">
+            <progress id="progressbar" value="{{ 60 - current_time }}" max="60">20</progress >
+        </div>
         <div id="progress">{{ win }}:{{ defeat }}</div>
         <div id="question">{{ question.text }}</div>
         <div id="div_question_time">
-            <div id="question_time">{{ 60 - current_time }}</div>
             <script>
                 var time = {{ 60 - current_time }};
 
                 function minusSec() {
                     time--;
                     if (time < 0) {
-                        document.getElementById('question_time').innerHTML = "Закончилось";
                         document.location.href = '{{ path }}';
                     } else {
-                        document.getElementById('question_time').textContent = time;
-                    }
+                        document.getElementById('progressbar').value = time;
+                    };
                 };
 
                 setInterval(minusSec, 1000);
