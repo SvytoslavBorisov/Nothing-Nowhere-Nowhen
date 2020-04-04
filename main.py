@@ -18,6 +18,8 @@ from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
 from random import choice, shuffle
+from cryptography.fernet import Fernet
+
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -218,6 +220,7 @@ def game(id_):
 
 @app.route('/start_game/<int:id_>')
 def start_game(id_):
+    global cipher
     session = db_session.create_session()
 
     quests = []
@@ -234,16 +237,26 @@ def start_game(id_):
     temp_data = ['0', '1', '2', '3']  # порядок вариантов
     shuffle(temp_data)  # рандомно изменяем его
 
-    return redirect(f'/current_game/{"!@$".join([str(x.id) for x in selected])}'  # id вопросов, которые будут в игре
-                    f'{"!@$" +  "0"}'  # сколько игрок правильно ответил
-                    f'{"!@$" +  "".join(temp_data)}'  # порядок вариантов ответов
-                    f'{"!@$" + "0"}'  # номер текущего вопроса
-                    f'{"!@$" + str(get_time())}')  # текущее время из интернета
+    print(0)
+    text = bytes(f'{"!@$".join([str(x.id) for x in selected])}'  # id вопросов, которые будут в игре
+                f'{"!@$" +  "0"}'  # сколько игрок правильно ответил
+                f'{"!@$" +  "".join(temp_data)}'  # порядок вариантов ответов
+                f'{"!@$" + "0"}'  # номер текущего вопроса
+                f'{"!@$" + str(get_time())}', encoding='UTF-8')  # текущее время из интернета
+
+    encrypted_text = cipher.encrypt(text)
+    print(9)
+
+    return redirect(f'/current_game/{str(encrypted_text)[2:-1]}')
 
 
-@app.route('/current_game/<quests>', methods=['POST', 'GET'])
-def current_game(quests):
+@app.route('/current_game/<quests_hash>', methods=['POST', 'GET'])
+def current_game(quests_hash):
+    global cipher
     session = db_session.create_session()
+    print(quests_hash, bytes(quests_hash, encoding='UTF-8'))
+    quests = str(cipher.decrypt(bytes(quests_hash, encoding='UTF-8')))[2:-1]
+    print(1)
     data_from_path = quests.split('!@$')
 
     param = {}
@@ -270,36 +283,51 @@ def current_game(quests):
     param['defeat'] = int(data_from_path[-2]) - count_right_answers
 
     questions = data_from_path[:-4]
-    param['path'] = f'/next_quest/{"!@$".join([x for x in questions])}' \
-                    f'{"!@$" + str(count_right_answers)}' \
-                    f'{"!@$" + data_from_path[-3]}' \
-                    f'{"!@$" + str(param["current_number_quest"])}' \
-                    f'{"!@$" + "time"}'  # Результат ответа на вопрос
+
+    text = bytes(f'{"!@$".join([x for x in questions])}'
+                f'{"!@$" + str(count_right_answers)}'
+                f'{"!@$" + data_from_path[-3]}'
+                f'{"!@$" + str(param["current_number_quest"])}'
+                f'{"!@$" + "time"}', encoding='UTF-8')
+
+    encrypted_text = cipher.encrypt(text)
+
+    param['path'] = f'/next_quest/{str(encrypted_text)[2:-1]}'  # Результат ответа на вопрос
 
     if request.method == 'GET':
         if param['current_time'] > 60:  # Время на вопрос закончилось
             result = False
-            return redirect(f'/next_quest/{"!@$".join([x for x in questions])}'
-                            f'{"!@$" + str(count_right_answers)}'
-                            f'{"!@$" + data_from_path[-3]}'
-                            f'{"!@$" + str(param["current_number_quest"])}'
-                            f'{"!@$" + str(result)}')
+            text = bytes(f'{"!@$".join([x for x in questions])}'
+                         f'{"!@$" + str(count_right_answers)}'
+                         f'{"!@$" + data_from_path[-3]}'
+                         f'{"!@$" + str(param["current_number_quest"])}'
+                         f'{"!@$" + str(result)}', encoding='UTF-8')
+
+            encrypted_text = cipher.encrypt(text)
+            return redirect(f'/next_quest/{str(encrypted_text)[2:-1]}')
         return render_template('current_game.html', **param)
     elif request.method == 'POST':
         if request.form.get('option'):
             result = request.form['option'] == param['question'].right_answer
         else:
             result = False
-        return redirect(f'/next_quest/{"!@$".join([x for x in questions])}'
-                        f'{"!@$" + str(count_right_answers)}'
-                        f'{"!@$" + data_from_path[-3]}'
-                        f'{"!@$" + str(param["current_number_quest"])}'
-                        f'{"!@$" + str(result)}')
+
+        text = bytes(f'{"!@$".join([x for x in questions])}'
+                     f'{"!@$" + str(count_right_answers)}'
+                     f'{"!@$" + data_from_path[-3]}'
+                     f'{"!@$" + str(param["current_number_quest"])}'
+                     f'{"!@$" + str(result)}', encoding='UTF-8')
+
+        encrypted_text = cipher.encrypt(text)
+
+        return redirect(f'/next_quest/{str(encrypted_text)[2:-1]}')
 
 
-@app.route('/next_quest/<quests>', methods=['POST', 'GET'])
-def next_quest(quests):
+@app.route('/next_quest/<quests_hash>', methods=['POST', 'GET'])
+def next_quest(quests_hash):
+    global cipher
     session = db_session.create_session()
+    quests = str(cipher.decrypt(bytes(quests_hash, encoding='UTF-8')))[2:-1]
 
     param = {}
     param['title'] = 'Ответ'
@@ -336,11 +364,16 @@ def next_quest(quests):
         shuffle(temp_data)
 
         if param['win'] != 6 and param['defeat'] != 6:
-            return redirect(f'/current_game/{"!@$".join([x for x in questions])}'
-                            f'{"!@$" + str(count_right_answers)}'
-                            f'{"!@$" + "".join(temp_data)}'
-                            f'{"!@$" + str(param["current_number_quest"] + 1)}'
-                            f'{"!@$" + str(get_time())}')
+
+            text = bytes(f'{"!@$".join([x for x in questions])}'
+                         f'{"!@$" + str(count_right_answers)}'
+                         f'{"!@$" + "".join(temp_data)}'
+                         f'{"!@$" + str(param["current_number_quest"] + 1)}'
+                         f'{"!@$" + str(get_time())}', encoding='UTF-8')
+
+            encrypted_text = cipher.encrypt(text)
+
+            return redirect(f'/current_game/{str(encrypted_text)[2:-1]}')
         else:
             if current_user.is_authenticated:
                 game_res = Game()
@@ -377,3 +410,9 @@ def end_game():
     param['style'] = '/static/css/styleForEndGame.css'
 
     return render_template('end_game.html', **param)
+
+
+cipher_key = Fernet.generate_key()
+cipher = Fernet(cipher_key)
+
+app.run()
