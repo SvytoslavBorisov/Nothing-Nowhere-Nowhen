@@ -11,7 +11,8 @@
         {% endif %}
         <img id="opponent_icon" src="/{{ user.avatar }}" width="70px" height="70px">
         <div id="opponent_name">{{ user.nickname }}</div>
-        <h1>Вопрос {{ current_number_quest + 1 }}</h1>
+        <h1>Вопрос</h1>
+        <div id="progress">{{ win }}:{{ defeat }}</div>
         <div id="question">{{ question.text }}</div>
         <div id="div_question_time">
             <div id="question_time">{{ 60 - current_time }}</div>

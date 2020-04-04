@@ -225,7 +225,7 @@ def start_game(id_):
         quests.append(question)
 
     selected = []
-    for _ in range(min(len(quests), 6)):
+    for _ in range(min(len(quests), 11)):
         k = choice(quests)
         while k in selected:
             k = choice(quests)
@@ -265,6 +265,9 @@ def current_game(quests):
     """
 
     param['current_number_quest'] = int(data_from_path[-2])
+
+    param['win'] = count_right_answers
+    param['defeat'] = int(data_from_path[-2]) - count_right_answers
 
     questions = data_from_path[:-4]
     param['path'] = f'/next_quest/{"!@$".join([x for x in questions])}' \
@@ -320,6 +323,9 @@ def next_quest(quests):
 
     param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
 
+    param['win'] = count_right_answers
+    param['defeat'] = int(data_from_path[-2]) - count_right_answers + 1
+
     questions = data_from_path[:-4]
 
     if request.method == 'GET':
@@ -329,7 +335,7 @@ def next_quest(quests):
         temp_data = ['0', '1', '2', '3']  # порядок вариантов
         shuffle(temp_data)
 
-        if param["current_number_quest"] + 1 < len(questions):
+        if param['win'] != 6 and param['defeat'] != 6:
             return redirect(f'/current_game/{"!@$".join([x for x in questions])}'
                             f'{"!@$" + str(count_right_answers)}'
                             f'{"!@$" + "".join(temp_data)}'
@@ -345,7 +351,8 @@ def next_quest(quests):
                 game_res.result_questions = '111111'  # Изменить
                 session.add(game_res)
                 session.commit()
-            return redirect('/categories')
+
+            return redirect('/end_game')
 
 
 @app.route('/rating')
@@ -354,9 +361,21 @@ def rating():
     param = {}
 
     param['title'] = 'Рейтинг'
-    param['style'] = 'static/css/styleForRating.css'
+    param['style'] = '/static/css/styleForRating.css'
     all_users = session.query(User).all()
     all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))
     param['users'] = all_users
 
     return render_template('rating.html', **param)
+
+
+@app.route('/end_game')
+def end_game():
+    param = {}
+
+    param['title'] = 'Конец игры'
+    param['style'] = '/static/css/styleForEndGame.css'
+
+    return render_template('end_game.html', **param)
+
+app.run()
