@@ -40,20 +40,14 @@ def get_time():
     return secs
 
 
-@app.route('/')
-def index1():
-    logout_user()
-    return redirect('/categories')
-
-
-@app.route('/categories', methods=['POST', 'GET'])
-def main_page():
+@app.route('/categories')
+def categories():
     session = db_session.create_session()
 
     param = {}
 
-    param['title'] = 'Главная страница'
-    param['style'] = '/static/css/styleForMainPage.css'
+    param['title'] = 'Играть'
+    param['style'] = '/static/css/styleForCategories.css'
     param['script'] = ''
     param['categories'] = session.query(Category).all()
 
@@ -61,6 +55,15 @@ def main_page():
         return render_template('categories.html', **param)
     elif request.method == 'POST':
         return render_template('categories.html', **param)
+
+
+@app.route('/', methods=['POST', 'GET'])
+def main_page():
+    param = {}
+
+    param['title'] = 'Главная страница'
+    param['style'] = 'static/css/styleForMainPage.css'
+    return render_template('main_page.html', **param)
 
 
 @login_manager.user_loader
@@ -238,8 +241,8 @@ def start_game(id_):
     shuffle(temp_data)  # рандомно изменяем его
 
     text = bytes(f'{"!@$".join([str(x.id) for x in selected])}'  # id вопросов, которые будут в игре
-                f'{"!@$" +  "0"}'  # сколько игрок правильно ответил
-                f'{"!@$" +  "".join(temp_data)}'  # порядок вариантов ответов
+                f'{"!@$" + "0"}'  # сколько игрок правильно ответил
+                f'{"!@$" + "".join(temp_data)}'  # порядок вариантов ответов
                 f'{"!@$" + "0"}'  # номер текущего вопроса
                 f'{"!@$" + str(get_time())}', encoding='UTF-8')  # текущее время из интернета
 
@@ -264,6 +267,7 @@ def current_game(quests_hash):
     data_from_path = quests.split('!@$')
 
     param = {}
+
     param['title'] = 'Идёт игра'
     param['style'] = '/static/css/styleForCurrentGame.css'
 
@@ -396,11 +400,11 @@ def next_quest(quests_hash):
                 user.rating += 100 if param['defeat'] != 6 else 0
 
                 game_res = Game()
-                game_res.category = 1  # Изменить
-                game_res.result = param['defeat'] != 6  # Изменить
+                game_res.category = param['question'].category
+                game_res.result = param['defeat'] != 6
                 game_res.who_play = current_user.id
                 game_res.questions = '!@$'.join(data_from_path[0:-4])
-                game_res.result_questions = '111111'  # Изменить
+                game_res.result_questions = f"{param['win']}:{param['defeat']}"
                 session.add(game_res)
                 session.commit()
 
@@ -437,3 +441,6 @@ def end_game(why):
 
 cipher_key = Fernet.generate_key()
 cipher = Fernet(cipher_key)
+
+
+app.run()
