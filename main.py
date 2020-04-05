@@ -259,7 +259,7 @@ def current_game(quests_hash):
     except Exception as e:
         cipher_key = Fernet.generate_key()
         cipher = Fernet(cipher_key)
-        return redirect('/end_game/Вы были замечены за читерством! За это вы дисквалифицированы!!!!!')
+        return redirect('/end_game/404')
 
     data_from_path = quests.split('!@$')
 
@@ -334,7 +334,7 @@ def next_quest(quests_hash):
     except Exception as e:
         cipher_key = Fernet.generate_key()
         cipher = Fernet(cipher_key)
-        return redirect('/end_game/Вы были замечены за читерством! За это вы дисквалифицированы!!!!!')
+        return redirect('/end_game/404')
 
     param = {}
     param['title'] = 'Ответ'
@@ -404,7 +404,7 @@ def next_quest(quests_hash):
                 session.add(game_res)
                 session.commit()
 
-            return redirect('/end_game/Вы сыграли в игру честно!')
+            return redirect('/end_game/200')
 
 
 @app.route('/rating')
@@ -427,7 +427,10 @@ def end_game(why):
 
     param['title'] = 'Конец игры'
     param['style'] = '/static/css/styleForEndGame.css'
-    param['why'] = why
+    if why == '404':
+        param['why'] = 'ЧИИИИИТЕЕЕЕР'
+    else:
+        param['why'] = 'Результат записан'
 
     return render_template('end_game.html', **param)
 
