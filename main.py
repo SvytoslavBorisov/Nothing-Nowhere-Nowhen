@@ -237,15 +237,15 @@ def start_game(id_):
     temp_data = ['0', '1', '2', '3']  # порядок вариантов
     shuffle(temp_data)  # рандомно изменяем его
 
-    print(0)
     text = bytes(f'{"!@$".join([str(x.id) for x in selected])}'  # id вопросов, которые будут в игре
                 f'{"!@$" +  "0"}'  # сколько игрок правильно ответил
                 f'{"!@$" +  "".join(temp_data)}'  # порядок вариантов ответов
                 f'{"!@$" + "0"}'  # номер текущего вопроса
                 f'{"!@$" + str(get_time())}', encoding='UTF-8')  # текущее время из интернета
 
+    cipher_key = Fernet.generate_key()
+    cipher = Fernet(cipher_key)
     encrypted_text = cipher.encrypt(text)
-    print(9)
 
     return redirect(f'/current_game/{str(encrypted_text)[2:-1]}')
 
@@ -254,9 +254,13 @@ def start_game(id_):
 def current_game(quests_hash):
     global cipher
     session = db_session.create_session()
-    print(quests_hash, bytes(quests_hash, encoding='UTF-8'))
-    quests = str(cipher.decrypt(bytes(quests_hash, encoding='UTF-8')))[2:-1]
-    print(1)
+    try:
+        quests = str(cipher.decrypt(bytes(quests_hash, encoding='UTF-8')))[2:-1]
+    except Exception as e:
+        cipher_key = Fernet.generate_key()
+        cipher = Fernet(cipher_key)
+        return redirect('/end_game/Вы были замечены за читерством! За это вы дисквалифицированы!!!!!')
+
     data_from_path = quests.split('!@$')
 
     param = {}
@@ -284,24 +288,19 @@ def current_game(quests_hash):
 
     questions = data_from_path[:-4]
 
-    text = bytes(f'{"!@$".join([x for x in questions])}'
-                f'{"!@$" + str(count_right_answers)}'
-                f'{"!@$" + data_from_path[-3]}'
-                f'{"!@$" + str(param["current_number_quest"])}'
-                f'{"!@$" + "time"}', encoding='UTF-8')
-
-    encrypted_text = cipher.encrypt(text)
-
-    param['path'] = f'/next_quest/{str(encrypted_text)[2:-1]}'  # Результат ответа на вопрос
+    param['path'] = quests_hash
 
     if request.method == 'GET':
         if param['current_time'] > 60:  # Время на вопрос закончилось
-            result = False
+
+            cipher_key = Fernet.generate_key()
+            cipher = Fernet(cipher_key)
+
             text = bytes(f'{"!@$".join([x for x in questions])}'
                          f'{"!@$" + str(count_right_answers)}'
                          f'{"!@$" + data_from_path[-3]}'
                          f'{"!@$" + str(param["current_number_quest"])}'
-                         f'{"!@$" + str(result)}', encoding='UTF-8')
+                         f'{"!@$" + "time"}', encoding='UTF-8')
 
             encrypted_text = cipher.encrypt(text)
             return redirect(f'/next_quest/{str(encrypted_text)[2:-1]}')
@@ -311,6 +310,9 @@ def current_game(quests_hash):
             result = request.form['option'] == param['question'].right_answer
         else:
             result = False
+
+        cipher_key = Fernet.generate_key()
+        cipher = Fernet(cipher_key)
 
         text = bytes(f'{"!@$".join([x for x in questions])}'
                      f'{"!@$" + str(count_right_answers)}'
@@ -327,7 +329,12 @@ def current_game(quests_hash):
 def next_quest(quests_hash):
     global cipher
     session = db_session.create_session()
-    quests = str(cipher.decrypt(bytes(quests_hash, encoding='UTF-8')))[2:-1]
+    try:
+        quests = str(cipher.decrypt(bytes(quests_hash, encoding='UTF-8')))[2:-1]
+    except Exception as e:
+        cipher_key = Fernet.generate_key()
+        cipher = Fernet(cipher_key)
+        return redirect('/end_game/Вы были замечены за читерством! За это вы дисквалифицированы!!!!!')
 
     param = {}
     param['title'] = 'Ответ'
@@ -365,6 +372,9 @@ def next_quest(quests_hash):
 
         if param['win'] != 6 and param['defeat'] != 6:
 
+            cipher_key = Fernet.generate_key()
+            cipher = Fernet(cipher_key)
+
             text = bytes(f'{"!@$".join([x for x in questions])}'
                          f'{"!@$" + str(count_right_answers)}'
                          f'{"!@$" + "".join(temp_data)}'
@@ -375,6 +385,9 @@ def next_quest(quests_hash):
 
             return redirect(f'/current_game/{str(encrypted_text)[2:-1]}')
         else:
+            cipher_key = Fernet.generate_key()
+            cipher = Fernet(cipher_key)
+
             if current_user.is_authenticated:
                 user = session.query(User).filter(User.id == current_user.id).first()
                 user.games += 1
@@ -391,7 +404,7 @@ def next_quest(quests_hash):
                 session.add(game_res)
                 session.commit()
 
-            return redirect('/end_game')
+            return redirect('/end_game/Вы сыграли в игру честно!')
 
 
 @app.route('/rating')
@@ -408,12 +421,13 @@ def rating():
     return render_template('rating.html', **param)
 
 
-@app.route('/end_game')
-def end_game():
+@app.route('/end_game/<why>')
+def end_game(why):
     param = {}
 
     param['title'] = 'Конец игры'
     param['style'] = '/static/css/styleForEndGame.css'
+    param['why'] = why
 
     return render_template('end_game.html', **param)
 
