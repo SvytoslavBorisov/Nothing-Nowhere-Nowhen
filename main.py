@@ -227,7 +227,7 @@ def start_game(id_):
     session = db_session.create_session()
 
     quests = []
-    for question in session.query(Question).filter(Question.category == id_):
+    for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id):
         quests.append(question)
 
     selected = []
@@ -300,6 +300,10 @@ def current_game(quests_hash):
             cipher_key = Fernet.generate_key()
             cipher = Fernet(cipher_key)
 
+            user = session.query(User).filter(User.id == param['question'].who_add).first()
+            user.rating += 10
+            session.commit()
+
             text = bytes(f'{"!@$".join([x for x in questions])}'
                          f'{"!@$" + str(count_right_answers)}'
                          f'{"!@$" + data_from_path[-3]}'
@@ -311,7 +315,13 @@ def current_game(quests_hash):
         return render_template('current_game.html', **param)
     elif request.method == 'POST':
         if request.form.get('option'):
-            result = request.form['option'] == param['question'].right_answer
+            if request.form['option'] == param['question'].right_answer:
+                result = True
+            else:
+                result = False
+                user = session.query(User).filter(User.id == param['question'].who_add).first()
+                user.rating += 10
+                session.commit()
         else:
             result = False
 
@@ -348,13 +358,13 @@ def next_quest(quests_hash):
     param['result'] = 'Вы ответили правильно' if data_from_path[-1] == 'True' \
         else 'Вы не успели ответить' if data_from_path[-1] == 'time' else 'Вы ответили неправильно'
 
-    count_right_answers = int(data_from_path[-4])
-    if data_from_path[-1] == 'True':
-        count_right_answers += 1
-
     param['question'] = session.query(Question).filter(
         Question.id == int(data_from_path[int(data_from_path[-2])])).first()
     param['current_number_quest'] = int(data_from_path[-2])
+
+    count_right_answers = int(data_from_path[-4])
+    if data_from_path[-1] == 'True':
+        count_right_answers += 1
 
     param['answers'] = ['', '', '', '']
     for i in range(4):
@@ -397,7 +407,7 @@ def next_quest(quests_hash):
                 user.games += 1
                 user.wins += param['defeat'] != 6
                 user.defeats += param['win'] != 6
-                user.rating += 100 if param['defeat'] != 6 else 0
+                user.rating += 100 if param['defeat'] != 6 else param['win'] * 10
 
                 game_res = Game()
                 game_res.category = param['question'].category
@@ -432,7 +442,7 @@ def end_game(why):
     param['title'] = 'Конец игры'
     param['style'] = '/static/css/styleForEndGame.css'
     if why == '404':
-        param['why'] = 'ЧИИИИИТЕЕЕЕР'
+        param['why'] = 'Вы покинули страницу с вопросом и были дискфалифицированы'
     else:
         param['why'] = 'Результат записан'
 
