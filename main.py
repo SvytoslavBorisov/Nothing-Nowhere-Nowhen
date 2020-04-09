@@ -158,8 +158,9 @@ def user_info(user):
     param['title'] = 'Профиль'
     param['style'] = '/static/css/styleForUserInfo.css'
     param['user'] = session.query(User).filter(User.nickname == user).first()
-    if param['user'].games:
-        param['procent_win'] = int((param['user'].wins / param['user'].games) * 100)
+    param['games'] = param['user'].games
+    if param['user'].all_games:
+        param['procent_win'] = int((param['user'].wins / param['user'].all_games) * 100)
         param['procent_def'] = int(100 - param['procent_win'])
     else:
         param['procent_win'] = 100
@@ -404,7 +405,7 @@ def next_quest(quests_hash):
 
             if current_user.is_authenticated:
                 user = session.query(User).filter(User.id == current_user.id).first()
-                user.games += 1
+                user.all_games += 1
                 user.wins += param['defeat'] != 6
                 user.defeats += param['win'] != 6
                 user.rating += 100 if param['defeat'] != 6 else param['win'] * 10
