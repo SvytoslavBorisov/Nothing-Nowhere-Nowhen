@@ -50,12 +50,12 @@ def get_time():
 
 @app.route('/api/questions')
 def get_questions():
-    print(request.get('http://what-wherewhen/api/questions').json())
+    print(request.get('http://what-wherewhen.herokuapp.com/api/questions').json())
 
 
 @app.route('/api/questions/<int:questions_id>')
 def get_questions(id_):
-    print(request.get(f'http://what-wherewhen/api/questions/{id_}').json())
+    print(request.get(f'http://what-wherewhen.herokuapp.com/api/questions/{id_}').json())
 
 
 @app.route('/categories')
