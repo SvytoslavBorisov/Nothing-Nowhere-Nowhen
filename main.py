@@ -246,8 +246,12 @@ def start_game(id_):
     session = db_session.create_session()
 
     quests = []
-    for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id):
-        quests.append(question)
+    if current_user.is_authenticated:
+        for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id):
+            quests.append(question)
+    else:
+        for question in session.query(Question).filter(Question.category == id_):
+            quests.append(question)
 
     selected = []
     for _ in range(min(len(quests), 11)):
