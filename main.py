@@ -150,7 +150,7 @@ def register():
                 user.wins = 0
                 user.defeats = 0
                 user.add_questions = 0
-                user.games = 0
+                user.all_games = 0
                 session.add(user)
                 session.commit()
                 if request.files.get('file'):
