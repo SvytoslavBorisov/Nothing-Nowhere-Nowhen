@@ -20,7 +20,7 @@ from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
 from random import choice, shuffle
 from cryptography.fernet import Fernet
-from api import questions_resources#, questions_api
+from api import questions_resources, users_resources
 
 
 app = Flask(__name__)
@@ -33,8 +33,12 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db_session.global_init("db/baseDate.sqlite")
+
 api.add_resource(questions_resources.QuestionsListResource, '/api/questions')
 api.add_resource(questions_resources.QuestionResource, '/api/question/<question_id>')
+
+api.add_resource(users_resources.UsersListResource, '/api/users')
+api.add_resource(users_resources.UserResource, '/api/user/<user_id>')
 
 
 def get_time():
