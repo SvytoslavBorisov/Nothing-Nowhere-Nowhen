@@ -26,7 +26,7 @@ def abort_if_questions_not_found(quest_id):
         if not questions:
             abort(404, message=f"Questions {quest_id} not found")
     else:
-        abort(404, message=f"Question id is integer")
+        abort(404, message=f"Question id is not integer")
 
 
 class QuestionResource(Resource):

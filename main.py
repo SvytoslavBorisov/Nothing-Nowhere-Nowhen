@@ -34,7 +34,7 @@ login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db_session.global_init("db/baseDate.sqlite")
 api.add_resource(questions_resources.QuestionsListResource, '/api/questions')
-api.add_resource(questions_resources.QuestionResource, '/api/question/<int:question_id>')
+api.add_resource(questions_resources.QuestionResource, '/api/question/<question_id>')
 
 
 def get_time():
@@ -466,5 +466,3 @@ def end_game(why):
 
 cipher_key = Fernet.generate_key()
 cipher = Fernet(cipher_key)
-
-app.run()
