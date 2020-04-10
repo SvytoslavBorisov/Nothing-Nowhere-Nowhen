@@ -20,7 +20,7 @@ from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
 from random import choice, shuffle
 from cryptography.fernet import Fernet
-from api import questions_resources, questions_api
+from api import questions_resources#, questions_api
 
 
 app = Flask(__name__)
@@ -28,7 +28,7 @@ app.config.update(
     JSON_AS_ASCII=False
 )
 api = Api(app)
-app.register_blueprint(questions_api.blueprint)
+#app.register_blueprint(questions_api.blueprint)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -466,3 +466,5 @@ def end_game(why):
 
 cipher_key = Fernet.generate_key()
 cipher = Fernet(cipher_key)
+
+app.run()

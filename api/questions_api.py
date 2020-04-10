@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, Blueprint, jsonify
+'''from flask import Flask, render_template, redirect, request, url_for, Blueprint, jsonify
 from data.categories import Category
 from data.questions import Question
 from data.users import User
@@ -36,4 +36,4 @@ def get_questions():
                 [item.to_dict(only=('id', 'text', 'category.name', 'who_add.name', 'answers', 'right_answer'))
                  for item in questions]
         }
-    )
+    )'''
