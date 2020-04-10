@@ -54,7 +54,7 @@ def get_questions():
 
 
 @app.route('/api/questions/<int:questions_id>')
-def get_questions(id_):
+def get_question(id_):
     print(request.get(f'http://what-wherewhen.herokuapp.com/api/questions/{id_}').json())
 
 
