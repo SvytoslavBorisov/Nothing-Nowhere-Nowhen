@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, make_response, jsonify
 from flask_restful import reqparse, abort, Api, Resource
 from data import db_session, users, questions
 from datetime import datetime
@@ -20,7 +20,7 @@ from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
 from random import choice, shuffle
 from cryptography.fernet import Fernet
-from api import questions_resources
+from api import questions_resources, questions_api
 
 
 app = Flask(__name__)
@@ -28,12 +28,13 @@ app.config.update(
     JSON_AS_ASCII=False
 )
 api = Api(app)
+app.register_blueprint(questions_api.blueprint)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db_session.global_init("db/baseDate.sqlite")
 api.add_resource(questions_resources.QuestionsListResource, '/api/questions')
-api.add_resource(questions_resources.QuestionResource, '/api/questions/<int:questions_id>')
+api.add_resource(questions_resources.QuestionResource, '/api/question/<int:question_id>')
 
 
 def get_time():
@@ -48,14 +49,9 @@ def get_time():
     return secs
 
 
-@app.route('/api/questions')
-def get_questions():
-    print(request.get('http://what-wherewhen.herokuapp.com/api/questions').json())
-
-
-@app.route('/api/questions/<int:questions_id>')
-def get_question(id_):
-    print(request.get(f'http://what-wherewhen.herokuapp.com/api/questions/{id_}').json())
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 @app.route('/categories')

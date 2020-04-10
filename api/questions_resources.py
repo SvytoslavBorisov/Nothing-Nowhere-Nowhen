@@ -45,9 +45,13 @@ class QuestionsListResource(Resource):
         session = db_session.create_session()
         questions = session.query(Question).all()
 
-        data = {'questions': [item.text.encode('utf-8').decode() for item in questions]}
-
-        return jsonify(data)
+        return jsonify(
+            {
+                'questions':
+                    [item.to_dict(only=('text', 'category.name', 'who_add.name'))
+                     for item in questions]
+            }
+        )
 
     def post(self):
         args = parser.parse_args()
