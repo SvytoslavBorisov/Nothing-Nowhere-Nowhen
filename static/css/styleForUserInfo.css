@@ -229,3 +229,59 @@ h1 {
     display: inline-block;
     padding-top: 15px;
 }
+
+#div_user_games_and_info {
+    float: left;
+    width: 473px;
+}
+
+#div_user_games {
+    margin-top: 25px;
+    margin-left: 25px;
+    padding-bottom: 5px;
+    width: 473px;
+    background: rgb(60, 60, 60);
+    color: white;
+    border-radius: 35px;
+    float: left;
+}
+
+#p_games {
+    margin-top: -10px;
+    padding: 0px;
+    font-size: 25px;
+    text-align: center;
+    padding-top: 15px;
+    margin-bottom: 0px;
+}
+
+#p_game {
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+    padding-left: 10px;
+    width: 473px;
+    float: left;
+    padding-top: 5px;
+}
+
+#table_games {
+    width: calc(100% - 40px);
+    cellspacing: 0px;
+    border-collapse: collapse;
+    margin: auto;
+}
+
+td, tr {
+    border: 2px solid rgb(70, 70, 70);
+    cellspacing: 0px;
+    border-collapse: collapse;
+}
+
+#header_table_number, #header_table_category, #header_table_result, #header_table_date {
+    width: 5px;
+    border: 2px solid rgb(70, 70, 70);
+    cellspacing: 0px;
+    border-collapse: collapse;
+
+}
