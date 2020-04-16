@@ -19,54 +19,28 @@
                 </div>
             {% endif %}
         </div>
-
-        <div id="div_user_games_and_info">
-            <div id="user_info">
-                <div id="user_info_p_name">{{ user.surname }} <div id="nickname">"{{ user.nickname }}"</div> {{ user.name}}</div>
-                <hr class="top_line_user_info">
-                <p id="user_info_p_rating">Рейтинг: {{ user.rating }}</p>
-                <p id="user_info_p_email">Почта: {{ user.email }}</p>
-                <p id="user_info_p_vk">ВК: {{ user.link_vk }}</p>
-                <hr class="top_line_user_info">
-                <div id="statistic_user">
-                    <p id="p_statistic">Статистика</p>
-                    <script src="/static/scripts/scriptForUserInfo.js"></script>
-                    <div id="wins_cont">
-                        <p class="p_windef">Побед</p>
-                        <div class="container" ><p style="position: relative; z-index:1;" class="p_procent">{{ procent_win }}%</p></div>
-                    </div>
-                    <div id="defeats_cont">
-                        <p class="p_windef">Поражений</p>
-                        <div class="container1" ><p style="position: relative; z-index:1;" class="p_procent">{{ procent_def }}%</p></div>
-                    </div>
-                    <script>
-                        showDiagramm1({{ procent_win }}, {{ procent_def }});
-                        showDiagramm({{ procent_win }}, {{ procent_def }})
-                    </script>
+        <div id="user_info">
+            <div id="user_info_p_name">{{ user.surname }} <div id="nickname">"{{ user.nickname }}"</div> {{ user.name}}</div>
+            <hr class="top_line_user_info">
+            <p id="user_info_p_rating">Рейтинг: {{ user.rating }}</p>
+            <p id="user_info_p_email">Почта: {{ user.email }}</p>
+            <p id="user_info_p_vk">ВК: {{ user.link_vk }}</p>
+            <hr class="top_line_user_info">
+            <div id="statistic_user">
+                <p id="p_statistic">Статистика</p>
+                <script src="/static/scripts/scriptForUserInfo.js"></script>
+                <div id="wins_cont">
+                    <p class="p_windef">Побед</p>
+                    <div class="container" ><p style="position: relative; z-index:1;" class="p_procent">{{ procent_win }}%</p></div>
                 </div>
-            </div>
-            <div id="div_user_games">
-                <p id="p_games">Игры</p>
-                    <table id="table_games">
-                        <tr>
-                            <th id="header_table_number">№</th>
-                            <th id="header_table_category">Категория</th>
-                            <th id="header_table_result">Результат</th>
-                            <th id="header_table_date">Дата</th>
-                        </tr>
-                        {% for game in games %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ game.orm_with_category.name }}</td>
-                                {% if game.result == '1' %}
-                                    <td>Выйграно</td>
-                                {% else %}
-                                    <td>Проиграно</td>
-                                {% endif %}
-                                <td>{{ game.when_play }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+                <div id="defeats_cont">
+                    <p class="p_windef">Поражений</p>
+                    <div class="container1" ><p style="position: relative; z-index:1;" class="p_procent">{{ procent_def }}%</p></div>
+                </div>
+                <script>
+                    showDiagramm1({{ procent_win }}, {{ procent_def }});
+                    showDiagramm({{ procent_win }}, {{ procent_def }})
+                </script>
             </div>
         </div>
     </div>

@@ -98,3 +98,43 @@ p.heading {
     padding-top: 10px;
     text-align: center;
 }
+
+#vk_div {
+    width: 300px;
+    position: fixed;
+    margin-top: 35px;
+    margin-left: 60px;
+    background-color: white;
+    text-align: center;
+    padding-top: 20px;
+    font-size: 18px;
+    color: #2A5885;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+#vk_line {
+    width: 70%;
+    height: 2px;
+    background-color: gray;
+    opacity: 40%;
+    margin-top: 15px;
+    margin-left: 15%;
+    border-radius: 5px;
+}
+
+#vk_button_join {
+    width: 70%;
+    background-color: #4A76A8;
+    margin-left: 15%;
+    height: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 5px;
+    border-radius: 10px;
+}
+
+#vk_a_join {
+    text-decoration: none;
+    color: white;
+}

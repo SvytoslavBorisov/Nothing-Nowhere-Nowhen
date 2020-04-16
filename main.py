@@ -1,5 +1,4 @@
-from flask import Flask, render_template, redirect, request, make_response, jsonify
-from flask_restful import reqparse, abort, Api, Resource
+from flask import Flask, render_template, redirect, request, url_for
 from data import db_session, users, questions
 from datetime import datetime
 from flask_wtf import FlaskForm
@@ -20,25 +19,13 @@ from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
 from random import choice, shuffle
 from cryptography.fernet import Fernet
-from api import questions_resources, users_resources
 
 
 app = Flask(__name__)
-app.config.update(
-    JSON_AS_ASCII=False
-)
-api = Api(app)
-#app.register_blueprint(questions_api.blueprint)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db_session.global_init("db/baseDate.sqlite")
-
-api.add_resource(questions_resources.QuestionsListResource, '/api/questions')
-api.add_resource(questions_resources.QuestionResource, '/api/question/<question_id>')
-
-api.add_resource(users_resources.UsersListResource, '/api/users')
-api.add_resource(users_resources.UserResource, '/api/user/<user_id>')
 
 
 def get_time():
@@ -51,11 +38,6 @@ def get_time():
 
     secs = struct.unpack("!12I", msg)[10] - 2208988800
     return secs
-
-
-@app.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 @app.route('/categories')
@@ -150,7 +132,7 @@ def register():
                 user.wins = 0
                 user.defeats = 0
                 user.add_questions = 0
-                user.all_games = 0
+                user.games = 0
                 session.add(user)
                 session.commit()
                 if request.files.get('file'):
@@ -176,9 +158,8 @@ def user_info(user):
     param['title'] = 'Профиль'
     param['style'] = '/static/css/styleForUserInfo.css'
     param['user'] = session.query(User).filter(User.nickname == user).first()
-    param['games'] = param['user'].games
-    if param['user'].all_games:
-        param['procent_win'] = int((param['user'].wins / param['user'].all_games) * 100)
+    if param['user'].games:
+        param['procent_win'] = int((param['user'].wins / param['user'].games) * 100)
         param['procent_def'] = int(100 - param['procent_win'])
     else:
         param['procent_win'] = 100
@@ -246,12 +227,8 @@ def start_game(id_):
     session = db_session.create_session()
 
     quests = []
-    if current_user.is_authenticated:
-        for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id):
-            quests.append(question)
-    else:
-        for question in session.query(Question).filter(Question.category == id_):
-            quests.append(question)
+    for question in session.query(Question).filter(Question.category == id_):
+        quests.append(question)
 
     selected = []
     for _ in range(min(len(quests), 11)):
@@ -323,10 +300,6 @@ def current_game(quests_hash):
             cipher_key = Fernet.generate_key()
             cipher = Fernet(cipher_key)
 
-            user = session.query(User).filter(User.id == param['question'].who_add).first()
-            user.rating += 10
-            session.commit()
-
             text = bytes(f'{"!@$".join([x for x in questions])}'
                          f'{"!@$" + str(count_right_answers)}'
                          f'{"!@$" + data_from_path[-3]}'
@@ -338,13 +311,7 @@ def current_game(quests_hash):
         return render_template('current_game.html', **param)
     elif request.method == 'POST':
         if request.form.get('option'):
-            if request.form['option'] == param['question'].right_answer:
-                result = True
-            else:
-                result = False
-                user = session.query(User).filter(User.id == param['question'].who_add).first()
-                user.rating += 10
-                session.commit()
+            result = request.form['option'] == param['question'].right_answer
         else:
             result = False
 
@@ -381,13 +348,13 @@ def next_quest(quests_hash):
     param['result'] = 'Вы ответили правильно' if data_from_path[-1] == 'True' \
         else 'Вы не успели ответить' if data_from_path[-1] == 'time' else 'Вы ответили неправильно'
 
-    param['question'] = session.query(Question).filter(
-        Question.id == int(data_from_path[int(data_from_path[-2])])).first()
-    param['current_number_quest'] = int(data_from_path[-2])
-
     count_right_answers = int(data_from_path[-4])
     if data_from_path[-1] == 'True':
         count_right_answers += 1
+
+    param['question'] = session.query(Question).filter(
+        Question.id == int(data_from_path[int(data_from_path[-2])])).first()
+    param['current_number_quest'] = int(data_from_path[-2])
 
     param['answers'] = ['', '', '', '']
     for i in range(4):
@@ -427,10 +394,10 @@ def next_quest(quests_hash):
 
             if current_user.is_authenticated:
                 user = session.query(User).filter(User.id == current_user.id).first()
-                user.all_games += 1
+                user.games += 1
                 user.wins += param['defeat'] != 6
                 user.defeats += param['win'] != 6
-                user.rating += 100 if param['defeat'] != 6 else param['win'] * 10
+                user.rating += 100 if param['defeat'] != 6 else 0
 
                 game_res = Game()
                 game_res.category = param['question'].category
@@ -465,7 +432,7 @@ def end_game(why):
     param['title'] = 'Конец игры'
     param['style'] = '/static/css/styleForEndGame.css'
     if why == '404':
-        param['why'] = 'Вы покинули страницу с вопросом и были дискфалифицированы'
+        param['why'] = 'ЧИИИИИТЕЕЕЕР'
     else:
         param['why'] = 'Результат записан'
 
@@ -474,3 +441,6 @@ def end_game(why):
 
 cipher_key = Fernet.generate_key()
 cipher = Fernet(cipher_key)
+
+
+app.run()
