@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="shortcut icon" href="{{ icon }}" type="image/x-icon">
+    <link rel="icon" href="/static/img/icons/icon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/static/css/styleForHeader.css">
     <link rel="stylesheet" type="text/css" href="{{ style }}">
     <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
@@ -53,16 +53,28 @@
         </div>
         <div id="top_fonLine"></div>
     </div>
-    <script src="/static/scripts/scriptForBase.js"></script>
-    {% block content %}{% endblock %}
-    <div id="vk_div">
-        Что? Где? Когда? - в ВК
-        <div id="vk_line"></div>
-        <a id="vk_a_join" target="_blank" href="https://vk.com/club194326967">
-            <div id="vk_button_join">
-                Присоединиться
+    <div id="main">
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div id="footer">
+            <div id="logo_and_name">
+                <img src="/static/img/icons/footer_logo.png" alt="" height="100px" width="200px" id="footer_logo">
+                <p id="p_name"> Что? Где? Когда?</p>
             </div>
-        </a>
+            <div id='div_links'>
+                Что? Где? Когда? - в ВК
+                <div id="vk_line">
+
+                </div>
+                <a id="vk_a_join" target="_blank" href="https://vk.com/club194326967">
+                    <img src="/static/img/icons/vk_link.png" alt="">
+                </a>
+            </div>
+            <p id="footer_p">Онлайн Викторина © 2020 WhoWhenWhere.com</p>
+        </div>
     </div>
+    <script src="/static/scripts/scriptForBase.js"></script>
 </body>
 </html>

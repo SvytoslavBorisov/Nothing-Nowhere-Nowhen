@@ -1,5 +1,11 @@
 h1 {
     text-align: center;
-    margin-top: 100px;
     color: #FFF;
+    margin-bottom: 0px;
+}
+
+#main_div {
+    margin: auto;
+    margin-bottom: 0px;
+    margin-top: 100px;
 }

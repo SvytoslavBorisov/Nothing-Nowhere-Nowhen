@@ -2,9 +2,24 @@
 
 {% block content %}
     <h1 style="color: #FFF; text-align: center; margin-top: 100px;">Выбрана категория:</h1>
-    <h3 style="color: #FFF; text-align: center;">{{ category.name }}</h3>
+    <h3 style="color: rgb(200, 200, 200); text-align: center;">{{ category.name }}</h3>
     <div id="links">
-        <a class="link" href="/start_game/{{ category.id }}">Начать игру</a>
-        <a class="link" href="/categories">Вернуться к категориям</a>
+        <h3>
+           Правила
+        </h3>
+        <p>
+            - Не читерить
+        </p>
+        <a class="link" href="/start_game/{{ category.id }}">
+            <div id="register_button">
+                Начать игру
+            </div>
+        </a>
+        <div id="login_div">
+            Передумали?
+            <a href="/categories" id="a_for_login">
+                Вернуться к категориям
+            </a>
+        </div>
     </div>
 {% endblock %}

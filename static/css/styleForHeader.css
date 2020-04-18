@@ -99,18 +99,22 @@ p.heading {
     text-align: center;
 }
 
-#vk_div {
+#footer_logo {
+    float: left;
+}
+
+#div_links {
     width: 300px;
-    position: fixed;
-    margin-top: 35px;
-    margin-left: 60px;
     background-color: white;
     text-align: center;
     padding-top: 20px;
+    padding-bottom: 0px;
     font-size: 18px;
     color: #2A5885;
     font-weight: bold;
     border-radius: 10px;
+    margin-top: 0px;
+    float: right;
 }
 
 #vk_line {
@@ -129,7 +133,7 @@ p.heading {
     margin-left: 15%;
     height: 30px;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding-top: 5px;
     border-radius: 10px;
 }
@@ -137,4 +141,45 @@ p.heading {
 #vk_a_join {
     text-decoration: none;
     color: white;
+}
+
+#top_fonLine {
+    width: 100%;
+    height: 4px;
+    background-color: rgba(0,0,0,0.1);
+}
+
+#main {
+    overflow: hidden;
+}
+
+#content {
+    height: 100%;
+}
+
+#footer {
+    width: 100%;
+    float: left;
+    height: 100%;
+    background: rgb(50, 50, 50);
+}
+
+#footer_p {
+    float: right;
+    height: 100%;
+    vertical-align: bottom;
+}
+
+#p_name {
+    width: 100%;
+    float: left;
+    color: white;
+    text-align: center;
+    margin: 0px;
+}
+
+#logo_and_name {
+    width: 200px;
+    height: 150px;
+    float: left;
 }

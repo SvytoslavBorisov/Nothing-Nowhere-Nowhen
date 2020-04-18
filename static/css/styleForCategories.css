@@ -1,7 +1,6 @@
-#top_fonLine {
+#main_div_categories {
+    overflow: hidden;
     width: 100%;
-    height: 4px;
-    background-color: rgba(0,0,0,0.1);
 }
 
 #categories {
