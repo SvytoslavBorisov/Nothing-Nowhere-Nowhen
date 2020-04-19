@@ -104,8 +104,6 @@ p.heading {
 }
 
 #div_links {
-    width: 300px;
-    background-color: white;
     text-align: center;
     padding-top: 20px;
     padding-bottom: 0px;
@@ -167,7 +165,6 @@ p.heading {
 #footer_p {
     float: right;
     height: 100%;
-    vertical-align: bottom;
 }
 
 #p_name {
@@ -180,6 +177,21 @@ p.heading {
 
 #logo_and_name {
     width: 200px;
-    height: 150px;
+    height: 125px;
+    float: left;
+}
+
+#links_and_foot_p {
+    width: 500px;
+    float: right;
+    margin-right:50px;
+}
+
+#vk_logo {
+    float: left;
+    padding-left: 20px;
+}
+
+#footer_p_ {
     float: left;
 }
