@@ -33,30 +33,41 @@
                 setInterval(minusSec, 1000);
             </script>
         </div>
-        <p id="p_answers">Варианты:</p>
-        <form class="login_form" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <div id="div_questions_answers">
-                    <div id='div_questions_answers_up'>
-                        <div class="div_questions_answer" id="div_questions_answer1">
-                            <input type="radio" name="option" value="{{ answers[0] }}" class="checkbox" id="checkbox1" onchange="changeRadioBox('checkbox1')"><div class="p_questions_answer"> {{ answers[0] }} </div>
+        {% if type_quest == 'change' %}
+            <p id="p_answers">Варианты:</p>
+            <form class="login_form" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <div id="div_questions_answers">
+                        <div id='div_questions_answers_up'>
+                            <div class="div_questions_answer" id="div_questions_answer1">
+                                <input type="radio" name="option" value="{{ answers[0] }}" class="checkbox" id="checkbox1" onchange="changeRadioBox('checkbox1')"><div class="p_questions_answer"> {{ answers[0] }} </div>
+                            </div>
+                            <div class="div_questions_answer" id="div_questions_answer2">
+                                <input type="radio" name="option" value="{{ answers[1] }}" class="checkbox" id="checkbox2" onchange="changeRadioBox('checkbox2')"><div class="p_questions_answer"> {{ answers[1] }} </div>
+                            </div>
                         </div>
-                        <div class="div_questions_answer" id="div_questions_answer2">
-                            <input type="radio" name="option" value="{{ answers[1] }}" class="checkbox" id="checkbox2" onchange="changeRadioBox('checkbox2')"><div class="p_questions_answer"> {{ answers[1] }} </div>
+                        <div id='div_questions_answers_down'>
+                            <div class="div_questions_answer" id="div_questions_answer3">
+                                <input type="radio" name="option" value="{{ answers[2] }}" class="checkbox" id="checkbox3" onchange="changeRadioBox('checkbox3')"><div class="p_questions_answer"> {{ answers[2] }} </div>
+                            </div>
+                            <div class="div_questions_answer" id="div_questions_answer4">
+                                <input type="radio" name="option" value="{{ answers[3] }}" class="checkbox" id="checkbox4" onchange="changeRadioBox('checkbox4')"><div class="p_questions_answer"> {{ answers[3] }} </div>
+                            </div>
                         </div>
+                        <input type="submit" value="Отправить" id="b_answer_question">
                     </div>
-                    <div id='div_questions_answers_down'>
-                        <div class="div_questions_answer" id="div_questions_answer3">
-                            <input type="radio" name="option" value="{{ answers[2] }}" class="checkbox" id="checkbox3" onchange="changeRadioBox('checkbox3')"><div class="p_questions_answer"> {{ answers[2] }} </div>
-                        </div>
-                        <div class="div_questions_answer" id="div_questions_answer4">
-                            <input type="radio" name="option" value="{{ answers[3] }}" class="checkbox" id="checkbox4" onchange="changeRadioBox('checkbox4')"><div class="p_questions_answer"> {{ answers[3] }} </div>
-                        </div>
-                    </div>
-                    <input type="submit" value="Отправить" id="b_answer_question">
                 </div>
-            </div>
-        </form>
+            </form>
+        {% elif type_quest == 'write' %}
+            <p id="p_answers">Наберите ответ:</p>
+            <form class="login_form" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <div id="div_questions_answers">
+                        <input type="text" name="option" id="input_text" autocomplete="off">
+                    </div>
+                </div>
+            </form>
+        {% endif %}
     </div>
     <script src="/static/scripts/scriptForCurrentGame.js"></script>
 {% endblock %}

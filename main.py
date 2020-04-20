@@ -301,13 +301,14 @@ def current_game(quests_hash):
     param['question'] = session.query(Question).filter(Question.id == int(data_from_path[int(data_from_path[-2])])).first()
     param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
 
+    param['type_quest'] = param['question'].type
+
     param['answers'] = ['', '', '', '']
     for i in range(4):
         param['answers'][i] = param['question'].answers.split('!@#$%')[int(data_from_path[-3][i])]
-    """
-       Для каждого ответа заранее заготовлен номер ячейки, где он будет находиться
-    """
-
+        """
+           Для каждого ответа заранее заготовлен номер ячейки, где он будет находиться
+        """
     param['current_number_quest'] = int(data_from_path[-2])
 
     param['win'] = count_right_answers
@@ -338,13 +339,22 @@ def current_game(quests_hash):
         return render_template('current_game.html', **param)
     elif request.method == 'POST':
         if request.form.get('option'):
-            if request.form['option'] == param['question'].right_answer:
-                result = True
+            if param['type_quest'] == 'change':
+                if request.form['option'] == param['question'].right_answer:
+                    result = True
+                else:
+                    result = False
+                    user = session.query(User).filter(User.id == param['question'].who_add).first()
+                    user.rating += 10
+                    session.commit()
             else:
-                result = False
-                user = session.query(User).filter(User.id == param['question'].who_add).first()
-                user.rating += 10
-                session.commit()
+                if request.form['option'].lower() in param['answers']:
+                    result = True
+                else:
+                    result = False
+                    user = session.query(User).filter(User.id == param['question'].who_add).first()
+                    user.rating += 10
+                    session.commit()
         else:
             result = False
 
@@ -381,17 +391,23 @@ def next_quest(quests_hash):
     param['result'] = 'Вы ответили правильно' if data_from_path[-1] == 'True' \
         else 'Вы не успели ответить' if data_from_path[-1] == 'time' else 'Вы ответили неправильно'
 
-    param['question'] = session.query(Question).filter(
-        Question.id == int(data_from_path[int(data_from_path[-2])])).first()
+    param['question'] = session.query(Question).filter(Question.id == int(data_from_path[int(data_from_path[-2])])).first()
     param['current_number_quest'] = int(data_from_path[-2])
 
     count_right_answers = int(data_from_path[-4])
     if data_from_path[-1] == 'True':
         count_right_answers += 1
 
+    param['type_quest'] = param['question'].type
+
     param['answers'] = ['', '', '', '']
     for i in range(4):
         param['answers'][i] = param['question'].answers.split('!@#$%')[int(data_from_path[-3][i])]
+        """
+           Для каждого ответа заранее заготовлен номер ячейки, где он будет находиться
+        """
+
+    param['current_number_quest'] = int(data_from_path[-2])
 
     param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
 

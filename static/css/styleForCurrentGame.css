@@ -177,3 +177,13 @@ h1 {
     width: calc(100% - 100px);
     background: white;
 }
+
+#input_text {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 20px;
+    width: 606px;
+    border-radius: 1px;
+    outline: none;
+}

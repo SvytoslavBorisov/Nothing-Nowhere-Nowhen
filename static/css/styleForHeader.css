@@ -160,6 +160,7 @@ p.heading {
     float: left;
     height: 100%;
     background: rgb(50, 50, 50);
+    visibility: hide;
 }
 
 #footer_p {
