@@ -341,22 +341,13 @@ def current_game(quests_hash):
         return render_template('current_game.html', **param)
     elif request.method == 'POST':
         if request.form.get('option'):
-            if param['type_quest'] == 'change':
-                if request.form['option'] == param['question'].right_answer:
-                    result = True
-                else:
-                    result = False
-                    user = session.query(User).filter(User.id == param['question'].who_add).first()
-                    user.rating += 10
-                    session.commit()
+            if request.form['option'].lower() in param['question'].right_answer.lower():
+                result = True
             else:
-                if request.form['option'].lower() in param['answers']:
-                    result = True
-                else:
-                    result = False
-                    user = session.query(User).filter(User.id == param['question'].who_add).first()
-                    user.rating += 10
-                    session.commit()
+                result = False
+                user = session.query(User).filter(User.id == param['question'].who_add).first()
+                user.rating += 10
+                session.commit()
         else:
             result = False
 
