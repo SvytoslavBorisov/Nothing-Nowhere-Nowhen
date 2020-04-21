@@ -18,7 +18,13 @@
             <div id="result" style="color: green; border: 3px solid green;">{{ result }}</div>
         {% else %}
             <div id="result" style="color: red; border: 3px solid red;">{{ result }}</div>
-        {% endif%}
+        {% endif %}
+        {% if question.comment != "" %}
+            <h2>Комментарий</h2>
+            <div id="comment">
+                {{ question.comment }}
+            </div>
+        {% endif %}
         <form class="login_form" method="post" enctype="multipart/form-data">
             <div id="button">
                 <input type="submit" value="Далее" id="b_answer_question">

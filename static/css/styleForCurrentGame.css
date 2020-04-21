@@ -187,3 +187,21 @@ h1 {
     border-radius: 1px;
     outline: none;
 }
+
+h2 {
+    text-align: center;
+}
+
+#comment {
+    margin-top: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    font-size: 20px;
+    text-align: justify;
+    background-color: rgb(60, 60, 60);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 35px;
+}

@@ -8,6 +8,7 @@ import datetime
 import socket
 import struct
 import time
+import random
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -28,7 +29,7 @@ app.config.update(
     JSON_AS_ASCII=False
 )
 api = Api(app)
-#app.register_blueprint(questions_api.blueprint)
+#  app.register_blueprint(questions_api.blueprint)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -211,6 +212,7 @@ def add_question(user):
             question.is_promoted = True
         else:
             question.is_promoted = False
+        question.comment = request.form['comment']
         session.add(question)
         session.commit()
 
@@ -291,6 +293,8 @@ def current_game(quests_hash):
 
     param = {}
 
+    param['type_quest'] = random.choice(['change', 'write'])
+
     param['title'] = 'Идёт игра'
     param['style'] = '/static/css/styleForCurrentGame.css'
 
@@ -300,8 +304,6 @@ def current_game(quests_hash):
 
     param['question'] = session.query(Question).filter(Question.id == int(data_from_path[int(data_from_path[-2])])).first()
     param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
-
-    param['type_quest'] = param['question'].type
 
     param['answers'] = ['', '', '', '']
     for i in range(4):
@@ -397,8 +399,6 @@ def next_quest(quests_hash):
     count_right_answers = int(data_from_path[-4])
     if data_from_path[-1] == 'True':
         count_right_answers += 1
-
-    param['type_quest'] = param['question'].type
 
     param['answers'] = ['', '', '', '']
     for i in range(4):

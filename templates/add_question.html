@@ -20,9 +20,9 @@
                     {{ error }}
                 </div>
             {% endfor %}
-            <div class="login_label">{{ form.comments.label }}</div>
-            <div class="login_area_div">{{ form.comments(class="login_area") }}</div>
-            {% for error in form.comments.errors %}
+            <div class="login_label">{{ form.comment.label }}</div>
+            <div class="login_area_div">{{ form.comment(class="login_area") }}</div>
+            {% for error in form.comment.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
                 </div>

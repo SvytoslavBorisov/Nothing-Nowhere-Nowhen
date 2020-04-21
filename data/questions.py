@@ -15,8 +15,6 @@ class Question(SqlAlchemyBase, SerializerMixin):
 
     answers = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
-    type = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-
     right_answer = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     who_add = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
@@ -24,6 +22,8 @@ class Question(SqlAlchemyBase, SerializerMixin):
     images = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     is_promoted = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
+
+    comment = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     orm_with_category = orm.relation('Category')
     orm_with_users = orm.relation('User')
