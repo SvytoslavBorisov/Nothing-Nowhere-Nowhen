@@ -17,7 +17,7 @@ document.getElementById('checkbox1').style.width = String(document.getElementByI
 document.getElementById('checkbox2').style.width = String(document.getElementById('div_questions_answer2').style.width) + 'px';
 document.getElementById('checkbox3').style.width = String(document.getElementById('div_questions_answer3').style.width) + 'px';
 document.getElementById('checkbox4').style.width = String(document.getElementById('div_questions_answer4').style.width) + 'px';
-
+document.getElementById('checkbox4').style.width = String(document.getElementById('div_questions_answer4').style.width) + 'px';
 
 function changeRadioBox(id_) {
     chbox = document.getElementById(id_);
