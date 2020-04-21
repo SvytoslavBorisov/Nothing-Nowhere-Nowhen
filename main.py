@@ -390,6 +390,7 @@ def next_quest(quests_hash):
     param['style'] = '/static/css/styleForCurrentGame.css'
 
     data_from_path = quests.split('!@$')
+    param['current_time'] = 0
     param['result'] = 'Вы ответили правильно' if data_from_path[-1] == 'True' \
         else 'Вы не успели ответить' if data_from_path[-1] == 'time' else 'Вы ответили неправильно'
 
