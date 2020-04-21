@@ -8,22 +8,22 @@ body {
 .title_div {
     width: 400px;
     float: left;
-    background: rgb(45,45,45);
+    background: rgb(45, 45, 45);
 }
 
 #all_navigator_div {
     width: 70%;
     float: left;
-    background: rgb(45,45,45);
+    background: rgb(45, 45, 45);
 }
 
 p.heading {
     margin: 0px;
     padding-left: 20px;
-    padding-top: 12px;
+    padding-top: 20px;
     padding-bottom: 16px;
     text-align: left;
-    font-size: 40px;
+    font-size: 28px;
     color: white;
 }
 

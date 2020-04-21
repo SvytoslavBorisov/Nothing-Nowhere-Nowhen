@@ -342,7 +342,7 @@ def current_game(quests_hash):
     elif request.method == 'POST':
         if request.form.get('option'):
             if param['type_quest'] == 'change':
-                if request.form['option'] == param['question'].right_answer:
+                if request.form['option'].lower() in param['question'].right_answer.lower():
                     result = True
                 else:
                     result = False
@@ -350,7 +350,7 @@ def current_game(quests_hash):
                     user.rating += 10
                     session.commit()
             else:
-                if request.form['option'].lower() in param['answers']:
+                if request.form['option'].lower() in param['question'].right_answer.lower():
                     result = True
                 else:
                     result = False
