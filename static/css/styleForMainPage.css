@@ -9,3 +9,9 @@ h1 {
     margin-bottom: 0px;
     margin-top: 100px;
 }
+
+@media only screen and (max-width: 650px) {
+    h1 {
+        color: red;
+    }
+}

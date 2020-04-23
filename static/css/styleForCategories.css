@@ -10,7 +10,6 @@
     background: rgb(255, 255, 255);
     border-radius: 4px;
     overflow: hidden;
-    margin-bottom: 1%;
 }
 
 #categoriesName {
@@ -29,25 +28,4 @@
 #playCategory {
     text-decoration: none;
     color: black;
-}
-
-
-@media only screen and (max-width: 500px) {
-    h1 {
-        font-size: 60px;
-    }
-
-    #main_div_categories {
-        overflow: hidden;
-        width: 84%;
-        margin-left: 8%;
-    }
-
-    #categoriesName {
-        font-size: 40px;
-    }
-
-    #categoriesDescription {
-        font-size: 28px;
-    }
 }
