@@ -71,7 +71,6 @@ p.heading {
     height: 57px;
     max-height: 75px;
     padding-top: 15px;
-    box-sizing: content-box;
 }
 
 #top_menuDiv {
@@ -187,7 +186,7 @@ p.heading {
 #links_and_foot_p {
     width: 500px;
     float: right;
-    margin-right:50px;
+    margin-right: 50px;
 }
 
 #vk_logo {
@@ -197,4 +196,10 @@ p.heading {
 
 #footer_p_ {
     float: left;
+}
+
+h1 {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    margin-top: 100px;
 }

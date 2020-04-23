@@ -1,0 +1,45 @@
+h1 {
+    margin-top: 230px;
+    font-size: 60px;
+}
+
+p.heading {
+    font-size: 60px;
+    text-align: center;
+}
+
+.title_div {
+    width: 100%;
+    font-weight: bold;
+}
+
+#all_navigator_div {
+    width: 100%;
+    float: none;
+}
+
+.navigator_div {
+    width: 25%;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 20px;
+}
+
+#navigator_div5 {
+    width: 25%;
+    float: left;
+}
+
+p.navigator_p {
+    font-size: 32px;
+}
+
+#user_avatar_navigator {
+    width: 60px;
+    height: 60px;
+    margin-left: 10px;
+}
+
+#navigator_div4 {
+    width: 25%;
+}

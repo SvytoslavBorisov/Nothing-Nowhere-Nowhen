@@ -1,0 +1,13 @@
+#main_div_categories {
+    overflow: hidden;
+    width: 84%;
+    margin-left: 8%;
+}
+
+#categoriesName {
+    font-size: 40px;
+}
+
+#categoriesDescription {
+    font-size: 28px;
+}
