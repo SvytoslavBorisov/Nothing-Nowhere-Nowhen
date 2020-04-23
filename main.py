@@ -55,7 +55,7 @@ def save_json(data, file):
 
 def return_to_game():
     data = open_json('static/json/games.json')
-    if str(current_user.id) in data['current_games'] and data['current_games'][str(current_user.id)] is not None:
+    if current_user.is_authenticated and str(current_user.id) in data['current_games'] and data['current_games'][str(current_user.id)] is not None:
         print("yes")
         return 1
     return 0
