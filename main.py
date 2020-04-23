@@ -9,6 +9,7 @@ import socket
 import struct
 import time
 import random
+import json
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -42,6 +43,24 @@ api.add_resource(users_resources.UsersListResource, '/api/users')
 api.add_resource(users_resources.UserResource, '/api/user/<user_id>')
 
 
+def open_json(file):
+    with open(file, "r") as f:
+        return json.load(f)
+
+
+def save_json(data, file):
+    with open(file, "w") as f:
+        json.dump(data, f, indent=4)
+
+
+def return_to_game():
+    data = open_json('static/json/games.json')
+    if str(current_user.id) in data['current_games'] and data['current_games'][str(current_user.id)] is not None:
+        print("yes")
+        return 1
+    return 0
+
+
 def get_time():
     address = ('pool.ntp.org', 123)
     msg = '\x1b' + '\0' * 47
@@ -61,6 +80,9 @@ def not_found(error):
 
 @app.route('/categories')
 def categories():
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     session = db_session.create_session()
 
     param = {}
@@ -78,6 +100,9 @@ def categories():
 
 @app.route('/', methods=['POST', 'GET'])
 def main_page():
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     param = {}
 
     param['title'] = 'Главная страница'
@@ -93,6 +118,9 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     session = db_session.create_session()
     param = {}
 
@@ -121,6 +149,9 @@ def logout():
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     session = db_session.create_session()
     param = {}
 
@@ -171,6 +202,9 @@ def register():
 
 @app.route('/user_info/<string:user>')
 def user_info(user):
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     session = db_session.create_session()
     param = {}
 
@@ -191,6 +225,9 @@ def user_info(user):
 @app.route('/add_question/<string:user>', methods=['POST', 'GET'])
 @login_required
 def add_question(user):
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     session = db_session.create_session()
     param = {}
 
@@ -223,6 +260,9 @@ def add_question(user):
 
 @app.route('/about_site', methods=['POST', 'GET'])
 def about_site():
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     param = {}
 
     param['title'] = 'О сайте'
@@ -232,6 +272,9 @@ def about_site():
 
 @app.route('/game/<int:id_>')
 def game(id_):
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     session = db_session.create_session()
     param = {}
 
@@ -244,7 +287,9 @@ def game(id_):
 
 @app.route('/start_game/<int:id_>')
 def start_game(id_):
-    global cipher
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     session = db_session.create_session()
 
     quests = []
@@ -262,91 +307,80 @@ def start_game(id_):
             k = choice(quests)
         selected.append(k)
 
-    temp_data = ['0', '1', '2', '3']  # порядок вариантов
-    shuffle(temp_data)  # рандомно изменяем его
+    data = open_json('static/json/games.json')
+    if current_user.is_authenticated:
+        load = {
+            'questions': [x.id for x in selected],
+            'wins': 0,
+            'defeats': 0,
+            'current_question': 0,
+            'time': get_time(),
+            'quest_or_next': 'quest',
+            'last_result': None
+        }
+        data['current_games'][str(current_user.id)] = {}
+        for x in load:
+            data['current_games'][str(current_user.id)][x] = load[x]
+        print(0)
+        print(data)
+        save_json(data, 'static/json/games.json')
 
-    text = bytes(f'{"!@$".join([str(x.id) for x in selected])}'  # id вопросов, которые будут в игре
-                f'{"!@$" + "game"}'
-                f'{"!@$" + "0"}'  # сколько игрок правильно ответил
-                f'{"!@$" + "".join(temp_data)}'  # порядок вариантов ответов
-                f'{"!@$" + "0"}'  # номер текущего вопроса
-                f'{"!@$" + str(get_time())}', encoding='UTF-8')  # текущее время из интернета
-
-    cipher_key = Fernet.generate_key()
-    cipher = Fernet(cipher_key)
-    encrypted_text = cipher.encrypt(text)
-
-    return redirect(f'/current_game/{str(encrypted_text)[2:-1]}')
+    return redirect('/current_game')
 
 
-@app.route('/current_game/<quests_hash>', methods=['POST', 'GET'])
-def current_game(quests_hash):
-    global cipher
+@app.route('/current_game', methods=['POST', 'GET'])
+def current_game():
     session = db_session.create_session()
+    if current_user.is_authenticated:
+        data = open_json('static/json/games.json')
 
-    try:
-        quests = str(cipher.decrypt(bytes(quests_hash, encoding='UTF-8')))[2:-1]
-
-        data_from_path = quests.split('!@$')
+        print(data['current_games'][str(current_user.id)]['quest_or_next'])
 
         param = {}
         param['style'] = '/static/css/styleForCurrentGame.css'
-        count_right_answers = int(data_from_path[-4])
 
-        param['question'] = session.query(Question).filter(
-            Question.id == int(data_from_path[int(data_from_path[-2])])).first()
-        param['answers'] = ['', '', '', '']
-        for i in range(4):
-            param['answers'][i] = param['question'].answers.split('!@#$%')[int(data_from_path[-3][i])]
+        cur_quest_id = data['current_games'][str(current_user.id)]['questions'][data['current_games'][str(current_user.id)]['current_question']]
+        param['question'] = session.query(Question).filter(Question.id == cur_quest_id).first()
 
-        questions = data_from_path[:-4]
+        temp_data = [0, 1, 2, 3]  # порядок вариантов
+        shuffle(temp_data)  # рандомно изменяем его
 
-        param['current_number_quest'] = int(data_from_path[-2])
+        answers = param['question'].answers.split('!@#$%')
+        shuffle_answers = []
+        for x in temp_data:
+            shuffle_answers.append(answers[x])
 
-        if data_from_path[-5] == 'game':
+        param['answers'] = shuffle_answers
 
+        param['current_number_quest'] = data['current_games'][str(current_user.id)]['current_question']
+
+        if data['current_games'][str(current_user.id)]['quest_or_next'] == 'quest':
             param['title'] = 'Идёт игра'
             param['type_quest'] = random.choice(['change', 'write'])
 
-            param['current_time'] = get_time() - int(data_from_path[-1])  # Разница между текущим и тем, когда началась игра
+            param['current_time'] = get_time() - data['current_games'][str(current_user.id)]['time']  # Разница между текущим и тем, когда началась игра
 
             param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
 
-            param['win'] = count_right_answers
-            param['defeat'] = int(data_from_path[-2]) - count_right_answers
+            param['win'] = data['current_games'][str(current_user.id)]['wins']
+            param['defeat'] = data['current_games'][str(current_user.id)]['defeats']
 
-            text = bytes(f'{"!@$".join([x for x in questions])}'
-                         f'{"!@$" + "answer"}'
-                         f'{"!@$" + str(count_right_answers)}'
-                         f'{"!@$" + data_from_path[-3]}'
-                         f'{"!@$" + str(param["current_number_quest"])}'
-                         f'{"!@$" + "time"}', encoding='UTF-8')
-
-            encrypted_text = cipher.encrypt(text)
-
-            param['path'] = f'/current_game/{str(encrypted_text)[2:-1]}'
+            param['path'] = f'/current_game'
 
             if request.method == 'GET':
-                if param['current_time'] > 60:  # Время на вопрос закончилось
-
-                    cipher_key = Fernet.generate_key()
-                    cipher = Fernet(cipher_key)
-
+                if param['current_time'] > 60:
                     user = session.query(User).filter(User.id == param['question'].who_add).first()
                     user.rating += 10
                     session.commit()
 
-                    text = bytes(f'{"!@$".join([x for x in questions])}'
-                                 f'{"!@$" + "answer"}'
-                                 f'{"!@$" + str(count_right_answers)}'
-                                 f'{"!@$" + data_from_path[-3]}'
-                                 f'{"!@$" + str(param["current_number_quest"])}'
-                                 f'{"!@$" + "time"}', encoding='UTF-8')
+                    data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
+                    save_json(data, 'static/json/games.json')
 
-                    encrypted_text = cipher.encrypt(text)
-                    return redirect(f'/current_game/{str(encrypted_text)[2:-1]}')
+                    return redirect('/current_game')
                 return render_template('current_game.html', **param)
             elif request.method == 'POST':
+                data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
+                save_json(data, 'static/json/games.json')
                 if request.form.get('option'):
                     if request.form['option'].lower() in param['question'].right_answer.lower():
                         result = True
@@ -356,63 +390,35 @@ def current_game(quests_hash):
                         user.rating += 10
                         session.commit()
                 else:
-                    result = False
-
-                cipher_key = Fernet.generate_key()
-                cipher = Fernet(cipher_key)
-
-                text = bytes(f'{"!@$".join([x for x in questions])}'
-                             f'{"!@$" + "answer"}'
-                             f'{"!@$" + str(count_right_answers)}'
-                             f'{"!@$" + data_from_path[-3]}'
-                             f'{"!@$" + str(param["current_number_quest"])}'
-                             f'{"!@$" + str(result)}', encoding='UTF-8')
-
-                encrypted_text = cipher.encrypt(text)
-
-                return redirect(f'/current_game/{str(encrypted_text)[2:-1]}')
+                    result = None
+                data['current_games'][str(current_user.id)]['last_result'] = result
+                if result:
+                    data['current_games'][str(current_user.id)]['wins'] += 1
+                else:
+                    data['current_games'][str(current_user.id)]['defeats'] += 1
+                save_json(data, 'static/json/games.json')
+                return redirect(f'/current_game')
         else:
-
             param['title'] = 'Ответ'
 
             param['current_time'] = 0
-            param['result'] = 'Вы ответили правильно' if data_from_path[-1] == 'True' \
-                else 'Вы не успели ответить' if data_from_path[-1] == 'time' else 'Вы ответили неправильно'
-
-            if data_from_path[-1] == 'True':
-                count_right_answers += 1
+            param['result'] = 'Вы ответили правильно' if data['current_games'][str(current_user.id)]['last_result'] else 'Вы не успели ответить' if data['current_games'][str(current_user.id)]['last_result'] is None else 'Вы ответили неправильно'
 
             param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
 
-            param['win'] = count_right_answers
-            param['defeat'] = int(data_from_path[-2]) - count_right_answers + 1
+            param['win'] = data['current_games'][str(current_user.id)]['wins']
+            param['defeat'] = data['current_games'][str(current_user.id)]['defeats']
 
             if request.method == 'GET':
                 return render_template('next_game.html', **param)
             elif request.method == 'POST':
-
-                temp_data = ['0', '1', '2', '3']  # порядок вариантов
-                shuffle(temp_data)
-
+                data['current_games'][str(current_user.id)]['quest_or_next'] = 'quest'
+                data['current_games'][str(current_user.id)]['current_question'] += 1
+                data['current_games'][str(current_user.id)]['time'] = get_time()
+                save_json(data, 'static/json/games.json')
                 if param['win'] != 6 and param['defeat'] != 6:
-
-                    cipher_key = Fernet.generate_key()
-                    cipher = Fernet(cipher_key)
-
-                    text = bytes(f'{"!@$".join([x for x in questions])}'
-                                 f'{"!@$" + "game"}'
-                                 f'{"!@$" + str(count_right_answers)}'
-                                 f'{"!@$" + "".join(temp_data)}'
-                                 f'{"!@$" + str(param["current_number_quest"] + 1)}'
-                                 f'{"!@$" + str(get_time())}', encoding='UTF-8')
-
-                    encrypted_text = cipher.encrypt(text)
-
-                    return redirect(f'/current_game/{str(encrypted_text)[2:-1]}')
+                    return redirect('/current_game')
                 else:
-                    cipher_key = Fernet.generate_key()
-                    cipher = Fernet(cipher_key)
-
                     if current_user.is_authenticated:
                         user = session.query(User).filter(User.id == current_user.id).first()
                         user.all_games += 1
@@ -424,20 +430,21 @@ def current_game(quests_hash):
                         game_res.category = param['question'].category
                         game_res.result = param['defeat'] != 6
                         game_res.who_play = current_user.id
-                        game_res.questions = '!@$'.join(data_from_path[0:-4])
+                        game_res.questions = '!@$'.join([str(x) for x in data['current_games'][str(current_user.id)]['questions']])
                         game_res.result_questions = f"{param['win']}:{param['defeat']}"
                         session.add(game_res)
                         session.commit()
 
+                        data['current_games'][str(current_user.id)] = None
+                        save_json(data, 'static/json/games.json')
                     return redirect('/end_game/200')
-    except Exception as e:
-        cipher_key = Fernet.generate_key()
-        cipher = Fernet(cipher_key)
-        return redirect('/end_game/404')
 
 
 @app.route('/rating')
 def rating():
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     session = db_session.create_session()
     param = {}
 
@@ -452,6 +459,9 @@ def rating():
 
 @app.route('/end_game/<why>')
 def end_game(why):
+    k = return_to_game()
+    if k:
+        return redirect('/current_game')
     param = {}
 
     param['title'] = 'Конец игры'
@@ -462,7 +472,3 @@ def end_game(why):
         param['why'] = 'Результат записан'
 
     return render_template('end_game.html', **param)
-
-
-cipher_key = Fernet.generate_key()
-cipher = Fernet(cipher_key)
