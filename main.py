@@ -42,6 +42,8 @@ api.add_resource(questions_resources.QuestionResource, '/api/question/<question_
 api.add_resource(users_resources.UsersListResource, '/api/users')
 api.add_resource(users_resources.UserResource, '/api/user/<user_id>')
 
+run_with_ngrok(app)
+
 
 def open_json(file):
     with open(file, "r") as f:
@@ -89,6 +91,7 @@ def categories():
 
     param['title'] = 'Играть'
     param['style'] = '/static/css/styleForCategories.css'
+    param['style_mobile'] = '/static/css_mobile/styleForCategories.css'
     param['script'] = ''
     param['categories'] = session.query(Category).all()
 
@@ -472,3 +475,6 @@ def end_game(why):
         param['why'] = 'Результат записан'
 
     return render_template('end_game.html', **param)
+
+
+app.run()
