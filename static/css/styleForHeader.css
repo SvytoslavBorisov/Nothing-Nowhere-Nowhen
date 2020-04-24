@@ -1,5 +1,5 @@
 body {
-    background: rgb(60, 60, 60);
+    background: url('/static/img/icons/background.jpg');
     margin: 0px;
     overflow-y: scroll;
     font-family: "Verdana", serif;
