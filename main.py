@@ -478,6 +478,3 @@ def end_game(why):
         param['why'] = 'Результат записан'
 
     return render_template('end_game.html', **param)
-
-
-app.run()
