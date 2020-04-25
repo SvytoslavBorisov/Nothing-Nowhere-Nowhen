@@ -10,6 +10,7 @@ import struct
 import time
 import random
 import json
+import os
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -92,6 +93,7 @@ def categories():
     param['style_mobile'] = '/static/css_mobile/styleForCategoriesMobile.css'
     param['script'] = ''
     param['categories'] = session.query(Category).all()
+    param['img'] = [int(x.split('.')[0]) for x in os.listdir('static/img/categories')]
 
     if request.method == 'GET':
         return render_template('categories.html', **param)
@@ -126,7 +128,7 @@ def login():
     session = db_session.create_session()
     param = {}
 
-    param['title'] = 'Главная страница'
+    param['title'] = 'Вход'
     param['style'] = '/static/css/styleForLogin.css'
     param['script'] = ''
 
@@ -157,7 +159,7 @@ def register():
     session = db_session.create_session()
     param = {}
 
-    param['title'] = 'Главная страница'
+    param['title'] = 'Регистрация'
     param['style'] = '/static/css/styleForRegister.css'
 
     form = RegisterForm()
@@ -440,6 +442,8 @@ def current_game():
                         data['current_games'][str(current_user.id)] = None
                         save_json(data, 'static/json/games.json')
                     return redirect('/end_game/200')
+    else:
+        return redirect('/login')
 
 
 @app.route('/rating')

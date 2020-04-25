@@ -11,3 +11,9 @@
 #categoriesDescription {
     font-size: 28px;
 }
+
+#categoriesImg {
+    width: 73px;
+    height: 73px;
+    padding-top: 28px;
+}

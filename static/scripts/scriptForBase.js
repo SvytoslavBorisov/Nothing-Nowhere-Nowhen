@@ -7,7 +7,7 @@ div.innerHTML = `<div id="logo_and_name">
                  <div id="links_and_foot_p">
                      <div id="div_links">
                          <p id="footer_p_">Ничто? Нигде? Никогда? - в соцсетях</p>
-                         <a id="vk_a_join" target="_blank" href="https://vk.com/whatwhewhe">
+                         <a id="vk_a_join" target="_blank" href="https://vk.com/nothingnowherenowhen">
                              <img src="/static/img/icons/vk_link.png" alt="" id="vk_logo">
                          </a>
                      </div>

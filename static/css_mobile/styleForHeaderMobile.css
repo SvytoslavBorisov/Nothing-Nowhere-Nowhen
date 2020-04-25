@@ -3,12 +3,12 @@ h1 {
     font-size: 60px;
 }
 
-p.heading {
+#heading {
     font-size: 60px;
     text-align: center;
 }
 
-.title_div {
+#title_div {
     width: 100%;
     font-weight: bold;
 }
