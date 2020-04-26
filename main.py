@@ -480,5 +480,4 @@ def end_game(why):
 
     return render_template('end_game.html', **param)
 
-
 #app.run(threaded=True)
