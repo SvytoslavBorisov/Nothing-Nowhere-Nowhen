@@ -13,7 +13,7 @@ body {
 #title_div {
     width: 400px;
     float: left;
-    background: rgb(45, 45, 45);
+    background: rgba(45, 45, 45);
 }
 
 #all_navigator_div {
@@ -88,6 +88,7 @@ body {
     overflow: hidden;
     position: fixed;
     font-family: "Verdana", serif;
+    background: rgba(50, 50, 50, 0.8);
 }
 
 #user_avatar_navigator {
@@ -159,7 +160,7 @@ body {
     width: 100%;
     float: left;
     height: 100%;
-    background: rgb(50, 50, 50);
+    background: rgba(50, 50, 50, 0.8);
 }
 
 #footer_p {

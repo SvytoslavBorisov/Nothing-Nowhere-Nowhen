@@ -3,8 +3,9 @@
     margin-top: 101px;
     padding-bottom: 30px;
     width: 740px;
-    background-color: rgb(70, 70, 70);
+    background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
     border-radius: 35px;
+    border: 4px outset black;
     color: #FFF;
     overflow: hidden;
 }

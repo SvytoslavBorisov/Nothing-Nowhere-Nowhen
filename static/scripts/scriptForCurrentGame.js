@@ -19,7 +19,7 @@ function changeRadioBox(id_) {
     chbox = document.getElementById(id_);
         if (chbox.checked) {
             if (id_ == 'checkbox1') {
-                document.getElementById('div_questions_answer1').style.background = 'linear-gradient(to top, #fefc0a, rgb(247, 150, 62))';
+                document.getElementById('div_questions_answer1').style.background = 'linear-gradient(to top, rgb(0, 200, 0), rgb(0, 255, 0))';
                 document.getElementById('div_questions_answer1').style.color = 'white';
                 document.getElementById('div_questions_answer2').style.color = 'rgb(60, 60, 60)';
                 document.getElementById('div_questions_answer3').style.color = 'rgb(60, 60, 60)';
@@ -29,7 +29,7 @@ function changeRadioBox(id_) {
                 document.getElementById('div_questions_answer4').style.background = 'rgb(200, 200, 200)';
              };
             if (id_ == 'checkbox2') {
-                document.getElementById('div_questions_answer2').style.background = 'green';
+                document.getElementById('div_questions_answer2').style.background = 'linear-gradient(to top, rgb(0, 200, 0), rgb(0, 255, 0))';
                 document.getElementById('div_questions_answer2').style.color = 'white';
                 document.getElementById('div_questions_answer1').style.color = 'rgb(60, 60, 60)';
                 document.getElementById('div_questions_answer3').style.color = 'rgb(60, 60, 60)';
@@ -39,7 +39,7 @@ function changeRadioBox(id_) {
                 document.getElementById('div_questions_answer4').style.background = 'rgb(200, 200, 200)';
              };
             if (id_ == 'checkbox3') {
-                document.getElementById('div_questions_answer3').style.background = 'green';
+                document.getElementById('div_questions_answer3').style.background = 'linear-gradient(to top, rgb(0, 200, 0), rgb(0, 255, 0))';
                 document.getElementById('div_questions_answer3').style.color = 'white';
                 document.getElementById('div_questions_answer2').style.color = 'rgb(60, 60, 60)';
                 document.getElementById('div_questions_answer1').style.color = 'rgb(60, 60, 60)';
@@ -49,7 +49,7 @@ function changeRadioBox(id_) {
                 document.getElementById('div_questions_answer4').style.background = 'rgb(200, 200, 200)';
              };
             if (id_ == 'checkbox4') {
-                document.getElementById('div_questions_answer4').style.background = 'green';
+                document.getElementById('div_questions_answer4').style.background = 'linear-gradient(to top, rgb(0, 200, 0), rgb(0, 255, 0))';
                 document.getElementById('div_questions_answer4').style.color = 'white';
                 document.getElementById('div_questions_answer2').style.color = 'rgb(60, 60, 60)';
                 document.getElementById('div_questions_answer3').style.color = 'rgb(60, 60, 60)';
