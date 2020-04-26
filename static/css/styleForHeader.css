@@ -1,18 +1,23 @@
+@font-face {
+    font-family: Roboto; /* Имя шрифта */
+    src: url(/static/fonts/Roboto/Roboto-Regular.ttf); /* Путь к файлу со шрифтом */
+}
+
 body {
-    background: url('/static/img/icons/background.jpg');
     margin: 0px;
     overflow-y: scroll;
-    font-family: "Verdana", serif;
+    font-family: Roboto, serif;
+    background: url('/static/img/icons/background.jpg');
 }
 
 #title_div {
-    width: 33%;
+    width: 400px;
     float: left;
     background: rgb(45, 45, 45);
 }
 
 #all_navigator_div {
-    width: 67%;
+    width: 70%;
     float: left;
     background: rgb(45, 45, 45);
 }
@@ -147,6 +152,7 @@ body {
     height: 100%;
     padding: 0px;
     margin: 0px;
+    margin-top:101px;
 }
 
 #footer {

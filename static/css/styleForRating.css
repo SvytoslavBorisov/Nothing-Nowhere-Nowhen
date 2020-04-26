@@ -1,7 +1,8 @@
-h1 {
+#header_rating {
+    margin-bottom: 18px;
+    margin-top: 101px;
     text-align: center;
     color: #FFF;
-    margin-top: 100px;
 }
 
 .user_div {

@@ -1,3 +1,18 @@
+window.onresize = function () {
+    document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
+    document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
+    var x = $( '#content' ).height() + 100 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2));
+    if ( $( window ).height() > x + 130) {
+        document.getElementById('footer').style.marginTop = String( Number($( document ).height() - x - 130)) + 'px';
+    }
+    else {
+        document.getElementById('footer').style.marginTop = String( 30 ) + 'px';
+    };
+};
+
+document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
+document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
+
 let div = document.createElement('div');
 div.id = 'footer';
 div.innerHTML = `<div id="logo_and_name">
@@ -14,10 +29,10 @@ div.innerHTML = `<div id="logo_and_name">
                      <p id="footer_p">Онлайн Викторина © 2020 NothingNowhereNowhen.com</p>
                  </div>`
 document.getElementById('main').after(div);
-var x = $( '#content' ).height() + 100 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2));
+var x = $( '#content' ).height() + 202 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2));
 if ( $( window ).height() > x + 130) {
-    document.getElementById('footer').style.marginTop = String( $( document ).height() - x - 130) + 'px';
+    document.getElementById('footer').style.marginTop = String( Number($( document ).height() - x - 130)) + 'px';
 }
 else {
-    document.getElementById('footer').style.marginTop = String( 15 ) + 'px';
+    document.getElementById('footer').style.marginTop = String( 30 ) + 'px';
 };
