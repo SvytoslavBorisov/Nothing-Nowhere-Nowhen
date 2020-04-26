@@ -271,6 +271,7 @@ def about_site():
 
     param['title'] = 'О сайте'
     param['style'] = '/static/css/styleForAboutSite.css'
+    param['style_mobile'] = '/static/css_mobile/styleForAboutSiteMobile.css'
     return render_template('about_site.html', **param)
 
 

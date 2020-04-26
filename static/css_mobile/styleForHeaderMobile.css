@@ -1,5 +1,4 @@
 h1 {
-    margin-top: 230px;
     font-size: 60px;
 }
 
@@ -14,8 +13,11 @@ h1 {
 }
 
 #all_navigator_div {
-    width: 100%;
+    margin: 0px;
+    margin-top: 100px;
+    height: 101px;
     float: none;
+    width: 100%;
 }
 
 .navigator_div {
@@ -27,7 +29,7 @@ h1 {
 
 #navigator_div5 {
     width: 25%;
-    float: left;
+    float: right;
 }
 
 p.navigator_p {
@@ -42,4 +44,8 @@ p.navigator_p {
 
 #navigator_div4 {
     width: 25%;
+}
+
+#content {
+    margin-top: 201px;
 }
