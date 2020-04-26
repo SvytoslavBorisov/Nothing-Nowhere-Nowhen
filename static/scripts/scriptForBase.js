@@ -1,17 +1,27 @@
 window.onresize = function () {
-    document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
-    document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
-    var x = $( '#content' ).height() + 102 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2));
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    var x = $( '#content' ).height() + 402 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2));
     if ( $( window ).height() > x + 130) {
         document.getElementById('footer').style.marginTop = String( Number($( document ).height() - x - 130)) + 'px';
     }
     else {
         document.getElementById('footer').style.marginTop = String( 30 ) + 'px';
     };
+
+  } else {
+    var x = $( '#content' ).height() + 202 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2));
+    if ( $( window ).height() > x + 130) {
+        document.getElementById('footer').style.marginTop = String( Number($( document ).height() - x - 130)) + 'px';
+    }
+    else {
+        document.getElementById('footer').style.marginTop = String( 30 ) + 'px';
+    };
+    document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
+    document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
+};
 };
 
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    alert(document.documentElement.clientWidth);
     let div = document.createElement('div');
     div.id = 'footer';
     div.innerHTML = `<div id="logo_and_name">
@@ -62,4 +72,4 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
     };
     document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
     document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
-}
+};

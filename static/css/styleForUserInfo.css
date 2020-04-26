@@ -117,6 +117,7 @@ h1 {
   width: 80px;
   height: 80px;
   overflow: hidden;
+  z-index: 2;
   border-radius: 50%;
   position: relative;
   margin: auto;
@@ -129,6 +130,7 @@ h1 {
   border-radius: 50%;
   position: relative;
   margin: auto;
+  z-index: 2;
 }
 
 #wins_cont, #defeats_cont {
@@ -145,6 +147,7 @@ h1 {
   width: 50%;
   height: 50%;
   position: absolute;
+  z-index: 2;
   left: 50%;
   top: 0;
   transform-origin: left bottom;
@@ -153,17 +156,7 @@ h1 {
 .container:after {
   content: '';
   position: absolute;
-  width: 50%;
-  height: 50%;
-  background: rgb(60, 60, 60);
-  border-radius: 50%;
-  top: 25%;
-  left: 25%;
-}
-
-.container1:after {
-  content: '';
-  position: absolute;
+  z-index: 2;
   width: 50%;
   height: 50%;
   background: rgb(60, 60, 60);
