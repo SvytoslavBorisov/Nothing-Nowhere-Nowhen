@@ -374,14 +374,28 @@ def current_game():
 
             if request.method == 'GET':
                 if param['current_time'] > 60:
-                    user = session.query(User).filter(User.id == param['question'].who_add).first()
-                    user.rating += 10
-                    session.commit()
-
                     data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
                     save_json(data, 'static/json/games.json')
-
-                    return redirect('/current_game')
+                    if request.form.get('option'):
+                        if request.form['option'].lower() in param['question'].right_answer.lower():
+                            result = True
+                        else:
+                            result = False
+                            user = session.query(User).filter(User.id == param['question'].who_add).first()
+                            user.rating += 10
+                            session.commit()
+                    else:
+                        result = False
+                        user = session.query(User).filter(User.id == param['question'].who_add).first()
+                        user.rating += 10
+                        session.commit()
+                    data['current_games'][str(current_user.id)]['last_result'] = result
+                    if result:
+                        data['current_games'][str(current_user.id)]['wins'] += 1
+                    else:
+                        data['current_games'][str(current_user.id)]['defeats'] += 1
+                    save_json(data, 'static/json/games.json')
+                    return redirect(f'/current_game')
                 return render_template('current_game.html', **param)
             elif request.method == 'POST':
                 data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
@@ -407,7 +421,7 @@ def current_game():
             param['title'] = 'Ответ'
 
             param['current_time'] = 0
-            param['result'] = 'Вы ответили правильно' if data['current_games'][str(current_user.id)]['last_result'] else 'Вы не успели ответить' if data['current_games'][str(current_user.id)]['last_result'] is None else 'Вы ответили неправильно'
+            param['result'] = 'Вы ответили правильно' if data['current_games'][str(current_user.id)]['last_result'] else 'Вы ответили неправильно'
 
             param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
 

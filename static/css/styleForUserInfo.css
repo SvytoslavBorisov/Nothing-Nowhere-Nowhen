@@ -7,10 +7,10 @@
     margin: auto;
     margin-top: 100px;
     width: 740px;
+    border: 4px outset black;
     background: rgb(70, 70, 70);
     border-radius: 35px;
     height: 0px;
-    box-shadow: 0 3px 0 rgb(55, 55, 55);
 }
 
 #user_avatar {
