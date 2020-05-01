@@ -3,16 +3,7 @@ from flask import jsonify
 from flask_restful import reqparse, abort, Resource
 from data import db_session
 from data.questions import Question
-
-
-parser = reqparse.RequestParser()
-parser.add_argument('id', required=True, type=int)
-parser.add_argument('text', required=True)
-parser.add_argument('answers', required=True)
-parser.add_argument('category', required=True)
-parser.add_argument('right_answer', required=True)
-parser.add_argument('is_promoted', required=True, type=bool)
-parser.add_argument('who_add', required=True, type=int)
+from api.parsers import parserForQuestion
 
 
 def abort_if_questions_not_found(quest_id):
@@ -50,3 +41,22 @@ class QuestionsListResource(Resource):
                      for item in questions]
             }
         )
+
+    def post(self):
+        args = parserForQuestion.parse_args()
+        session = db_session.create_session()
+        try:
+            quest = Question(
+                id=args['id'],
+                text=args['text'],
+                category=args['category'],
+                answers=args['answers'],
+                right_answer=args['right_answer'],
+                who_add=args['who_add'],
+                is_promoted=args['is_promoted']
+            )
+            session.add(quest)
+            session.commit()
+        except:
+            return jsonify({'error': 'Id already exists'})
+        return jsonify({'success': 'OK'})

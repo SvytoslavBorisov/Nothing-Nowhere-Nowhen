@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, make_response, jsonify
 from flask_restful import reqparse, abort, Api, Resource
 from data import db_session, users, questions
+from requests import get, post, delete, put
 from datetime import datetime
 from flask_wtf import FlaskForm
 from flask_ngrok import run_with_ngrok
@@ -23,7 +24,7 @@ from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
 from random import choice, shuffle
 from cryptography.fernet import Fernet
-from api import questions_resources, users_resources
+from api import questions_resources, users_resources, questions_api
 
 
 app = Flask(__name__)
@@ -36,6 +37,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db_session.global_init("db/baseDate.sqlite")
+app.register_blueprint(questions_api.blueprint)
 
 api.add_resource(questions_resources.QuestionsListResource, '/api/questions')
 api.add_resource(questions_resources.QuestionResource, '/api/question/<question_id>')
@@ -463,6 +465,7 @@ def current_game():
 
 @app.route('/rating')
 def rating():
+
     k = return_to_game()
     if k:
         return redirect('/current_game')
