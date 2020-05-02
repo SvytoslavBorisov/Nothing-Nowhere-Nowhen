@@ -3,11 +3,16 @@
     src: url(/static/fonts/Roboto/Roboto-Regular.ttf); /* Путь к файлу со шрифтом */
 }
 
-body {
+body{
     margin: 0px;
     overflow-y: scroll;
     font-family: Roboto, serif;
     background: url('/static/img/icons/background.jpg');
+    height: 100vh;
+}
+
+html {
+    height: 100vh;
 }
 
 #title_div {
@@ -148,7 +153,6 @@ body {
 }
 
 #content {
-    height: 100%;
     padding: 0px;
     margin: 0px;
     margin-top: 101px;
@@ -157,13 +161,13 @@ body {
 #footer {
     width: 100%;
     float: left;
-    height: 100%;
     background: linear-gradient(to top, rgb(30, 30, 30), rgb(50, 50, 50));
 }
 
 #footer_p {
     float: right;
     height: 100%;
+    margin-bottom: 0px;
 }
 
 #p_name {
@@ -199,5 +203,5 @@ body {
 h1 {
     color: rgb(255, 255, 255);
     text-align: center;
-    margin-top: 100px;
+    margin-top: 101px;
 }

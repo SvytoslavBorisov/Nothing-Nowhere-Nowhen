@@ -16,7 +16,20 @@
             <progress id="progressbar" value="{{ 60 - current_time }}" max="60">20</progress >
         </div>
         <div id="progress">{{ win }}:{{ defeat }}</div>
-        <div id="question">{{ question.text }}</div>
+        <div id="question">
+            {% if question.images == ' ' %}
+                {{ question.text }}
+            {% else %}
+                <div id="div_question_text">
+                    <p class="temp_p">{{ question.text }}</p>
+                </div>
+                <div id="div_question_image">
+                    <p class="temp_p">
+                        <img src="{{ question.images }}" alt="" id="question_image">
+                    </p>
+                </div>
+            {% endif %}
+        </div>
         <div id="div_question_time">
             <script>
                 var time = {{ 60 - current_time }};
@@ -58,6 +71,17 @@
                     </div>
                 </div>
             </form>
+            <script>
+                document.getElementById('checkbox1').style.left = String(document.getElementById('div_questions_answer1').getBoundingClientRect().x) + 'px';
+                document.getElementById('checkbox2').style.left = String(document.getElementById('div_questions_answer2').getBoundingClientRect().x) + 'px';
+                document.getElementById('checkbox3').style.left = String(document.getElementById('div_questions_answer3').getBoundingClientRect().x) + 'px';
+                document.getElementById('checkbox4').style.left = String(document.getElementById('div_questions_answer4').getBoundingClientRect().x) + 'px';
+                document.getElementById('checkbox1').style.width = String(document.getElementById('div_questions_answer1').style.width) + 'px';
+                document.getElementById('checkbox2').style.width = String(document.getElementById('div_questions_answer2').style.width) + 'px';
+                document.getElementById('checkbox3').style.width = String(document.getElementById('div_questions_answer3').style.width) + 'px';
+                document.getElementById('checkbox4').style.width = String(document.getElementById('div_questions_answer4').style.width) + 'px';
+                document.getElementById('checkbox4').style.width = String(document.getElementById('div_questions_answer4').style.width) + 'px';
+            </script>
         {% elif type_quest == 'write' %}
             <p id="p_answers">Наберите ответ:</p>
             <form class="login_form" method="post" enctype="multipart/form-data">
