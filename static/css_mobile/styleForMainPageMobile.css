@@ -1,3 +1,12 @@
-h1 {
-    font-size: 60px;
+#div_info {
+    width: 84%;
+    background: rgb(255, 255, 255);
+    border-radius: 35px;
+    overflow: hidden;
+    margin: auto;
+    border: 4px outset black;
+}
+
+#slider__item_text {
+    font-size: 50px;
 }

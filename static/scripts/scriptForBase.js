@@ -18,6 +18,7 @@ window.onresize = function () {
     };
     document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
     document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
+    $('#navigator_div4').css('visibility', 'visible');
 };
 };
 
@@ -65,13 +66,15 @@ $( document ).ready(function () {
                      </div>`
     document.getElementById('main').after(div);
     $('#content').height('100%');
+    $('.header').height(38);
     var x = $( '#content' ).height() + 202 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2)) - Number($( '#content' ).css( "border-width" ).substring(0, $( '#content' ).css( "border-width" ).length - 2));
-    if ( $( window ).height() > x + 125) {
+    if ( $( window ).height() > x + 130) {
         document.getElementById('footer').style.marginTop = String( Number(document.documentElement.clientHeight - x - 125)) + 'px';
     }
     else {
         document.getElementById('footer').style.marginTop = String( 30 ) + 'px';
     };
-    $( '#top_menuDiv' ).width(document.documentElement.clientWidth)
-    $( '#all_navigator_div' ).width(document.documentElement.clientWidth - 400)
+    $( '#top_menuDiv' ).width(document.documentElement.clientWidth);
+    $( '#all_navigator_div' ).width(document.documentElement.clientWidth - 400);
+    $('#navigator_div4').css('visibility', 'visible');
 };});

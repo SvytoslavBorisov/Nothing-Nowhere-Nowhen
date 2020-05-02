@@ -2,13 +2,13 @@
 
 {% block content %}
     <div id="main_div">
-        <h1 id="heading_h">Главная страница</h1>
+        <h1 class='header' id="heading_h">Главная страница</h1>
         <div id="div_info">
             <div class="slider">
                 <div class="slider__wrapper">
                     {% for new in news %}
                         <div class="slider__item">
-                            <div id='slider__item_text' style="background-image: url('');">{{ new[0] }}</div>
+                            <div id='slider__item_text' style="background-image: url('');">{{ new[2] }}</div>
                         </div>
                     {% endfor %}
                 </div>
@@ -20,6 +20,7 @@
                 <div class="news__item">
                     <img src="{{ new[1] }}" alt="" class="img_news" height="110px" width="220px">
                     <div class="div_text_news">
+                        <p class="p_news_caption">{{ new[2] }}</p>
                         <p class="p_news">{{ new[0] }}</p>
                     </div>
                 </div>

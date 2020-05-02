@@ -22,7 +22,7 @@ window.onresize = function () {
     document.getElementById('checkbox2').style.left = String(document.getElementById('div_questions_answer2').getBoundingClientRect().x) + 'px';
     document.getElementById('checkbox3').style.left = String(document.getElementById('div_questions_answer3').getBoundingClientRect().x) + 'px';
     document.getElementById('checkbox4').style.left = String(document.getElementById('div_questions_answer4').getBoundingClientRect().x) + 'px';
-};
+};};
 
 function changeRadioBox(id_) {
     chbox = document.getElementById(id_);
@@ -74,4 +74,6 @@ function changeRadioBox(id_) {
             if (id_ == 'checkbox3') { document.getElementById('div_questions_answer3').style.background = 'rgb(200, 200, 200)'; };
             if (id_ == 'checkbox4') { document.getElementById('div_questions_answer4').style.background = 'rgb(200, 200, 200)'; };
         }
-}
+};
+
+$('#game_div').height($('#game_div').height() + 6);

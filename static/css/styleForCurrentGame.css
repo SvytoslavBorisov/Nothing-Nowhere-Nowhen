@@ -124,6 +124,7 @@ h1 {
     margin: auto;
     font-size: 20px;
     text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+    padding-bottom: 5px;
 }
 
 #div_questions_answers_up {

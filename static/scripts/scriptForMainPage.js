@@ -86,3 +86,5 @@ var multiItemSlider = (function () {
 }());
 
 var slider = multiItemSlider('.slider')
+
+$('#main_div').height($('#main_div').height() + 1);

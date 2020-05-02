@@ -10,13 +10,6 @@
     margin-bottom: 0px;
 }
 
-#p_text {
-    text-align: center;
-    color: #000000;
-    margin-bottom: 0px;
-    font-size: 20px;
-}
-
 #main_div {
     margin: auto;
     margin-bottom: 0px;
@@ -135,10 +128,21 @@
 }
 
 .p_news {
-    float: left;
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-left: 20px;
     margin-bottom: 10px;
-    height: 110px;
     font-size: 20px;
+    padding-left: 10px;
+}
+
+.p_news_caption {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    height: 30px;
+    font-size: 30px;
+}
+
+.div_text_news {
+    float: left;
+    width: 66%;
 }

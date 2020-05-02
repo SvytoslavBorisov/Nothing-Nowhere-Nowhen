@@ -113,7 +113,7 @@ def main_page():
     param['style'] = 'static/css/styleForMainPage.css'
     param['style_mobile'] = '/static/css_mobile/styleForMainPageMobile.css'
 
-    param['news'] = [[x.text, x.image] for x in session.query(News).all()]
+    param['news'] = [[x.text, x.image, x.caption] for x in session.query(News).all()]
 
     return render_template('main_page.html', **param)
 
@@ -476,6 +476,7 @@ def rating():
 
     param['title'] = 'Рейтинг'
     param['style'] = '/static/css/styleForRating.css'
+    param['style_mobile'] = '/static/css_mobile/styleForRatingMobile.css'
     all_users = session.query(User).all()
     all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))
     param['users'] = all_users
