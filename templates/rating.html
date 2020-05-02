@@ -2,22 +2,22 @@
 
 {% block content %}
     <h1 id="header_rating">Рейтинг</h1>
-    <div>
+    <div id="main_div">
         <table id="rating_div">
             <tr class="user_div">
-                <th>Место</th>
+                <th class="first_td_left" >Место</th>
                 <th>Ник</th>
                 <th>Имя</th>
                 <th>Рейтинг</th>
             </tr>
             {% for user in users %}
 
-                <tr class="user_div" onclick="toUser('{{ user.nickname }}')">
-                    <td>{{ loop.index }}</td>
-                    <td>{{ user.nickname }}</td>
-                    <td>{{ user.surname }} {{user.name}}</td>
-                    <td>{{ user.rating }}</td>
-                </tr>
+            <tr class="user_div" onclick="toUser('{{ user.nickname }}')">
+                <td class="first_td_left">{{ loop.index }}</td>
+                <td>{{ user.nickname }}</td>
+                <td>{{ user.surname }} {{user.name}}</td>
+                <td>{{ user.rating }}</td>
+            </tr>
 
             {% endfor %}
         </table>

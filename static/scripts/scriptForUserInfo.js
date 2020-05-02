@@ -96,5 +96,5 @@ dataset.reduce(function (prev, curr) {
   })(curr, prev);
 }, 0);}
 
-document.getElementById('main_div_user_info').style.height = String(document.documentElement.clientHeight - 211 -150) + 'px';
-document.getElementById('user_avatar_and_root').style.height = String(document.documentElement.clientHeight - 361) + 'px';
+document.getElementById('main_div_user_info').style.height = String(document.documentElement.clientHeight - 251) + 'px';
+document.getElementById('user_avatar_and_root').style.height = String(document.documentElement.clientHeight - 251) + 'px';

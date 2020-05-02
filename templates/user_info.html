@@ -26,7 +26,7 @@
                 <hr class="top_line_user_info">
                 <p id="user_info_p_rating">Рейтинг: {{ user.rating }}</p>
                 <p id="user_info_p_email">Почта: {{ user.email }}</p>
-                <p id="user_info_p_vk">ВК: {{ user.link_vk }}</p>
+                <p id="user_info_p_vk">ВК: <a href="{{ user.link_vk }}" id="a_vk" target="_blank">{{ user.link_vk }}</a></p>
                 <hr class="top_line_user_info">
                 <div id="statistic_user">
                     <p id="p_statistic">Статистика</p>

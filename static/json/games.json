@@ -1,18 +1,4 @@
 {
     "current_games": {
-        "1": {
-            "questions": [
-                90,
-                89,
-                88,
-                87
-            ],
-            "wins": 1,
-            "defeats": 3,
-            "current_question": 4,
-            "time": 1587987298,
-            "quest_or_next": "quest",
-            "last_result": null
-        }
     }
 }

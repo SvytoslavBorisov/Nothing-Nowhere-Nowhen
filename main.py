@@ -16,6 +16,7 @@ from data.categories import Category
 from data.questions import Question
 from data.users import User
 from data.games import Game
+from data.news import News
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
@@ -79,9 +80,9 @@ def not_found(error):
 
 @application.route('/categories')
 def categories():
-    k = return_to_game()
-    if k:
+    if return_to_game():
         return redirect('/current_game')
+
     session = db_session.create_session()
 
     param = {}
@@ -101,14 +102,19 @@ def categories():
 
 @application.route('/', methods=['POST', 'GET'])
 def main_page():
-    k = return_to_game()
-    if k:
+    if return_to_game():
         return redirect('/current_game')
+
+    session = db_session.create_session()
+
     param = {}
 
     param['title'] = 'Главная страница'
     param['style'] = 'static/css/styleForMainPage.css'
     param['style_mobile'] = '/static/css_mobile/styleForMainPageMobile.css'
+
+    param['news'] = [[x.text, x.image] for x in session.query(News).all()]
+
     return render_template('main_page.html', **param)
 
 

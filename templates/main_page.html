@@ -2,6 +2,29 @@
 
 {% block content %}
     <div id="main_div">
-        <h1>Главная страница</h1>
+        <h1 id="heading_h">Главная страница</h1>
+        <div id="div_info">
+            <div class="slider">
+                <div class="slider__wrapper">
+                    {% for new in news %}
+                        <div class="slider__item">
+                            <div id='slider__item_text' style="background-image: url('');">{{ new[0] }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <a class="slider__control slider__control_left" href="#" role="button"></a>
+                <a class="slider__control slider__control_right slider__control_show" href="#" role="button"></a>
+            </div>
+            <h2 id="heading_news">Новостная лента</h2>
+            {% for new in news %}
+                <div class="news__item">
+                    <img src="{{ new[1] }}" alt="" class="img_news" height="110px" width="220px">
+                    <div class="div_text_news">
+                        <p class="p_news">{{ new[0] }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+    <script src="/static/scripts/scriptForMainPage.js"></script>
 {% endblock %}
