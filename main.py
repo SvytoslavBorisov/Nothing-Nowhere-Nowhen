@@ -4,7 +4,6 @@ from data import db_session, users, questions
 from requests import get, post, delete, put
 from datetime import datetime
 from flask_wtf import FlaskForm
-from flask_ngrok import run_with_ngrok
 import datetime
 import socket
 import struct
@@ -12,8 +11,6 @@ import time
 import random
 import json
 import os
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.categories import Category
 from data.questions import Question
@@ -23,21 +20,20 @@ from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
 from random import choice, shuffle
-from cryptography.fernet import Fernet
 from api import questions_resources, users_resources, questions_api
 
 
-app = Flask(__name__)
-app.config.update(
+application = Flask(__name__)
+application.config.update(
     JSON_AS_ASCII=False
 )
-api = Api(app)
+api = Api(application)
 #  app.register_blueprint(questions_api.blueprint)
 login_manager = LoginManager()
-login_manager.init_app(app)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+login_manager.init_app(application)
+application.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db_session.global_init("db/baseDate.sqlite")
-app.register_blueprint(questions_api.blueprint)
+application.register_blueprint(questions_api.blueprint)
 
 api.add_resource(questions_resources.QuestionsListResource, '/api/questions')
 api.add_resource(questions_resources.QuestionResource, '/api/question/<question_id>')
@@ -76,12 +72,12 @@ def get_time():
     return secs
 
 
-@app.errorhandler(404)
+@application.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
-@app.route('/categories')
+@application.route('/categories')
 def categories():
     k = return_to_game()
     if k:
@@ -103,7 +99,7 @@ def categories():
         return render_template('categories.html', **param)
 
 
-@app.route('/', methods=['POST', 'GET'])
+@application.route('/', methods=['POST', 'GET'])
 def main_page():
     k = return_to_game()
     if k:
@@ -122,7 +118,7 @@ def load_user(user_id):
     return session.query(User).get(user_id)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@application.route('/login', methods=['GET', 'POST'])
 def login():
     k = return_to_game()
     if k:
@@ -146,14 +142,14 @@ def login():
     return render_template('login.html', form=form, **param)
 
 
-@app.route('/logout')
+@application.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect("/")
 
 
-@app.route('/register', methods=['POST', 'GET'])
+@application.route('/register', methods=['POST', 'GET'])
 def register():
     k = return_to_game()
     if k:
@@ -206,7 +202,7 @@ def register():
     return render_template('register.html', form=form, **param)
 
 
-@app.route('/user_info/<string:user>')
+@application.route('/user_info/<string:user>')
 def user_info(user):
     k = return_to_game()
     if k:
@@ -228,7 +224,7 @@ def user_info(user):
     return render_template('user_info.html', **param)
 
 
-@app.route('/add_question/<string:user>', methods=['POST', 'GET'])
+@application.route('/add_question/<string:user>', methods=['POST', 'GET'])
 @login_required
 def add_question(user):
     k = return_to_game()
@@ -264,7 +260,7 @@ def add_question(user):
     return render_template('add_question.html', form=form, **param)
 
 
-@app.route('/about_site', methods=['POST', 'GET'])
+@application.route('/about_site', methods=['POST', 'GET'])
 def about_site():
     k = return_to_game()
     if k:
@@ -277,7 +273,7 @@ def about_site():
     return render_template('about_site.html', **param)
 
 
-@app.route('/game/<int:id_>')
+@application.route('/game/<int:id_>')
 def game(id_):
     k = return_to_game()
     if k:
@@ -292,7 +288,7 @@ def game(id_):
     return render_template('game.html', **param)
 
 
-@app.route('/start_game/<int:id_>')
+@application.route('/start_game/<int:id_>')
 def start_game(id_):
     k = return_to_game()
     if k:
@@ -335,7 +331,7 @@ def start_game(id_):
     return redirect('/current_game')
 
 
-@app.route('/current_game', methods=['POST', 'GET'])
+@application.route('/current_game', methods=['POST', 'GET'])
 def current_game():
     session = db_session.create_session()
     if current_user.is_authenticated:
@@ -463,7 +459,7 @@ def current_game():
         return redirect('/login')
 
 
-@app.route('/rating')
+@application.route('/rating')
 def rating():
 
     k = return_to_game()
@@ -481,7 +477,7 @@ def rating():
     return render_template('rating.html', **param)
 
 
-@app.route('/end_game/<why>')
+@application.route('/end_game/<why>')
 def end_game(why):
     k = return_to_game()
     if k:
@@ -497,4 +493,5 @@ def end_game(why):
 
     return render_template('end_game.html', **param)
 
-#app.run(threaded=True)
+
+#application.run(threaded=True)

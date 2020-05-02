@@ -13,13 +13,11 @@ body {
 #title_div {
     width: 400px;
     float: left;
-    background: rgba(45, 45, 45);
 }
 
 #all_navigator_div {
     width: 70%;
     float: left;
-    background: rgb(45, 45, 45);
 }
 
 #heading {
@@ -160,7 +158,7 @@ body {
     width: 100%;
     float: left;
     height: 100%;
-    background: rgba(50, 50, 50, 0.8);
+    background: linear-gradient(to top, rgb(30, 30, 30), rgb(50, 50, 50));
 }
 
 #footer_p {
