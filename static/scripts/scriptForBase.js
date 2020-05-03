@@ -29,9 +29,7 @@ $( document ).ready(function () {
     $('#content').height('100%');
     $('.header').height(38);
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        alert($( window ).height());
         var x = $( '#content' ).height() + 420 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2));
-        alert(x);
         if ( $( window ).height() > x + 125) {
             document.getElementById('footer').style.marginTop = String( Number(document.documentElement.clientHeight - x - 125)) + 'px';
         }
