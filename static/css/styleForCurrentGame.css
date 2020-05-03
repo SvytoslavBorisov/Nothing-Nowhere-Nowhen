@@ -11,7 +11,7 @@
     overflow: hidden;
 }
 
-h1 {
+#header_quest {
     width: 200px;
     margin: 0 auto;
     text-align: center;

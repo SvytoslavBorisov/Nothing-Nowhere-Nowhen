@@ -11,7 +11,7 @@
         {% endif %}
         <img id="opponent_icon" src="/{{ user.avatar }}" width="70px" height="70px">
         <div id="opponent_name">{{ user.nickname }}</div>
-        <h1>Вопрос</h1>
+        <h1 id="header_quest">Вопрос</h1>
         <div id="div_progressbar">
             <progress id="progressbar" value="{{ 60 - current_time }}" max="60">20</progress>
         </div>
@@ -33,6 +33,6 @@
                 <input type="submit" value="Далее" id="b_answer_question">
             </div>
         </form>
+        <script src="/static/scripts/scriptForCurrentGame.js"></script>
     </div>
-    <script src="/static/scripts/scriptForCurrentGame.js"></script>
 {% endblock %}
