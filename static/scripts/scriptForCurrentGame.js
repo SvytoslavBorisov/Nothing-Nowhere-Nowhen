@@ -75,5 +75,3 @@ function changeRadioBox(id_) {
             if (id_ == 'checkbox4') { document.getElementById('div_questions_answer4').style.background = 'rgb(200, 200, 200)'; };
         }
 };
-
-$('#game_div').height($('#game_div').height() + 6);

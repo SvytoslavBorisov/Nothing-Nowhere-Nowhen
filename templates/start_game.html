@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class='header'>Игра</h1>
+    <h1 class='header' id="header_start">Игра</h1>
     {% for quest in questions %}
         <h3 style="text-align: center; color: #FFF;">{{ quest.text }}</h3>
     {% endfor %}

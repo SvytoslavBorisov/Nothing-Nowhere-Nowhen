@@ -39,10 +39,10 @@ var multiItemSlider = (function () {
         _positionLeftItem++;
 
         for (var i = 0; i < document.getElementsByClassName('p_news_lenta').length; i++) {
-            document.getElementsByClassName('p_news_lenta')[i].style.background = 'white';
+            document.getElementsByClassName('p_news_lenta')[i].style.background = 'rgb(200, 200, 200)';
         }
 
-        $('#slider_text_' + _positionLeftItem).css('background', 'red');
+        $('#slider_text_' + _positionLeftItem).css('background', 'rgb(186, 48, 48)');
         _transform -= _step;
       };
       if (direction === 'left') {
@@ -58,10 +58,10 @@ var multiItemSlider = (function () {
         _positionLeftItem--;
         _transform += _step;
         for (var i = 0; i < document.getElementsByClassName('p_news_lenta').length; i++) {
-            document.getElementsByClassName('p_news_lenta')[i].style.background = 'white';
+            document.getElementsByClassName('p_news_lenta')[i].style.background = 'rgb(200, 200, 200)';
         }
 
-        $('#slider_text_' + _positionLeftItem).css('background', 'red');
+        $('#slider_text_' + _positionLeftItem).css('background', 'rgb(186, 48, 48)');
       };
       if (direction === 'no') {
 
@@ -82,10 +82,10 @@ var multiItemSlider = (function () {
         _positionLeftItem = Number(_id);
 
         for (var i = 0; i < document.getElementsByClassName('p_news_lenta').length; i++) {
-            document.getElementsByClassName('p_news_lenta')[i].style.background = 'white';
+            document.getElementsByClassName('p_news_lenta')[i].style.background = 'rgb(200, 200, 200)';
         }
 
-        $('#slider_text_' + _positionLeftItem).css('background', 'red');
+        $('#slider_text_' + _positionLeftItem).css('background', 'rgb(186, 48, 48)');
       };
       _sliderWrapper.style.transform = 'translateX(' + _transform + '%)';
     };
@@ -140,3 +140,13 @@ var multiItemSlider = (function () {
 var slider = multiItemSlider('#div_lenta_news')
 
 $('#main_div').height($('#main_div').height() + 1);
+
+document.getElementById('div_news').style.visibility = 'hidden';
+
+window.addEventListener('scroll', function() {
+  document.getElementById('footer').style.visibility = 'visible';
+  document.getElementById('div_news').style.visibility = 'visible';
+  if ($(window).scrollTop() == 0) {
+    document.getElementById('div_news').style.visibility = 'hidden';
+  };
+});

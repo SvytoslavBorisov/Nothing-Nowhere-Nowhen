@@ -2,12 +2,11 @@
 
 {% block content %}
     <div id="main_div">
-        <h1 class='header' id="heading_h">Главная страница</h1>
         <div id="div_info">
             <div id="div_lenta_news">
                 <div class="slider">
                     <div class="slider__wrapper">
-                        {% for new in news %}
+                        {% for new in news[:5] %}
                             <div class="slider__item">
                                 <div id='slider__item_text'>
                                     <img src="{{ new[1] }}" alt="" class="image_news_lenta">
@@ -19,7 +18,7 @@
                     <a class="slider__control slider__control_right slider__control_show" href="#" role="button"></a>
                 </div>
                 <div id="slider_text">
-                    {% for new in news %}
+                    {% for new in news[:5] %}
                         <div class="inner">
                             <p class="p_news_lenta" id="slider_text_{{ loop.index - 1 }}">{{ new[2] }}</p>
                         </div>
@@ -31,7 +30,7 @@
                     $('.image_news_lenta').height($('#slider__item_text').height());
                     $('.image_news_lenta').width($('#slider__item_text').width());
                     $('#slider_text').height($('.image_news_lenta').height() + 8);
-                    $('.inner').height($('#slider_text').height() / 5);
+                    $('.inner').height($('#slider_text').height() / 5 + 1);
                     $('.p_news_lenta').css('line-height', String($('.inner').height() - 1) + 'px');
                 </script>
             </div>

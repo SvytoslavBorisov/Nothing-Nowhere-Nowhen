@@ -31,7 +31,7 @@ $( document ).ready(function () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         var x = $( '#content' ).height() + 420 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2));
         if ( $( window ).height() > x + 125) {
-            document.getElementById('footer').style.marginTop = String( Number(document.documentElement.clientHeight - x - 125)) + 'px';
+            document.getElementById('footer').style.marginTop = String( Number($( document ).height() - x - 125)) + 'px';
         }
         else {
             document.getElementById('footer').style.marginTop = String( 30 ) + 'px';
@@ -40,7 +40,7 @@ $( document ).ready(function () {
     else {
         var x = $( '#content' ).height() + 202 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2)) - Number($( '#content' ).css( "border-width" ).substring(0, $( '#content' ).css( "border-width" ).length - 2));
         if ( $( window ).height() > x + 130) {
-            document.getElementById('footer').style.marginTop = String( Number(document.documentElement.clientHeight - x - 125)) + 'px';
+            document.getElementById('footer').style.marginTop = String( Number($( document ).height() - x - 125)) + 'px';
             }
         else {
             document.getElementById('footer').style.marginTop = String( 30 ) + 'px';
@@ -63,7 +63,7 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 else {
     var x = $( '#content' ).height() + 202 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2)) - Number($( '#content' ).css( "border-width" ).substring(0, $( '#content' ).css( "border-width" ).length - 2));
     if ( $( window ).height() > x + 130) {
-        document.getElementById('footer').style.marginTop = String( Number(document.documentElement.clientHeight - x - 125)) + 'px';
+        document.getElementById('footer').style.marginTop = String( Number($( document ).height() - x - 125)) + 'px';
         }
     else {
         document.getElementById('footer').style.marginTop = String( 30 ) + 'px';
