@@ -52,7 +52,7 @@ $( document ).ready(function () {
 );
 
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    var x = $( '#content' ).height() + 408 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2));
+    var x = $( '#content' ).height() + 420 - Number($( '#content' ).css( "margin-bottom" ).substring(0, $( '#content' ).css( "margin-bottom" ).length - 2)) - Number($( '#content' ).css( "margin-top" ).substring(0, $( '#content' ).css( "margin-top" ).length - 2));
     if ( $( window ).height() > x + 125) {
         document.getElementById('footer').style.marginTop = String( Number($( document ).height() - x - 125)) + 'px';
         }

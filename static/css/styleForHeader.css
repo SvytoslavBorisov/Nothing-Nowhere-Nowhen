@@ -204,7 +204,7 @@ html {
     float: left;
 }
 
-h1 {
+.header {
     color: rgb(255, 255, 255);
     text-align: center;
     margin-top: 101px;
