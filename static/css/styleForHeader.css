@@ -19,6 +19,7 @@ html {
 #title_div {
     width: 400px;
     float: left;
+    z-index: 1;
 }
 
 #all_navigator_div {
@@ -94,6 +95,7 @@ html {
     position: fixed;
     font-family: "Verdana", serif;
     background: rgba(50, 50, 50, 0.8);
+    z-index: 3;
 }
 
 #user_avatar_navigator {
