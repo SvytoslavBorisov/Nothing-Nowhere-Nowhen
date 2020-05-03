@@ -29,7 +29,6 @@ application.config.update(
     JSON_AS_ASCII=False
 )
 api = Api(application)
-#  app.register_blueprint(questions_api.blueprint)
 login_manager = LoginManager()
 login_manager.init_app(application)
 application.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -126,10 +125,11 @@ def load_user(user_id):
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
-    k = return_to_game()
-    if k:
+    if return_to_game():
         return redirect('/current_game')
+
     session = db_session.create_session()
+
     param = {}
 
     param['title'] = 'Вход'
@@ -157,10 +157,11 @@ def logout():
 
 @application.route('/register', methods=['POST', 'GET'])
 def register():
-    k = return_to_game()
-    if k:
+    if return_to_game():
         return redirect('/current_game')
+
     session = db_session.create_session()
+
     param = {}
 
     param['title'] = 'Регистрация'

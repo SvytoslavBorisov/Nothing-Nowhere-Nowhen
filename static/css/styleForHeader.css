@@ -7,6 +7,7 @@ body{
     margin: 0px;
     overflow-y: scroll;
     font-family: Roboto, serif;
+    background: gray;
     background: url('/static/img/icons/background.jpg');
     height: 100vh;
 }

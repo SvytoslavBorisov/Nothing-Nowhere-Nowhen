@@ -18,9 +18,9 @@
 }
 
 #div_info {
-    width: 60%;
+    width: 80%;
     background: rgb(255, 255, 255);
-    border-radius: 35px;
+    border-radius: 20px;
     overflow: hidden;
     margin: auto;
     border: 4px outset black;
@@ -32,14 +32,33 @@
     }
 }
 
+#div_lenta_news {
+    overflow: hidden;
+}
+
+#slider_text
+ {
+    float: left;
+    width: 29.5%;
+    margin-top: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.p_news_lenta {
+    font-size: 20px;
+    margin: 0;
+    border: 1px solid black;
+}
+
 .slider {
     border: 4px outset black;
     border-left: 0px;
-    border-right: 0px;
     position: relative;
-    overflow: hidden;
-    margin: auto;
     margin-top: 20px;
+    overflow: hidden;
+    width: 70%;
+    float: left;
 }
 
 .slider__wrapper {
@@ -106,13 +125,13 @@
 
 .slider__item>div {
   line-height: 250px;
-  font-size: 100px;
+  font-size: 50px;
   text-align: center;
 }
 
 #slider__item_text {
-    height: 250px;
-    background: no-repeat;
+  height: 250px;
+  background: no-repeat;
 }
 
 .news__item {

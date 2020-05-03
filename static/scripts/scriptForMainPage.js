@@ -6,6 +6,7 @@ var multiItemSlider = (function () {
       _sliderWrapper = _mainElement.querySelector('.slider__wrapper'), // обертка для .slider-item
       _sliderItems = _mainElement.querySelectorAll('.slider__item'), // элементы (.slider-item)
       _sliderControls = _mainElement.querySelectorAll('.slider__control'), // элементы управления
+      _sliderControlsButton = _mainElement.querySelectorAll('.p_news_lenta'), // элементы управления
       _sliderControlLeft = _mainElement.querySelector('.slider__control_left'), // кнопка "LEFT"
       _sliderControlRight = _mainElement.querySelector('.slider__control_right'), // кнопка "RIGHT"
       _wrapperWidth = parseFloat(getComputedStyle(_sliderWrapper).width), // ширина обёртки
@@ -24,7 +25,7 @@ var multiItemSlider = (function () {
       getMax: _items.length - 1,
     }
 
-    var _transformItem = function (direction) {
+    var _transformItem = function (direction, _id) {
       if (direction === 'right') {
         if ((_positionLeftItem + _wrapperWidth / _itemWidth - 1) >= position.getMax) {
           return;
@@ -36,8 +37,14 @@ var multiItemSlider = (function () {
           _sliderControlRight.classList.remove('slider__control_show');
         }
         _positionLeftItem++;
+
+        for (var i = 0; i < document.getElementsByClassName('p_news_lenta').length; i++) {
+            document.getElementsByClassName('p_news_lenta')[i].style.background = 'white';
+        }
+
+        $('#slider_text_' + _positionLeftItem).css('background', 'red');
         _transform -= _step;
-      }
+      };
       if (direction === 'left') {
         if (_positionLeftItem <= position.getMin) {
           return;
@@ -50,9 +57,38 @@ var multiItemSlider = (function () {
         }
         _positionLeftItem--;
         _transform += _step;
-      }
+        for (var i = 0; i < document.getElementsByClassName('p_news_lenta').length; i++) {
+            document.getElementsByClassName('p_news_lenta')[i].style.background = 'white';
+        }
+
+        $('#slider_text_' + _positionLeftItem).css('background', 'red');
+      };
+      if (direction === 'no') {
+
+        _sliderControlRight.classList.add('slider__control_show');
+        _sliderControlLeft.classList.add('slider__control_show');
+
+        if (Number(_id) == position.getMin) {
+          _sliderControlRight.classList.add('slider__control_show');
+          _sliderControlLeft.classList.remove('slider__control_show');
+        }
+
+        if (Number(_id) == position.getMax) {
+          _sliderControlRight.classList.remove('slider__control_show');
+          _sliderControlLeft.classList.add('slider__control_show');
+        }
+
+        _transform += (_positionLeftItem - Number(_id)) * _step;
+        _positionLeftItem = Number(_id);
+
+        for (var i = 0; i < document.getElementsByClassName('p_news_lenta').length; i++) {
+            document.getElementsByClassName('p_news_lenta')[i].style.background = 'white';
+        }
+
+        $('#slider_text_' + _positionLeftItem).css('background', 'red');
+      };
       _sliderWrapper.style.transform = 'translateX(' + _transform + '%)';
-    }
+    };
 
     // обработчик события click для кнопок "назад" и "вперед"
     var _controlClick = function (e) {
@@ -63,11 +99,27 @@ var multiItemSlider = (function () {
       }
     };
 
+    var _click_on_p_news_lenta = function (e, _id) {
+      if (e.target.classList.contains('p_news_lenta')) {
+        e.preventDefault();
+        var i = 0;
+        while (e.target.id != 'slider_text_' + String(i)) {
+            i++;
+        };
+        var direction = i;
+        _transformItem('no', direction);
+      }
+    };
+
     var _setUpListeners = function () {
       // добавление к кнопкам "назад" и "вперед" обрботчика _controlClick для событя click
       _sliderControls.forEach(function (item) {
         item.addEventListener('click', _controlClick);
       });
+      _sliderControlsButton.forEach(function (item) {
+        item.addEventListener('click', _click_on_p_news_lenta);
+      });
+      _transformItem('no', 0);
     }
 
     // инициализация
@@ -85,6 +137,6 @@ var multiItemSlider = (function () {
   }
 }());
 
-var slider = multiItemSlider('.slider')
+var slider = multiItemSlider('#div_lenta_news')
 
 $('#main_div').height($('#main_div').height() + 1);
