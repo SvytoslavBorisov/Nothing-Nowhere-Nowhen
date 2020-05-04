@@ -1,13 +1,11 @@
 from flask import Flask, render_template, redirect, request, make_response, jsonify
-from flask_restful import reqparse, abort, Api, Resource
-from data import db_session, users, questions
+from flask_restful import Api
+from data import db_session
 from requests import get, post, delete, put
 from datetime import datetime
-from flask_wtf import FlaskForm
 import datetime
 import socket
 import struct
-import time
 import random
 import json
 import os
@@ -87,6 +85,7 @@ def categories():
     param = {}
 
     param['title'] = 'Играть'
+
     param['style'] = '/static/css/styleForCategories.css'
     param['style_mobile'] = '/static/css_mobile/styleForCategoriesMobile.css'
     param['script'] = ''
@@ -123,6 +122,13 @@ def load_user(user_id):
     return session.query(User).get(user_id)
 
 
+@application.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
 @application.route('/login', methods=['GET', 'POST'])
 def login():
     if return_to_game():
@@ -146,13 +152,6 @@ def login():
                                message="Неправильный логин или пароль",
                                form=form, **param)
     return render_template('login.html', form=form, **param)
-
-
-@application.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect("/")
 
 
 @application.route('/register', methods=['POST', 'GET'])
@@ -225,8 +224,8 @@ def user_info(user):
         param['procent_win'] = int((param['user'].wins / param['user'].all_games) * 100)
         param['procent_def'] = int(100 - param['procent_win'])
     else:
-        param['procent_win'] = 100
-        param['procent_def'] = 100
+        param['procent_win'] = 0
+        param['procent_def'] = 0
 
     return render_template('user_info.html', **param)
 
@@ -234,9 +233,9 @@ def user_info(user):
 @application.route('/add_question/<string:user>', methods=['POST', 'GET'])
 @login_required
 def add_question(user):
-    k = return_to_game()
-    if k:
+    if return_to_game():
         return redirect('/current_game')
+
     session = db_session.create_session()
     param = {}
 
@@ -245,7 +244,7 @@ def add_question(user):
     param['categories'] = session.query(Category).all()
 
     form = AddQuestionForm()
-    form.category.choices = [(x.name, x.name) for x in param['categories']]
+    form.category.choices = [(x.name, x.name) for x in param['categories'][1:]]
     form.category.default = param['categories'][0].name
     if form.validate_on_submit():
         question = Question()
@@ -269,8 +268,8 @@ def add_question(user):
 
 @application.route('/about_site', methods=['POST', 'GET'])
 def about_site():
-    k = return_to_game()
-    if k:
+
+    if return_to_game():
         return redirect('/current_game')
     param = {}
 
@@ -282,8 +281,8 @@ def about_site():
 
 @application.route('/game/<int:id_>')
 def game(id_):
-    k = return_to_game()
-    if k:
+
+    if return_to_game():
         return redirect('/current_game')
     session = db_session.create_session()
     param = {}
@@ -297,18 +296,26 @@ def game(id_):
 
 @application.route('/start_game/<int:id_>')
 def start_game(id_):
-    k = return_to_game()
-    if k:
+
+    if return_to_game():
         return redirect('/current_game')
     session = db_session.create_session()
 
     quests = []
     if current_user.is_authenticated:
-        for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id):
-            quests.append(question)
+        if Question.category.id != 1:
+            for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id):
+                quests.append(question)
+        else:
+            for question in session.query(Question).filter(Question.who_add != current_user.id):
+                quests.append(question)
     else:
-        for question in session.query(Question).filter(Question.category == id_):
-            quests.append(question)
+        if Question.category.id != 1:
+            for question in session.query(Question).filter(Question.category == id_):
+                quests.append(question)
+        else:
+            for question in session.query(Question):
+                quests.append(question)
 
     selected = []
     for _ in range(min(len(quests), 11)):

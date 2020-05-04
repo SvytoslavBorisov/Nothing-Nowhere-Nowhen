@@ -1,5 +1,5 @@
 #div_info {
-    width: 80%;
+    width: 100%;
     border-radius: 20px;
     overflow: hidden;
     margin: auto;
@@ -18,4 +18,12 @@
 .p_news_lenta:hover {
     background: rgb(186, 48, 48);
     font-size: 13px;
+}
+
+#slider_text
+ {
+    float: left;
+    width: calc(30% - 8px);
+    text-align: center;
+    position: relative;
 }
