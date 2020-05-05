@@ -279,23 +279,33 @@ def about_site():
     return render_template('about_site.html', **param)
 
 
-@application.route('/game/<int:id_>')
+@application.route('/game/<int:id_>', methods=['POST', 'GET'])
 def game(id_):
 
     if return_to_game():
         return redirect('/current_game')
     session = db_session.create_session()
+
     param = {}
 
     param['title'] = 'Начать игру'
     param['style'] = '/static/css/styleForGame.css'
     param['category'] = session.query(Category).filter(Category.id == id_).first()
 
-    return render_template('game.html', **param)
+    if request.method == 'GET':
+        return render_template('game.html', **param)
+    elif request.method == 'POST':
+
+        print(request.form['complexity'])
+        print(request.form['type'])
+
+        return redirect(f'/start_game/{str(id_)}+{str(request.form["complexity"])}+{str(request.form["type"])}')
 
 
-@application.route('/start_game/<int:id_>')
-def start_game(id_):
+@application.route('/start_game/<int:id_>+<int:comp_>+<type>')
+def start_game(id_, comp_, type):
+
+    print(id_, comp_, type)
 
     if return_to_game():
         return redirect('/current_game')
@@ -303,15 +313,15 @@ def start_game(id_):
 
     quests = []
     if current_user.is_authenticated:
-        if Question.category.id != 1:
-            for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id):
+        if id_!= 1:
+            for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id, (Question.type == type) | (Question.type == 'all')):
                 quests.append(question)
         else:
             for question in session.query(Question).filter(Question.who_add != current_user.id):
                 quests.append(question)
     else:
-        if Question.category.id != 1:
-            for question in session.query(Question).filter(Question.category == id_):
+        if id_ != 1:
+            for question in session.query(Question).filter(Question.category == id_, (Question.type == type) | (Question.type == 'all')):
                 quests.append(question)
         else:
             for question in session.query(Question):
@@ -333,7 +343,9 @@ def start_game(id_):
             'current_question': 0,
             'time': get_time(),
             'quest_or_next': 'quest',
-            'last_result': None
+            'last_result': None,
+            'type': type,
+            'complexity': comp_
         }
         data['current_games'][str(current_user.id)] = {}
         for x in load:
@@ -342,6 +354,7 @@ def start_game(id_):
         print(data)
         save_json(data, 'static/json/games.json')
 
+    print(1)
     return redirect('/current_game')
 
 
@@ -360,7 +373,7 @@ def current_game():
         param['question'] = session.query(Question).filter(Question.id == cur_quest_id).first()
 
         temp_data = [0, 1, 2, 3]  # порядок вариантов
-        shuffle(temp_data)  # рандомно изменяем его
+        shuffle(temp_data)        # рандомно изменяем его
 
         answers = param['question'].answers.split('!@#$%')
         shuffle_answers = []
@@ -373,7 +386,7 @@ def current_game():
 
         if data['current_games'][str(current_user.id)]['quest_or_next'] == 'quest':
             param['title'] = 'Идёт игра'
-            param['type_quest'] = random.choice(['change', 'write'])
+            param['type_quest'] = data['current_games'][str(current_user.id)]['type']
 
             param['current_time'] = get_time() - data['current_games'][str(current_user.id)]['time']  # Разница между текущим и тем, когда началась игра
 
@@ -389,17 +402,19 @@ def current_game():
                     data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
                     save_json(data, 'static/json/games.json')
                     if request.form.get('option'):
-                        if request.form['option'].lower() in param['question'].right_answer.lower():
+                        print(request.form['option'].lower().strip())
+                        print(set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]))
+                        if request.form['option'].lower().strip() in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):
                             result = True
                         else:
                             result = False
                             user = session.query(User).filter(User.id == param['question'].who_add).first()
-                            user.rating += 10
+                            user.rating += 1
                             session.commit()
                     else:
                         result = False
                         user = session.query(User).filter(User.id == param['question'].who_add).first()
-                        user.rating += 10
+                        user.rating += 1
                         session.commit()
                     data['current_games'][str(current_user.id)]['last_result'] = result
                     if result:
@@ -413,12 +428,14 @@ def current_game():
                 data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
                 save_json(data, 'static/json/games.json')
                 if request.form.get('option'):
-                    if request.form['option'].lower() in param['question'].right_answer.lower():
+                    print(request.form['option'].lower().strip())
+                    print(set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]))
+                    if request.form['option'].lower().strip() in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):
                         result = True
                     else:
                         result = False
                         user = session.query(User).filter(User.id == param['question'].who_add).first()
-                        user.rating += 10
+                        user.rating += 1
                         session.commit()
                 else:
                     result = None
@@ -455,7 +472,7 @@ def current_game():
                         user.all_games += 1
                         user.wins += param['defeat'] != 6
                         user.defeats += param['win'] != 6
-                        user.rating += 100 if param['defeat'] != 6 else param['win'] * 10
+                        user.rating += 100 if param['defeat'] != 6 else param['win'] * 3
 
                         game_res = Game()
                         game_res.category = param['question'].category
@@ -476,8 +493,7 @@ def current_game():
 @application.route('/rating')
 def rating():
 
-    k = return_to_game()
-    if k:
+    if return_to_game():
         return redirect('/current_game')
     session = db_session.create_session()
     param = {}
@@ -507,6 +523,53 @@ def end_game(why):
         param['why'] = 'Результат записан'
 
     return render_template('end_game.html', **param)
+
+
+@application.route('/check_quests/<why>')
+def check_quests(why):
+    if return_to_game():
+        return redirect('/current_game')
+
+    if why == 'GET':
+        if current_user.is_authenticated and current_user.state == 'admin':
+            session = db_session.create_session()
+            param = {}
+
+            param['title'] = 'Просмотр вопросов'
+            param['style'] = '/static/css/styleForCheckQuests.css'
+
+            param['quest'] = session.query(Question).filter(Question.is_promoted == 0).first()
+
+            if param['quest']:
+                return render_template('check_quests.html', **param)
+            else:
+                return redirect('/user_info/' + current_user.nickname)
+        else:
+            return redirect('/')
+    else:
+        if current_user.is_authenticated and current_user.state == 'admin':
+
+            data = why.split('+')
+            if data[1] == 'YES':
+
+                session = db_session.create_session()
+
+                quest = session.query(Question).filter(Question.id == int(data[2])).first()
+                user = session.query(User).filter(User.id == quest.who_add).first()
+                user.add_questions += 1
+                user.rating += 10
+                quest.is_promoted = 1
+                session.commit()
+                return redirect('/check_quests/GET')
+            else:
+                session = db_session.create_session()
+
+                quest = session.query(Question).filter(Question.id == int(data[2])).first()
+                session.delete(quest)
+                session.commit()
+                return redirect('/check_quests/GET')
+        else:
+            return redirect('/')
 
 
 #application.run(threaded=True)

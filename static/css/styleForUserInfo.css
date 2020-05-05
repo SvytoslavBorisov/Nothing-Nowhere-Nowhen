@@ -186,19 +186,6 @@
     outline: none;
 }
 
-#addQuestion:active {
-    background-color: rgb(190, 0, 0);
-}
-
-#addQuestion:hover {
-    background: linear-gradient(to top, rgb(250, 50, 50), rgb(255, 0, 0));
-}
-
-#addQuestionLink {
-    text-decoration: none;
-    color: #FFF;
-}
-
 #logout {
     margin-left: 5px;
     margin-bottom: 10px;
@@ -214,17 +201,30 @@
     text-align: center;
 }
 
-#logout:hover {
+#admin {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    width: 200px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    text-align: center;
+}
+
+#addQuestion:hover, #logout:hover, #admin:hover {
     background: linear-gradient(to top, rgb(250, 50, 50), rgb(255, 0, 0));
 }
 
-
-#logout:active {
+#logout:active, #addQuestion:active, #admin:hover  {
     background-color: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
 }
 
-
-#logoutLink {
+#logoutLink, #addQuestionLink, #adminLink {
     text-decoration: none;
     color: #FFF;
 }

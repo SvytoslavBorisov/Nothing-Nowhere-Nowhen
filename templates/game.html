@@ -10,11 +10,68 @@
         <p>
             - Не читерить
         </p>
-        <a class="link" href="/start_game/{{ category.id }}">
-            <div id="register_button">
-                Начать игру
-            </div>
-        </a>
+
+        <div id="change_type_and_comp">
+            <form class="login_form" method="post">
+                <div id="change_comp">
+                    <div class="form-group">
+                        <p>Выберите сложность</p>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="complexity" id="one" value="1" checked>
+                          <label class="form-check-label" for="one">
+                            1
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="complexity" id="two" value="2">
+                          <label class="form-check-label" for="two">
+                            2
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="complexity" id="three" value="3">
+                          <label class="form-check-label" for="three">
+                            3
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="complexity" id="four" value="4">
+                          <label class="form-check-label" for="four">
+                            4
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="complexity" id="five" value="5">
+                          <label class="form-check-label" for="five">
+                            5
+                          </label>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="change_type">
+                    <div class="form-group">
+                        <p>Выберите тип</p>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="type" id="change" value="change" checked>
+                          <label class="form-check-label" for="change">
+                            С вариантами
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="type" id="write" value="write">
+                          <label class="form-check-label" for="write">
+                            С вводом
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit">
+                    Начать игру
+                </button>
+            </form>
+        </div>
+
         <div id="login_div">
             Передумали?
             <a href="/categories" id="a_for_login">

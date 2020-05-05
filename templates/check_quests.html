@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="main_div">
+        <h1 class='header' id="header_categories">Добавить вопрос в игру</h1>
+        <div id="main_div_quests">
+            <div class="quest">
+                    <p class="p_quests">{{ quest.text }}</p>
+                    {% for answer in quest.answers.split('!@#$%') %}
+                        <p class="p_quests_answers">{{ answer }}</p>
+                    {% endfor %}
+                    <p class="p_quests_comment">Комментарий:{{ quest.comment }}</p>
+            </div>
+            <a href="/check_quests/POST+YES+{{ quest.id }}">
+                Добавить вопрос
+            </a>
+            <a href="/check_quests/POST+NO+{{ quest.id }}">
+                Не добавить вопрос
+            </a>
+        </div>
+    </div>
+{% endblock %}

@@ -46,3 +46,22 @@
     text-align: center;
     color: #FFF;
 }
+
+#change_type_and_comp {
+    width: 70%;
+    margin: auto;
+    overflow: hidden;
+    margin-bottom:20px;
+}
+
+#change_comp {
+    width: 50%;
+    float: left;
+    overflow: hidden;
+}
+
+#change_type {
+    width: 50%;
+    float: left;
+    overflow: hidden;
+}

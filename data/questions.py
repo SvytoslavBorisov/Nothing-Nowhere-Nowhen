@@ -25,5 +25,9 @@ class Question(SqlAlchemyBase, SerializerMixin):
 
     comment = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
+    type = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+
+    complexity = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+
     orm_with_category = orm.relation('Category')
     orm_with_users = orm.relation('User')
