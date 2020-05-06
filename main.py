@@ -567,4 +567,4 @@ def check_quests(why):
             return redirect('/')
 
 
-application.run(threaded=True)
+#application.run(threaded=True)
