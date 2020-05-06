@@ -309,15 +309,15 @@ def start_game(id_, comp_, type):
 
     quests = []
     if current_user.is_authenticated:
-        if id_!= 1:
-            for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id, (Question.type == type) | (Question.type == 'all')):
+        if id_ != 1:
+            for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id, (Question.type == type) | (Question.type == 'all'), Question.complexity == int(comp_)):
                 quests.append(question)
         else:
-            for question in session.query(Question).filter(Question.who_add != current_user.id):
+            for question in session.query(Question).filter(Question.who_add != current_user.id, Question.complexity == int(comp_)):
                 quests.append(question)
     else:
         if id_ != 1:
-            for question in session.query(Question).filter(Question.category == id_, (Question.type == type) | (Question.type == 'all')):
+            for question in session.query(Question).filter(Question.category == id_, (Question.type == type) | (Question.type == 'all'), Question.complexity == int(comp_)):
                 quests.append(question)
         else:
             for question in session.query(Question):
@@ -335,6 +335,7 @@ def start_game(id_, comp_, type):
         load = {
             'questions': [x.id for x in selected],
             'wins': 0,
+            'category': id_,
             'defeats': 0,
             'current_question': 0,
             'time': get_time(),
@@ -467,7 +468,7 @@ def current_game():
                         user.all_games += 1
                         user.wins += param['defeat'] != 6
                         user.defeats += param['win'] != 6
-                        user.rating += 100 if param['defeat'] != 6 else param['win'] * 3
+                        user.rating += 20 * int(data['current_games'][str(current_user.id)]['complexity']) if param['defeat'] != 6 else param['win'] * int(data['current_games'][str(current_user.id)]['complexity'])
 
                         game_res = Game()
                         game_res.category = param['question'].category
@@ -567,4 +568,4 @@ def check_quests(why):
             return redirect('/')
 
 
-#application.run(threaded=True)
+application.run(threaded=True)

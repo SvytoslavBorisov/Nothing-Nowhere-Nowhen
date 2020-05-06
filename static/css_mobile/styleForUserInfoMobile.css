@@ -53,7 +53,7 @@
     width: 265px;
     padding-top: 7px;
     padding-bottom: 7px;
-    font-size: 35px;
+    font-size: 30px;
     color: white;
     background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
     border: none;
@@ -68,7 +68,7 @@
     width: 265px;
     padding-top: 7px;
     padding-bottom: 7px;
-    font-size: 35px;
+    font-size: 30px;
     color: white;
     background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
     border: none;
@@ -165,7 +165,7 @@
 .p_procent {
    padding-left: 0px;
    padding-top: 10px;
-   font-size: 20px;
+   font-size: 18px;
 }
 
 td, tr {

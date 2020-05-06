@@ -1,13 +1,4 @@
-window.onresize = function () {
-    if ( $( window ).width > $( window ).height ) {
-        document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
-        document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
-    };
-    document.getElementById('checkbox1').style.left = String(document.getElementById('div_questions_answer1').getBoundingClientRect().x) + 'px';
-    document.getElementById('checkbox2').style.left = String(document.getElementById('div_questions_answer2').getBoundingClientRect().x) + 'px';
-    document.getElementById('checkbox3').style.left = String(document.getElementById('div_questions_answer3').getBoundingClientRect().x) + 'px';
-    document.getElementById('checkbox4').style.left = String(document.getElementById('div_questions_answer4').getBoundingClientRect().x) + 'px';
-};
+
 
 function changeRadioBox(id_) {
     chbox = document.getElementById(id_);
