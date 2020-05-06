@@ -87,7 +87,12 @@
             <form class="login_form" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <div id="div_questions_answers">
-                        <input type="text" name="option" id="input_text" autocomplete="off">
+                        <input type="text" name="option" id="input_text" autocomplete="off" oncontextmenu='return false;'>
+                        <script>
+                          input_text.onpaste = function(event) {
+                            return false;
+                          };
+                        </script>
                         <input type="submit" value="Отправить" id="b_answer_question">
                     </div>
                 </div>

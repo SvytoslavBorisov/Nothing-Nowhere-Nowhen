@@ -4,12 +4,16 @@
 
 #main_div_user_info {
     margin: auto;
-    margin-top: 100px;
+    margin-top: 101px;
     width: 740px;
     border: 4px outset black;
     background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
     border-radius: 35px;
-    height: 0px;
+    height: 100%;
+}
+
+#div_user_games_and_info {
+    height: 100%;
 }
 
 #user_avatar {
@@ -66,7 +70,7 @@
 #p_statistic {
     font-size: 25px;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .p_windef {
@@ -88,6 +92,7 @@
    float: left;
    border-radius: 35px;
    margin-right: 0px;
+   height: 100%;
 }
 
 #user_root {
@@ -347,5 +352,4 @@ td, tr {
     border: 2px solid rgb(70, 70, 70);
     cellspacing: 0px;
     border-collapse: collapse;
-
 }

@@ -1,5 +1,5 @@
 #main_div {
-    width: 84%;
+    width: 90%;
     border: 4px solid black;
     background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
     border-radius: 35px;
@@ -9,12 +9,12 @@
 .user_div {
     text-align: center;
     color: #FFF;
-    width: 80%;
+    width: 84%;
     cursor: pointer;
 }
 
 #rating_div {
-    font-size: 20px;
+    font-size: 35px;
     color: rgb(200, 200, 200);
     background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
     margin: 0 auto;

@@ -1,5 +1,5 @@
 #div_info {
-    width: 100%;
+    width: 95%;
     border-radius: 20px;
     overflow: hidden;
     margin: auto;
@@ -23,7 +23,33 @@
 #slider_text
  {
     float: left;
-    width: calc(30% - 8px);
+    width: 100%;
     text-align: center;
     position: relative;
+    font-size: 100px;
+}
+
+.slider {
+    border: 4px outset black;
+    border-left: 0px;
+    overflow: hidden;
+    width: 100%;
+    float: left;
+    z-index: 2;
+    position: relative;
+}
+
+.p_news_lenta {
+    font-size: 40px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.p_news_lenta:hover {
+    background: rgb(186, 48, 48);
+    font-size: 45px;
+}
+
+.header {
+    font-size: 60px;
 }

@@ -4,28 +4,21 @@
     <link rel="icon" href="/static/img/icons/icon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ style }}">
     <link rel="stylesheet" type="text/css" href="/static/css/styleForHeader.css">
-    <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 480px)" href="/static/css_mobile/styleForHeaderMobile.css">
-    <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 480px)" href="{{ style_mobile }}">
-    <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+    <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 980px)" href="/static/css_mobile/styleForHeaderMobile.css">
+    <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 980px)" href="{{ style_mobile }}">
     <title>{{ title }} | Играть в интеллектуальную бесплатную онлайн игру-викторину Ничто? Нигде? Никогда?</title>
     <meta name="Description" content="Играть в бесплатную онлайн-викторину Ничто? Нигде? Кокогда?"/>
+    <script type="text/javascript">
+        document.ondragstart = noselect;
+        // запрет на перетаскивание
+        document.onselectstart = noselect;
+        // запрет на выделение элементов страницы
+        document.oncontextmenu = noselect;
+        // запрет на выведение контекстного меню
+        function noselect() {return false;}
+    </script>
 </head>
 <body>
-    <!-- Yandex.Metrika counter -->
-            <script type="text/javascript" >
-               (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-               m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-               (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-               ym(62510245, "init", {
-                    clickmap:true,
-                    trackLinks:true,
-                    accurateTrackBounce:true,
-                    webvisor:true
-               });
-            </script>
-        <noscript><div><img src="https://mc.yandex.ru/watch/62510245" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
     <div id="top_menuDiv">
         <div style="overflow: hidden; background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));">
             <a href="/">
@@ -70,6 +63,7 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
     <div id="main">
         <div id="content">
             {% block content %}
@@ -77,23 +71,47 @@
         </div>
     </div>
     <script>
-            let div = document.createElement('div');
-            div.id = 'footer';
-            div.innerHTML = `<div id="logo_and_name">
-                                 <img src="/static/img/icons/footer_logo.png" alt="" height="100px" width="200px" id="footer_logo">
-                                 <p id="p_name"> Ничто? Нигде? Никогда?</p>
+        let div = document.createElement('div');
+        div.id = 'footer';
+        div.innerHTML = `<div id="logo_and_name">
+                             <img src="/static/img/icons/footer_logo.png" alt="" height="100px" width="200px" id="footer_logo">
+                             <p id="p_name"> Ничто? Нигде? Никогда?</p>
+                         </div>
+                         <div id="links_and_foot_p">
+                             <div id="div_links">
+                                 <p id="footer_p_">Ничто? Нигде? Никогда? - в соцсетях</p>
+                                 <a id="vk_a_join" target="_blank" href="https://vk.com/nothingnowherenowhen">
+                                     <img src="/static/img/icons/vk_link.png" alt="" id="vk_logo">
+                                 </a>
                              </div>
-                             <div id="links_and_foot_p">
-                                 <div id="div_links">
-                                     <p id="footer_p_">Ничто? Нигде? Никогда? - в соцсетях</p>
-                                     <a id="vk_a_join" target="_blank" href="https://vk.com/nothingnowherenowhen">
-                                         <img src="/static/img/icons/vk_link.png" alt="" id="vk_logo">
-                                     </a>
-                                 </div>
-                                 <p id="footer_p">Онлайн Викторина © 2020 NothingNowhereNowhen.com</p>
-                             </div>`
-            document.getElementById('main').after(div);
-        </script>
+                             <p id="footer_p">Онлайн Викторина © 2020 NothingNowhereNowhen.com</p>
+                         </div>`
+        document.getElementById('main').after(div);
+        if ( $( document ).height() - 125 > $( window ).height())
+            {
+                $('#footer').offset({top: $( document ).height() - 95})
+            }
+        else
+            {
+                $('#footer').offset({top: $( document ).height() - 125})
+            };
+
+    </script>
     <script src="/static/scripts/scriptForBase.js"></script>
+    <!-- Yandex.Metrika counter -->
+            <script type="text/javascript" >
+               (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+               m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+               (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+               ym(62510245, "init", {
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+               });
+            </script>
+        <noscript><div><img src="https://mc.yandex.ru/watch/62510245" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
 </body>
 </html>

@@ -218,14 +218,15 @@ def user_info(user):
 
     param['title'] = 'Профиль'
     param['style'] = '/static/css/styleForUserInfo.css'
+    param['style_mobile'] = '/static/css_mobile/styleForUserInfoMobile.css'
     param['user'] = session.query(User).filter(User.nickname == user).first()
     param['games'] = param['user'].games
     if param['user'].all_games:
         param['procent_win'] = int((param['user'].wins / param['user'].all_games) * 100)
         param['procent_def'] = int(100 - param['procent_win'])
     else:
-        param['procent_win'] = 0
-        param['procent_def'] = 0
+        param['procent_win'] = 50
+        param['procent_def'] = 50
 
     return render_template('user_info.html', **param)
 
@@ -296,16 +297,11 @@ def game(id_):
         return render_template('game.html', **param)
     elif request.method == 'POST':
 
-        print(request.form['complexity'])
-        print(request.form['type'])
-
         return redirect(f'/start_game/{str(id_)}+{str(request.form["complexity"])}+{str(request.form["type"])}')
 
 
 @application.route('/start_game/<int:id_>+<int:comp_>+<type>')
 def start_game(id_, comp_, type):
-
-    print(id_, comp_, type)
 
     if return_to_game():
         return redirect('/current_game')
@@ -354,7 +350,6 @@ def start_game(id_, comp_, type):
         print(data)
         save_json(data, 'static/json/games.json')
 
-    print(1)
     return redirect('/current_game')
 
 
@@ -404,7 +399,7 @@ def current_game():
                     if request.form.get('option'):
                         print(request.form['option'].lower().strip())
                         print(set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]))
-                        if request.form['option'].lower().strip() in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):
+                        if request.form['option'].lower().strip().replace('ё', 'е') in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):
                             result = True
                         else:
                             result = False
@@ -430,7 +425,7 @@ def current_game():
                 if request.form.get('option'):
                     print(request.form['option'].lower().strip())
                     print(set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]))
-                    if request.form['option'].lower().strip() in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):
+                    if request.form['option'].lower().strip().replace('ё', 'е') in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):
                         result = True
                     else:
                         result = False
@@ -572,4 +567,4 @@ def check_quests(why):
             return redirect('/')
 
 
-#application.run(threaded=True)
+application.run(threaded=True)

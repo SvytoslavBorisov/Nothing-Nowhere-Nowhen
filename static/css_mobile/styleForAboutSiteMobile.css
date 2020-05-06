@@ -7,5 +7,9 @@
  }
 
 #text_about_us {
-    width: 84%;
+    width: 90%;
+}
+
+#p_text {
+    font-size: 40px;
 }

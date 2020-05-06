@@ -94,7 +94,10 @@ dataset.reduce(function (prev, curr) {
       color: data.color,
     }, angle, true));
   })(curr, prev);
-}, 0);}
+}, 0);};
 
-document.getElementById('main_div_user_info').style.height = String(document.documentElement.clientHeight - 251) + 'px';
-document.getElementById('user_avatar_and_root').style.height = String(document.documentElement.clientHeight - 251) + 'px';
+$(document).ready(function() {
+    $('#main_div_user_info').height( $('#div_user_games_and_info').height() + 40);
+    $('#footer').offset({top: $( document ).height() - 169})
+});
+

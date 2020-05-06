@@ -1,0 +1,176 @@
+#main_div_user_info {
+    margin: auto;
+    margin-top: 101px;
+    width: 95%;
+    border: 4px outset black;
+    background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
+    border-radius: 35px;
+    height: 100%;
+    font-size: 20px;
+}
+
+#user_avatar_img {
+    width: 250px;
+    height: 250px;
+    border-radius: 200px;
+    margin-left: 25px;
+    margin-top: 25px;
+    border: 5px solid gray;
+    float: left;
+}
+
+#user_avatar {
+    width: 282px;
+}
+
+#user_root {
+    width: 282px;
+    padding-left: 7px;
+    float: left;
+}
+
+#user_avatar_and_root {
+   width: 282px;
+   background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
+   float: left;
+   border-radius: 35px;
+   margin-right: 0px;
+   height: 100%;
+}
+
+#user_root {
+   float:left;
+   border-radius: 10px;
+   margin-left: 10px;
+   margin-top: 10px;
+   background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
+   border: 1px solid gray;
+}
+
+#addQuestion {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    width: 265px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 35px;
+    color: white;
+    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    height: 50px;
+}
+
+#logout {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    width: 265px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 35px;
+    color: white;
+    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    text-align: center;
+    height: 50px;
+}
+
+#admin {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    width: 265px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 30px;
+    color: white;
+    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    text-align: center;
+    height: 50px;
+}
+
+#div_user_games_and_info {
+    float: left;
+    width: 60%;
+    margin-left: 30px;
+}
+
+#user_info {
+    margin-top: 25px;
+    margin-left: 25px;
+    padding-bottom: 5px;
+    width: 100%;
+
+    color: white;
+    border-radius: 35px;
+    border: 4px solid gray;
+    float: left;
+    background: linear-gradient(to top, rgb(70, 70, 70), rgb(50, 50, 50));
+}
+
+#div_user_games {
+    width: 100%;
+}
+
+#p_games {
+    margin-top: -10px;
+    padding: 0px;
+    font-size: 45px;
+    text-align: center;
+    padding-top: 15px;
+    margin-bottom: 0px;
+}
+
+#a_vk {
+    text-decoration: none;
+    color: white;
+    font-size: 30px;
+}
+
+#user_info_p_name {
+    margin-top: -10px;
+    padding: 0px;
+    font-size: 33px;
+    text-align: center;
+    padding-top: 15px;
+}
+
+#user_info_p_rating, #user_info_p_email, #user_info_p_vk {
+    margin: 0px;
+    padding: 0px;
+    font-size: 40px;
+    padding-left: 10px;
+    width: 100%;
+    float: left;
+    padding-top: 5px;
+}
+
+#p_statistic {
+    font-size: 45px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.p_windef {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 30px;
+}
+
+.p_procent {
+   padding-left: 0px;
+   padding-top: 10px;
+   font-size: 20px;
+}
+
+td, tr {
+    border: 2px solid rgb(70, 70, 70);
+    cellspacing: 2px;
+    font-size: 30px;
+    border-collapse: collapse;
+}
