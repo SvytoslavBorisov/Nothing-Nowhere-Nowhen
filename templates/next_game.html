@@ -2,37 +2,70 @@
 
 {% block content %}
     <div id="game_div">
-        {% if current_user.is_authenticated %}
-            <img id="player_icon" src="/{{ current_user.avatar }}" width="70px" height="70px">
-            <div id="player_name">{{ current_user.nickname }}</div>
-        {% else %}
-            <img id="player_icon" src="/static/img/users_avatars/no_photo.png" width="70px" height="70px">
-            <div id="player_name">Гость</div>
-        {% endif %}
-        <img id="opponent_icon" src="/{{ user.avatar }}" width="70px" height="70px">
-        <div id="opponent_name">{{ user.nickname }}</div>
-        <h1 id="header_quest">Вопрос</h1>
-        <div id="div_progressbar">
-            <progress id="progressbar" value="{{ 60 - current_time }}" max="60">20</progress>
-        </div>
-        <div id="progress">{{ win }}:{{ defeat }}</div>
-        <div id="question">{{ question.text }}</div>
-        {% if result == 'Вы ответили правильно' %}
-            <div id="result" style="color: green; border: 3px solid green;">{{ result }}</div>
-        {% else %}
-            <div id="result" style="color: red; border: 3px solid red;">{{ result }}</div>
-        {% endif %}
-        {% if question.comment != "" %}
-            <h2>Комментарий</h2>
-            <div id="comment">
-                {{ question.comment }}
+            <div id="main_div_info">
+                <h1 id="h1_quest">Вопрос №{{ current_number_quest + 1 }}</h1>
+                <div id="player_icon_name">
+                    <img id="player_icon" src="/{{ current_user.avatar }}" width="100px" height="100px">
+                    {% if current_user.nickname[9] %}
+                        <p class="player_name">{{ current_user.nickname[:9] + '...' }}</p>
+                    {% else %}
+                        <p class="player_name">{{ current_user.nickname[:11] }}</p>
+                    {% endif %}
+                </div>
+                <p id="p_vs">VS</p>
+                <div id="opp_icon_name">
+                    <img id="opponent_icon" src="/{{ user.avatar }}" width="100px" height="100px">
+                    {% if user.nickname[8] %}
+                        <p class="player_name">{{ user.nickname[:8] + '...' }}</p>
+                    {% else %}
+                        <p class="player_name">{{ user.nickname[:11] }}</p>
+                    {% endif %}
+                </div>
+                <h2 id="progress">{{ win }}:{{ defeat }}</h2>
+                <h2 id="category">Категория: {{ question.orm_with_category.name }}</h2>
+                {% if result == 'Вы ответили правильно' %}
+                    <div id="result" style="color: green; border: 3px solid green;">{{ result }}</div>
+                {% else %}
+                    <div id="result" style="color: red; border: 3px solid red;">{{ result }}</div>
+                {% endif %}
             </div>
-        {% endif %}
-        <form class="login_form" method="post" enctype="multipart/form-data">
-            <div id="button">
-                <input type="submit" value="Далее" id="b_answer_question">
+            <div id="main_div_questions">
+                <div id="div_question">
+                    {% if question.images == ' ' %}
+                        <p id="question">{{ question.text }}</p>
+                    {% else %}
+                        <div id="div_question_text">
+                            <p id="question">{{ question.text }}</p>
+                        </div>
+                        <div id="div_question_image">
+                            <p class="temp_p">
+                                <img src="{{ question.images }}" alt="" id="question_image">
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div id="div_answer">
+                    <p id="right_answer">Правильный ответ: {{ question.right_answer.split('!@#$%')[0] }}</p>
+                </div>
+                <div id="div_right_answer">
+                    {% if last_answer != ' ' %}
+                        <p id="answer">Ваш ответ: {{ last_answer }}</p>
+                    {% else %}
+                        <p id="answer">Вы не дали ответ</p>
+                    {% endif %}
+                </div>
+                {% if question.comment != "" %}
+                    <h3>Комментарий</h3>
+                    <div id="comment">
+                        {{ question.comment }}
+                    </div>
+                {% endif %}
+                <form class="login_form" method="post" enctype="multipart/form-data">
+                    <div id="button">
+                        <input type="submit" value="Далее" id="b_answer_question_next">
+                    </div>
+                </form>
             </div>
-        </form>
-        <script src="/static/scripts/scriptForCurrentGame.js"></script>
     </div>
+    <script src="/static/scripts/scriptForCurrentGame.js"></script>
 {% endblock %}

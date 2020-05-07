@@ -18,6 +18,7 @@ from data.news import News
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
+from forms.check_quests import CheckQuestionForm
 from random import choice, shuffle
 from api import questions_resources, users_resources, questions_api
 
@@ -41,13 +42,13 @@ api.add_resource(users_resources.UserResource, '/api/user/<user_id>')
 
 
 def open_json(file):
-    with open(file, "r") as f:
+    with open(file, "r", errors='ignore') as f:
         return json.load(f)
 
 
 def save_json(data, file):
     with open(file, "w") as f:
-        json.dump(data, f, indent=4)
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
 
 def return_to_game():
@@ -342,7 +343,8 @@ def start_game(id_, comp_, type):
             'quest_or_next': 'quest',
             'last_result': None,
             'type': type,
-            'complexity': comp_
+            'complexity': comp_,
+            'last_answer': ''
         }
         data['current_games'][str(current_user.id)] = {}
         for x in load:
@@ -360,10 +362,9 @@ def current_game():
     if current_user.is_authenticated:
         data = open_json('static/json/games.json')
 
-        print(data['current_games'][str(current_user.id)]['quest_or_next'])
-
         param = {}
         param['style'] = '/static/css/styleForCurrentGame.css'
+        param['style_mobile'] = '/static/css_mobile/styleForCurrentGameMobile.css'
 
         cur_quest_id = data['current_games'][str(current_user.id)]['questions'][data['current_games'][str(current_user.id)]['current_question']]
         param['question'] = session.query(Question).filter(Question.id == cur_quest_id).first()
@@ -398,8 +399,6 @@ def current_game():
                     data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
                     save_json(data, 'static/json/games.json')
                     if request.form.get('option'):
-                        print(request.form['option'].lower().strip())
-                        print(set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]))
                         if request.form['option'].lower().strip().replace('ё', 'е') in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):
                             result = True
                         else:
@@ -418,14 +417,14 @@ def current_game():
                     else:
                         data['current_games'][str(current_user.id)]['defeats'] += 1
                     save_json(data, 'static/json/games.json')
+
+                    data['current_games'][str(current_user.id)]['last_answer'] = request.form.get('option') if request.form.get('option') else ' '
                     return redirect(f'/current_game')
                 return render_template('current_game.html', **param)
             elif request.method == 'POST':
                 data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
                 save_json(data, 'static/json/games.json')
                 if request.form.get('option'):
-                    print(request.form['option'].lower().strip())
-                    print(set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]))
                     if request.form['option'].lower().strip().replace('ё', 'е') in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):
                         result = True
                     else:
@@ -436,6 +435,7 @@ def current_game():
                 else:
                     result = None
                 data['current_games'][str(current_user.id)]['last_result'] = result
+                data['current_games'][str(current_user.id)]['last_answer'] = request.form.get('option') if request.form.get('option') else ' '
                 if result:
                     data['current_games'][str(current_user.id)]['wins'] += 1
                 else:
@@ -452,6 +452,8 @@ def current_game():
 
             param['win'] = data['current_games'][str(current_user.id)]['wins']
             param['defeat'] = data['current_games'][str(current_user.id)]['defeats']
+
+            param['last_answer'] = data['current_games'][str(current_user.id)]['last_answer']
 
             if request.method == 'GET':
                 return render_template('next_game.html', **param)
@@ -521,51 +523,61 @@ def end_game(why):
     return render_template('end_game.html', **param)
 
 
-@application.route('/check_quests/<why>')
-def check_quests(why):
+@application.route('/check_quests', methods=['POST', 'GET'])
+def check_quests():
     if return_to_game():
         return redirect('/current_game')
 
-    if why == 'GET':
-        if current_user.is_authenticated and current_user.state == 'admin':
-            session = db_session.create_session()
-            param = {}
+    form = CheckQuestionForm()
+    if current_user.is_authenticated and current_user.state == 'admin':
 
-            param['title'] = 'Просмотр вопросов'
-            param['style'] = '/static/css/styleForCheckQuests.css'
+        session = db_session.create_session()
 
-            param['quest'] = session.query(Question).filter(Question.is_promoted == 0).first()
+        if request.method == 'POST':
+            if request.form.get('submit'):
+                question = session.query(Question).filter(Question.is_promoted == 0).first()
 
-            if param['quest']:
-                return render_template('check_quests.html', **param)
+                question.text = request.form['text']
+                question.category = session.query(Category).filter(Category.name == request.form['category']).first().id
+                question.answers = "!@#$%".join(
+                    [request.form['answer'], request.form['wrong_answer1'], request.form['wrong_answer2'],
+                     request.form['wrong_answer3']])
+                question.right_answer = request.form['answer']
+                question.is_promoted = True
+                question.comment = request.form['comment']
+                question.type = request.form['type']
+                question.comp = request.form['comp']
+
+                session.add(question)
+                session.commit()
             else:
-                return redirect('/user_info/' + current_user.nickname)
+                question = session.query(Question).filter(Question.is_promoted == 0).first()
+                session.delete(question)
+                session.commit()
+
+        param = {}
+
+        param['title'] = 'Просмотр вопросов'
+        param['style'] = '/static/css/styleForCheckQuests.css'
+
+        param['categories'] = session.query(Category).all()
+        param['quest'] = session.query(Question).filter(Question.is_promoted == 0).first()
+
+        if param['quest']:
+            temp = param['quest'].answers.split('!@#$%')
+            form.text.default = param['quest'].text
+            form.answer.default = temp[0]
+            form.comment.default = param['quest'].comment
+            form.category.choices = [(x.name, x.name) for x in param['categories'][1:]]
+            form.category.default = param['quest'].orm_with_category.name
+            form.wrong_answer1.default = temp[1]
+            form.wrong_answer2.default = temp[2]
+            form.wrong_answer3.default = temp[3]
+            return render_template('check_quests.html', form=form, **param)
         else:
-            return redirect('/')
+            return redirect('/user_info/' + current_user.nickname)
     else:
-        if current_user.is_authenticated and current_user.state == 'admin':
-
-            data = why.split('+')
-            if data[1] == 'YES':
-
-                session = db_session.create_session()
-
-                quest = session.query(Question).filter(Question.id == int(data[2])).first()
-                user = session.query(User).filter(User.id == quest.who_add).first()
-                user.add_questions += 1
-                user.rating += 10
-                quest.is_promoted = 1
-                session.commit()
-                return redirect('/check_quests/GET')
-            else:
-                session = db_session.create_session()
-
-                quest = session.query(Question).filter(Question.id == int(data[2])).first()
-                session.delete(quest)
-                session.commit()
-                return redirect('/check_quests/GET')
-        else:
-            return redirect('/')
+        return redirect('/login')
 
 
 #application.run(threaded=True)

@@ -2,112 +2,137 @@
 
 {% block content %}
     <div id="game_div">
-        {% if current_user.is_authenticated %}
-            <img id="player_icon" src="/{{ current_user.avatar }}" width="70px" height="70px">
-            <div id="player_name">{{ current_user.nickname }}</div>
-        {% else %}
-            <img id="player_icon" src="/static/img/users_avatars/no_photo.png" width="70px" height="70px">
-            <div id="player_name">Гость</div>
-        {% endif %}
-        <img id="opponent_icon" src="/{{ user.avatar }}" width="70px" height="70px">
-        <div id="opponent_name">{{ user.nickname }}</div>
-        <h1 id="header_quest">Вопрос</h1>
-        <div id="div_progressbar">
-            <progress id="progressbar" value="{{ 60 - current_time }}" max="60">20</progress >
-        </div>
-        <div id="progress">{{ win }}:{{ defeat }}</div>
-        <div id="question">
-            {% if question.images == ' ' %}
-                {{ question.text }}
-            {% else %}
-                <div id="div_question_text">
-                    <p class="temp_p">{{ question.text }}</p>
+            <div id="main_div_info">
+                <h1 id="h1_quest">Вопрос №{{ current_number_quest + 1 }}</h1>
+                <div id="player_icon_name">
+                    <img id="player_icon" src="/{{ current_user.avatar }}" width="100px" height="100px">
+                    {% if current_user.nickname[9] %}
+                        <p class="player_name">{{ current_user.nickname[:9] + '...' }}</p>
+                    {% else %}
+                        <p class="player_name">{{ current_user.nickname[:11] }}</p>
+                    {% endif %}
                 </div>
-                <div id="div_question_image">
-                    <p class="temp_p">
-                        <img src="{{ question.images }}" alt="" id="question_image">
-                    </p>
+                <p id="p_vs">VS</p>
+                <div id="opp_icon_name">
+                    <img id="opponent_icon" src="/{{ user.avatar }}" width="100px" height="100px">
+                    {% if user.nickname[8] %}
+                        <p class="player_name">{{ user.nickname[:8] + '...' }}</p>
+                    {% else %}
+                        <p class="player_name">{{ user.nickname[:11] }}</p>
+                    {% endif %}
                 </div>
-            {% endif %}
-        </div>
-        <div id="div_question_time">
-            <script>
-                var time = {{ 60 - current_time }};
+                <h2 id="progress">{{ win }}:{{ defeat }}</h2>
+                <h2 id="category">Категория: {{ question.orm_with_category.name }}</h2>
+                <div id="div_progressbar">
+                    <progress id="progressbar" value="{{ 60 - current_time }}" max="60">20</progress>
+                </div>
+                <script>
+                    var time = {{ 60 - current_time }};
 
-                function minusSec() {
-                    time--;
-                    if (time < 0) {
-                        document.location.href = '{{ path }}';
-                    } else {
-                        document.getElementById('progressbar').value = time;
+                    function minusSec() {
+                        time--;
+                        if (time < 0) {
+                            document.location.href = '{{ path }}';
+                        } else {
+                            document.getElementById('progressbar').value = time;
+                        };
                     };
-                };
 
-                setInterval(minusSec, 1000);
-            </script>
-        </div>
-        {% if type_quest == 'change' %}
-            <p id="p_answers">Варианты:</p>
-            <form class="login_form" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <div id="div_questions_answers">
-                        <div id='div_questions_answers_up'>
-                            <div class="div_questions_answer" id="div_questions_answer1">
-                                <input type="radio" name="option" value="{{ answers[0] }}" class="checkbox" id="checkbox1" onchange="changeRadioBox('checkbox1')"><div class="p_questions_answer"> {{ answers[0] }} </div>
+                    setInterval(minusSec, 1000);
+                </script>
+            </div>
+            <div id="main_div_questions">
+                <div id="div_question">
+                     {% if question.images == ' ' %}
+                        <p id="question">{{ question.text }}</p>
+                    {% else %}
+                        <div id="div_question_text">
+                            <p id="question">{{ question.text }}</p>
+                        </div>
+                        <div id="div_question_image">
+                            <p class="temp_p">
+                                <img src="{{ question.images }}" alt="" id="question_image">
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if type_quest == 'change' %}
+                <p id="p_answers">Варианты:</p>
+                <form class="login_form" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <div id="div_questions_answers">
+                            <div id='div_questions_answers_up'>
+                                <div class="div_questions_answer" id="div_questions_answer1">
+                                    <input type="radio" name="option" value="{{ answers[0] }}" class="checkbox" id="checkbox1" onchange="changeRadioBox('checkbox1')"><div class="p_questions_answer"> {{ answers[0] }} </div>
+                                </div>
+                                <div class="div_questions_answer" id="div_questions_answer2">
+                                    <input type="radio" name="option" value="{{ answers[1] }}" class="checkbox" id="checkbox2" onchange="changeRadioBox('checkbox2')"><div class="p_questions_answer"> {{ answers[1] }} </div>
+                                </div>
                             </div>
-                            <div class="div_questions_answer" id="div_questions_answer2">
-                                <input type="radio" name="option" value="{{ answers[1] }}" class="checkbox" id="checkbox2" onchange="changeRadioBox('checkbox2')"><div class="p_questions_answer"> {{ answers[1] }} </div>
+                            <div id='div_questions_answers_down'>
+                                <div class="div_questions_answer" id="div_questions_answer3">
+                                    <input type="radio" name="option" value="{{ answers[2] }}" class="checkbox" id="checkbox3" onchange="changeRadioBox('checkbox3')"><div class="p_questions_answer"> {{ answers[2] }} </div>
+                                </div>
+                                <div class="div_questions_answer" id="div_questions_answer4">
+                                    <input type="radio" name="option" value="{{ answers[3] }}" class="checkbox" id="checkbox4" onchange="changeRadioBox('checkbox4')"><div class="p_questions_answer"> {{ answers[3] }} </div>
+                                </div>
+                            </div>
+                            <input type="submit" value="Отправить" id="b_answer_question">
+                        </div>
+                    </div>
+                </form>
+                <script>
+                    window.onresize = function () {
+                        if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+                            document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
+                            document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
+                        };
+                        document.getElementById('checkbox1').style.left = String(document.getElementById('div_questions_answer1').getBoundingClientRect().x) + 'px';
+                        document.getElementById('checkbox2').style.left = String(document.getElementById('div_questions_answer2').getBoundingClientRect().x) + 'px';
+                        document.getElementById('checkbox3').style.left = String(document.getElementById('div_questions_answer3').getBoundingClientRect().x) + 'px';
+                        document.getElementById('checkbox4').style.left = String(document.getElementById('div_questions_answer4').getBoundingClientRect().x) + 'px';
+                    };
+                    $( document ).ready(function() {
+                        document.getElementById('checkbox1').style.left = String(document.getElementById('div_questions_answer1').getBoundingClientRect().x) + 'px';
+                        document.getElementById('checkbox2').style.left = String(document.getElementById('div_questions_answer2').getBoundingClientRect().x) + 'px';
+                        document.getElementById('checkbox3').style.left = String(document.getElementById('div_questions_answer3').getBoundingClientRect().x) + 'px';
+                        document.getElementById('checkbox4').style.left = String(document.getElementById('div_questions_answer4').getBoundingClientRect().x) + 'px';
+                        document.getElementById('checkbox1').style.width = String($('#div_questions_answer1').width()) + 'px';
+                        document.getElementById('checkbox2').style.width = String($('#div_questions_answer2').width()) + 'px';
+                        document.getElementById('checkbox3').style.width = String($('#div_questions_answer3').width()) + 'px';
+                        document.getElementById('checkbox4').style.width = String($('#div_questions_answer4').width()) + 'px';
+                    });
+
+                </script>
+                {% elif type_quest == 'write' %}
+                    <p id="p_answers">Наберите ответ:</p>
+                    <form class="login_form" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <div id="div_questions_answers">
+                                <script>
+                                    function inputAnswer() {
+                                        document.getElementById("b_answer_question").disabled = false;
+                                        document.getElementById("b_answer_question").style.background = 'linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0))';
+                                        document.getElementById("b_answer_question").style.boxShadow = '0 3px 0 rgb(190, 0, 0)';
+                                    }
+                                </script>
+                                <input type="text" name="option" id="input_text" autocomplete="off" oncontextmenu='return false;' oninput="inputAnswer()">
+                                <script>
+                                  input_text.onpaste = function(event) {
+                                    return false;
+                                  };
+
+                                </script>
+                                <input type="submit" value="Отправить" id="b_answer_question">
                             </div>
                         </div>
-                        <div id='div_questions_answers_down'>
-                            <div class="div_questions_answer" id="div_questions_answer3">
-                                <input type="radio" name="option" value="{{ answers[2] }}" class="checkbox" id="checkbox3" onchange="changeRadioBox('checkbox3')"><div class="p_questions_answer"> {{ answers[2] }} </div>
-                            </div>
-                            <div class="div_questions_answer" id="div_questions_answer4">
-                                <input type="radio" name="option" value="{{ answers[3] }}" class="checkbox" id="checkbox4" onchange="changeRadioBox('checkbox4')"><div class="p_questions_answer"> {{ answers[3] }} </div>
-                            </div>
-                        </div>
-                        <input type="submit" value="Отправить" id="b_answer_question">
-                    </div>
-                </div>
-            </form>
-            <script>
-                window.onresize = function () {
-                    if ( $( window ).width > $( window ).height ) {
-                        document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
-                        document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
-                    };
-                    document.getElementById('checkbox1').style.left = String(document.getElementById('div_questions_answer1').getBoundingClientRect().x) + 'px';
-                    document.getElementById('checkbox2').style.left = String(document.getElementById('div_questions_answer2').getBoundingClientRect().x) + 'px';
-                    document.getElementById('checkbox3').style.left = String(document.getElementById('div_questions_answer3').getBoundingClientRect().x) + 'px';
-                    document.getElementById('checkbox4').style.left = String(document.getElementById('div_questions_answer4').getBoundingClientRect().x) + 'px';
-                };
-                document.getElementById('checkbox1').style.left = String(document.getElementById('div_questions_answer1').getBoundingClientRect().x) + 'px';
-                document.getElementById('checkbox2').style.left = String(document.getElementById('div_questions_answer2').getBoundingClientRect().x) + 'px';
-                document.getElementById('checkbox3').style.left = String(document.getElementById('div_questions_answer3').getBoundingClientRect().x) + 'px';
-                document.getElementById('checkbox4').style.left = String(document.getElementById('div_questions_answer4').getBoundingClientRect().x) + 'px';
-                document.getElementById('checkbox1').style.width = String(document.getElementById('div_questions_answer1').style.width) + 'px';
-                document.getElementById('checkbox2').style.width = String(document.getElementById('div_questions_answer2').style.width) + 'px';
-                document.getElementById('checkbox3').style.width = String(document.getElementById('div_questions_answer3').style.width) + 'px';
-                document.getElementById('checkbox4').style.width = String(document.getElementById('div_questions_answer4').style.width) + 'px';
-                document.getElementById('checkbox4').style.width = String(document.getElementById('div_questions_answer4').style.width) + 'px';
-            </script>
-        {% elif type_quest == 'write' %}
-            <p id="p_answers">Наберите ответ:</p>
-            <form class="login_form" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <div id="div_questions_answers">
-                        <input type="text" name="option" id="input_text" autocomplete="off" oncontextmenu='return false;'>
-                        <script>
-                          input_text.onpaste = function(event) {
-                            return false;
-                          };
-                        </script>
-                        <input type="submit" value="Отправить" id="b_answer_question">
-                    </div>
-                </div>
-            </form>
-        {% endif %}
-        <script src="/static/scripts/scriptForCurrentGame.js"></script>
+                    </form>
+                {% endif %}
+            </div>
     </div>
+<script>document.getElementById("b_answer_question").disabled = true;
+document.getElementById("b_answer_question").style.background = 'linear-gradient(to top, rgb(180, 180, 180), rgb(200, 200, 200))';
+document.getElementById("b_answer_question").style.boxShadow = '0 3px 0 rgb(150, 150, 150)';
+</script>
+    <script src="/static/scripts/scriptForCurrentGame.js"></script>
 {% endblock %}

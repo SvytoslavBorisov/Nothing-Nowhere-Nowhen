@@ -1,8 +1,3 @@
-@font-face {
-    font-family: Roboto; /* Имя шрифта */
-    src: url(/static/fonts/Roboto/Roboto-Regular.ttf); /* Путь к файлу со шрифтом */
-}
-
 body{
     margin: 0px;
     overflow-y: scroll;

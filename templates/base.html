@@ -87,13 +87,13 @@
                              <p id="footer_p">Онлайн Викторина © 2020 NothingNowhereNowhen.com</p>
                          </div>`
         document.getElementById('main').after(div);
-        if ( $( document ).height() - 125 > $( window ).height())
+        if ( $( document ).height() > $( window ).height())
             {
-                $('#footer').offset({top: $( document ).height() - 95})
+                $('#footer').offset({top: $( document ).height() - 125});
             }
         else
             {
-                $('#footer').offset({top: $( document ).height() - 125})
+                $('#footer').offset({top: $( window ).height() - 125})
             };
 
     </script>

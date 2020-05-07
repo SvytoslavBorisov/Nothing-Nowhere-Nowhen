@@ -4,8 +4,8 @@ from wtforms.validators import DataRequired, Optional
 
 
 class AddQuestionForm(FlaskForm):
-    text = TextAreaField('Текст вопроса', validators=[DataRequired()])
-    answer = StringField('Правильный ответ', validators=[DataRequired()])
+    text = TextAreaField('Текст вопроса', validators=[DataRequired()], default='')
+    answer = StringField('Правильный ответ', validators=[DataRequired()], default='')
     comment = TextAreaField('Комментарии к ответу на вопрос')
     category = SelectField('Категория', validators=[Optional()], choices=[], default='')
     wrong_answer1 = StringField('Неправильные варианты ответа', validators=[DataRequired()])

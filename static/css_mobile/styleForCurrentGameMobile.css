@@ -1,0 +1,176 @@
+#game_div {
+    width: 100%;
+    background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
+    margin: auto;
+    margin-top: 201px;
+    text-align: center;
+    overflow: hidden;
+    border: 4px;
+}
+
+#main_div_questions {
+    width: 100%;
+    float:left;
+    margin-top: 30px;
+}
+
+#main_div_info {
+    width: 100%;
+    float:left;
+    overflow: hidden;
+}
+
+.div_questions_answer  {
+    width: calc(100% - 20px);
+    height: 100px;
+    background-color: rgb(200, 200, 200);
+    font-size: 100px;
+    color: rgb(60, 60, 60);
+    padding: 0px;
+    float: left;
+    margin: 0px 10px 10px 10px;
+    margin-bottom: 10px;
+}
+
+.div_questions_answers {
+    text-align: center;
+    width: 100%;
+    margin: auto;
+    font-size: 50px;
+    text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+    padding-bottom: 5px;
+}
+
+#div_questions_answers_up {
+    margin: auto;
+    width: 100%;
+}
+
+#div_questions_answers_down {
+    margin: auto;
+    width: 100%;
+}
+
+.p_questions_answer {
+font-size: 50px;
+}
+
+#player_icon_name {
+    float: left;
+    overflow: hidden;
+}
+#opp_icon_name {
+    float: right;
+    overflow: hidden;
+}
+
+.player_name {
+    font-size: 35px;
+    color: white;
+}
+
+#player_icon {
+    float: left;
+    margin-top: 5px;
+    margin-left: 15px;
+    border-radius: 300px;
+    border: 2px solid gray;
+    box-shadow: 0 0 7px #666;
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+}
+
+#opponent_icon {
+    float: right;
+    margin-top: 5px;
+    margin-right: 15px;
+    border-radius: 300px;
+    border: 2px solid gray;
+    box-shadow: 0 0 7px #666;
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+}
+
+#p_vs {
+    float:left;
+    line-height: 100px;
+    width: calc(100% - 438px);
+    font-size: 50px;
+    margin: 0px;
+    margin-top: 60px;
+    color: white;
+    overflow: hidden;
+}
+
+
+#progress {
+    font-size: 60px;
+    text-align: center;
+    margin-top: 10px;
+    text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+    color: white;
+}
+
+#category {
+    font-size: 42px;
+    text-align: center;
+    margin-top: 10px;
+    text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+    color: white;
+}
+
+#h1_quest {
+    color: #FFF;
+    margin: 0px;
+    margin-top: 10px;
+    font-size: 50px;
+}
+
+#question {
+    color: rgb(200, 200, 200);
+    font-size: 46px;
+    margin: 5px;
+}
+
+#b_answer_question, #b_answer_question_next {
+    width: 50%;
+    height: 100px;
+    margin-top: 10px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 10px;
+    font-size: 50px;
+    color: white;
+    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+}
+
+#p_answers {
+    font-size: 40px;
+}
+
+#result {
+    width: 90%;
+    font-size: 40px;
+    margin: auto;
+    margin-top: 50px;
+}
+
+#right_answer, #answer {
+    font-size: 40px;
+    color: white;
+}
+
+#div_questions_answers {
+    text-align: center;
+    width: 100%;
+    margin: auto;
+    font-size: 20px;
+    text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+    padding-bottom: 5px;
+}

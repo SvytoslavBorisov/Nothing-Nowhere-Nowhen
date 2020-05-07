@@ -1,5 +1,6 @@
 #main_div_about_site {
     margin-top: 201px;
+    font-family: "Verdana", serif;;
 }
 
 #header_about_site {
@@ -7,9 +8,26 @@
  }
 
 #text_about_us {
-    width: 90%;
+    width: 99%;
 }
 
-#p_text {
+.p_text {
+    font-size: 35px;
+}
+
+.h2_text {
     font-size: 40px;
+ }
+
+.imgs {
+    width: 200px;
+    height: 200px;
+}
+
+#p_text_2 {
+    width: 70%;
+    float:left;
+}
+#p_text_1 {
+    width: 100%;
 }

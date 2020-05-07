@@ -101,3 +101,11 @@ $(document).ready(function() {
     $('#footer').offset({top: $( document ).height() - 169})
 });
 
+function copyToClipboard() {
+     var copytext = document.createElement('input');
+     copytext.value = window.location.href;
+     document.body.appendChild(copytext);
+     copytext.select();
+     document.execCommand('copy');
+     document.body.removeChild(copytext);
+}

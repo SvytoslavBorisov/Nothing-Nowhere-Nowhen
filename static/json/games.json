@@ -1,5 +1,29 @@
 {
     "current_games": {
-        "1": null
+        "1": {
+            "questions": [
+                1061,
+                1035,
+                1071,
+                1064,
+                1062,
+                1074,
+                1030,
+                1049,
+                1078,
+                1065,
+                1044
+            ],
+            "wins": 0,
+            "category": 2,
+            "defeats": 1,
+            "current_question": 0,
+            "time": 1588891556,
+            "quest_or_next": "next",
+            "last_result": false,
+            "type": "change",
+            "complexity": 1,
+            "last_answer": ""
+        }
     }
 }
