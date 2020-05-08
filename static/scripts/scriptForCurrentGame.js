@@ -58,10 +58,7 @@ function oninput_forgame() {
         event.preventDefault();
 };
 
-if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
-    $('#game_div').height($('#main_div_questions').height())
-}
-else {
+if (!( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)))) {
     $('#p_vs').css('visibility', 'hidden');
     $('#p_vs').height(0);
 };
