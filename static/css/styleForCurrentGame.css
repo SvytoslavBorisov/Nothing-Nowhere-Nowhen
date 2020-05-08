@@ -8,7 +8,7 @@
     height: 100%;
     text-align: center;
     overflow: hidden;
-    border: 4px;
+    border: 4px solid black;
 }
 
 #main_div_questions {
@@ -34,6 +34,8 @@
 #question {
     color: rgb(200, 200, 200);
     font-size: 30px;
+    margin: 0px;
+    margin-top: 15px;
 }
 
 #div_questions_answers {
@@ -201,6 +203,7 @@
 #div_question_text {
     float: left;
     width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -223,4 +226,15 @@
 
 #result {
     width: 70%;
+    margin: auto;
+    height: 50px;
+    font-size: 25px;
+    line-height: 50px;
+}
+
+#question_image {
+    height: 50%;
+    width: 50%;
+    margin: 0px;
+    border: 4px solid black;
 }

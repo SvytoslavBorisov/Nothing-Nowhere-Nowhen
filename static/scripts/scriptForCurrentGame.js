@@ -54,18 +54,14 @@ function changeRadioBox(id_) {
 };
 
 function oninput_forgame() {
-    alert(event.data);
     if (event.text.length > 1)
         event.preventDefault();
 };
 
 if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
-    $('#main_div_questions').height($('#game_div').height());
-    $('#main_div_info').height($('#game_div').height());
+    $('#game_div').height($('#main_div_questions').height())
 }
 else {
     $('#p_vs').css('visibility', 'hidden');
     $('#p_vs').height(0);
-    $('#question').css('font-size', '46px');
-    alert($('#question').css('font-family'));
 };

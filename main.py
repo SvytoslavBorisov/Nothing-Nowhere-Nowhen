@@ -41,6 +41,16 @@ api.add_resource(users_resources.UsersListResource, '/api/users')
 api.add_resource(users_resources.UserResource, '/api/user/<user_id>')
 
 
+def get_bbox(GeoObject, k=0, k1=0, k2=0, k3=0):
+
+    toponym_down_coords = list(map(float, GeoObject["boundedBy"]['Envelope']['lowerCorner'].split()))
+    toponym_up_coords = list(map(float, GeoObject["boundedBy"]['Envelope']['upperCorner'].split()))
+
+    return ",".join(
+        [str(toponym_down_coords[0] + k), str(toponym_down_coords[1] + k1)]) + '~' + ",".join(
+        [str(toponym_up_coords[0] + k2), str(toponym_up_coords[1] + k3)])
+
+
 def open_json(file):
     with open(file, "r", errors='ignore') as f:
         return json.load(f)
@@ -141,6 +151,7 @@ def login():
 
     param['title'] = 'Вход'
     param['style'] = '/static/css/styleForLogin.css'
+    param['style_mobile'] = '/static/css_mobile/styleForLoginMobile.css'
     param['script'] = ''
 
     form = LoginForm()
@@ -344,7 +355,9 @@ def start_game(id_, comp_, type):
             'last_result': None,
             'type': type,
             'complexity': comp_,
-            'last_answer': ''
+            'last_answer': '',
+            'delete': [],
+            'create_map': 'yes'
         }
         data['current_games'][str(current_user.id)] = {}
         for x in load:
@@ -378,10 +391,67 @@ def current_game():
             shuffle_answers.append(answers[x])
 
         param['answers'] = shuffle_answers
-
         param['current_number_quest'] = data['current_games'][str(current_user.id)]['current_question']
+        param['image_question'] = param['question'].images
+
 
         if data['current_games'][str(current_user.id)]['quest_or_next'] == 'quest':
+
+            if param['question'].images.split('!@#')[0] == 'map' and len(data['current_games'][str(current_user.id)]['delete']):
+                param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
+
+            if param['question'].images.split('!@#')[0] == 'map' and data['current_games'][str(current_user.id)]['create_map']:
+                temp_data = param['question'].images.split('!@#')
+
+                coord_map = [float(x) for x in temp_data[3].split(', ')]
+                coord_sat = [float(x) for x in temp_data[2].split(', ')]
+                toponym_to_find = temp_data[1]
+
+                print(toponym_to_find )
+
+                geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
+
+                geocoder_params = {
+                    "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
+                    "geocode": toponym_to_find,
+                    "format": "json"}
+
+                response = get(geocoder_api_server, params=geocoder_params)
+
+                json_response = response.json()
+                toponym = json_response["response"]["GeoObjectCollection"][
+                    "featureMember"][0]["GeoObject"]
+
+                toponym_coodrinates = toponym["Point"]["pos"]
+                toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
+
+                type_map = random.choice([0, 1])
+
+                if type_map:
+                    typeMap = 'map'
+                    coord = coord_map
+                else:
+                    typeMap = 'sat'
+                    coord = coord_sat
+
+                map_params = {
+                    "ll": ",".join([toponym_longitude, toponym_lattitude]),
+                    "l": typeMap,
+                    'bbox': get_bbox(toponym, k=coord[0], k1=coord[1], k2=coord[2], k3=coord[3])
+                }
+
+                map_api_server = "http://static-maps.yandex.ru/1.x/"
+                response = get(map_api_server, params=map_params)
+
+                image_path = f'static/img/questions/{get_time()}+{current_user.id}.png'
+                with open(image_path, 'wb') as f:
+                    f.write(response.content)
+
+                param['image_question'] = image_path
+                data['current_games'][str(current_user.id)]['delete'].append(image_path)
+                data['current_games'][str(current_user.id)]['create_map'] =  None
+                save_json(data, 'static/json/games.json')
+
             param['title'] = 'Идёт игра'
             param['type_quest'] = data['current_games'][str(current_user.id)]['type']
 
@@ -445,6 +515,9 @@ def current_game():
         else:
             param['title'] = 'Ответ'
 
+            if param['question'].images.split('!@#')[0] == 'map':
+                param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
+
             param['current_time'] = 0
             param['result'] = 'Вы ответили правильно' if data['current_games'][str(current_user.id)]['last_result'] else 'Вы ответили неправильно'
 
@@ -461,6 +534,7 @@ def current_game():
                 data['current_games'][str(current_user.id)]['quest_or_next'] = 'quest'
                 data['current_games'][str(current_user.id)]['current_question'] += 1
                 data['current_games'][str(current_user.id)]['time'] = get_time()
+                data['current_games'][str(current_user.id)]['create_map'] = 'yes'
                 save_json(data, 'static/json/games.json')
                 if param['win'] != 6 and param['defeat'] != 6:
                     return redirect('/current_game')
@@ -481,7 +555,10 @@ def current_game():
                         session.add(game_res)
                         session.commit()
 
+                        for x in data['current_games'][str(current_user.id)]['delete']:
+                            os.remove(x)
                         data['current_games'][str(current_user.id)] = None
+
                         save_json(data, 'static/json/games.json')
                     return redirect('/end_game/200')
     else:
@@ -580,4 +657,4 @@ def check_quests():
         return redirect('/login')
 
 
-#application.run(threaded=True)
+#application.run()

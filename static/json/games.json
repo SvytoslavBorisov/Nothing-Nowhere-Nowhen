@@ -2,28 +2,30 @@
     "current_games": {
         "1": {
             "questions": [
-                1061,
-                1035,
-                1071,
-                1064,
-                1062,
-                1074,
-                1030,
                 1049,
                 1078,
+                1030,
+                1070,
+                1071,
+                1064,
+                1044,
+                1062,
                 1065,
-                1044
+                1061,
+                1048
             ],
-            "wins": 0,
+            "wins": 3,
             "category": 2,
-            "defeats": 1,
-            "current_question": 0,
-            "time": 1588891556,
-            "quest_or_next": "next",
-            "last_result": false,
+            "defeats": 0,
+            "current_question": 3,
+            "time": 1588950575,
+            "quest_or_next": "quest",
+            "last_result": true,
             "type": "change",
             "complexity": 1,
-            "last_answer": ""
+            "last_answer": "Леонардо Ди Каприо",
+            "delete": [],
+            "create_map": "yes"
         }
     }
 }

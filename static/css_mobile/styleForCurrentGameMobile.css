@@ -11,13 +11,16 @@
 #main_div_questions {
     width: 100%;
     float:left;
-    margin-top: 30px;
+    padding-top: 30px;
+    background: linear-gradient(to top, rgb(70, 70, 70), rgb(30, 30, 30));
+    border: 0px;
 }
 
 #main_div_info {
     width: 100%;
     float:left;
     overflow: hidden;
+    background : linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
 }
 
 .div_questions_answer  {
@@ -52,7 +55,10 @@
 }
 
 .p_questions_answer {
-font-size: 50px;
+    font-size: 50px;
+    height: 100px;
+    line-height: 100px;
+    padding: 0px;
 }
 
 #player_icon_name {
@@ -130,8 +136,9 @@ font-size: 50px;
 
 #question {
     color: rgb(200, 200, 200);
-    font-size: 46px;
+    font-size: 50px;
     margin: 5px;
+    height: 100%;
 }
 
 #b_answer_question, #b_answer_question_next {
@@ -156,9 +163,11 @@ font-size: 50px;
 
 #result {
     width: 90%;
-    font-size: 40px;
+    font-size: 43px;
     margin: auto;
     margin-top: 50px;
+    height: 70px;
+    line-height: 70px;
 }
 
 #right_answer, #answer {
@@ -173,4 +182,24 @@ font-size: 50px;
     font-size: 20px;
     text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
     padding-bottom: 5px;
+}
+#progressbar {
+    margin: auto;
+    width: calc(100% - 100px);
+    background: white;
+    height: 69px;
+}
+
+#input_text {
+    height: 60px;
+    font-size: 40px;
+}
+
+#question_image {
+    height: calc(50% + 50px);
+    width:  50%;
+}
+
+.checkbox {
+    height: 100px;
 }

@@ -9,6 +9,7 @@
 
 #text_about_us {
     width: 99%;
+    height: 100%;
 }
 
 .p_text {
@@ -27,7 +28,9 @@
 #p_text_2 {
     width: 70%;
     float:left;
+    height: 100%;
 }
 #p_text_1 {
     width: 100%;
+
 }

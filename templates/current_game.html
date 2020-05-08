@@ -43,7 +43,7 @@
             </div>
             <div id="main_div_questions">
                 <div id="div_question">
-                     {% if question.images == ' ' %}
+                     {% if image_question == ' ' %}
                         <p id="question">{{ question.text }}</p>
                     {% else %}
                         <div id="div_question_text">
@@ -51,7 +51,7 @@
                         </div>
                         <div id="div_question_image">
                             <p class="temp_p">
-                                <img src="{{ question.images }}" alt="" id="question_image">
+                                <img src="{{ image_question }}" alt="" id="question_image">
                             </p>
                         </div>
                     {% endif %}
@@ -77,7 +77,12 @@
                                     <input type="radio" name="option" value="{{ answers[3] }}" class="checkbox" id="checkbox4" onchange="changeRadioBox('checkbox4')"><div class="p_questions_answer"> {{ answers[3] }} </div>
                                 </div>
                             </div>
-                            <input type="submit" value="Отправить" id="b_answer_question">
+                            <input type="submit" value="Отправить" id="b_answer_question" disabled>
+                            <script>
+                                document.getElementById("b_answer_question").disabled = true;
+                                document.getElementById("b_answer_question").style.background = 'linear-gradient(to top, rgb(180, 180, 180), rgb(200, 200, 200))';
+                                document.getElementById("b_answer_question").style.boxShadow = '0 3px 0 rgb(150, 150, 150)';
+                            </script>
                         </div>
                     </div>
                 </form>
@@ -117,6 +122,9 @@
                                     }
                                 </script>
                                 <input type="text" name="option" id="input_text" autocomplete="off" oncontextmenu='return false;' oninput="inputAnswer()">
+                                    document.getElementById("b_answer_question").disabled = true;
+                                    document.getElementById("b_answer_question").style.background = 'linear-gradient(to top, rgb(180, 180, 180), rgb(200, 200, 200))';
+                                    document.getElementById("b_answer_question").style.boxShadow = '0 3px 0 rgb(150, 150, 150)';
                                 <script>
                                   input_text.onpaste = function(event) {
                                     return false;
@@ -130,9 +138,5 @@
                 {% endif %}
             </div>
     </div>
-<script>document.getElementById("b_answer_question").disabled = true;
-document.getElementById("b_answer_question").style.background = 'linear-gradient(to top, rgb(180, 180, 180), rgb(200, 200, 200))';
-document.getElementById("b_answer_question").style.boxShadow = '0 3px 0 rgb(150, 150, 150)';
-</script>
     <script src="/static/scripts/scriptForCurrentGame.js"></script>
 {% endblock %}

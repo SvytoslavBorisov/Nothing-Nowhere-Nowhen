@@ -87,9 +87,14 @@
                              <p id="footer_p">Онлайн Викторина © 2020 NothingNowhereNowhen.com</p>
                          </div>`
         document.getElementById('main').after(div);
-        if ( $( document ).height() > $( window ).height())
+        if ( $( document ).height() - 10 > $( window ).height())
             {
-                $('#footer').offset({top: $( document ).height() - 125});
+                if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+                    $('#footer').offset({top: $( document ).height() - 90});
+                }
+                else {
+                    $('#footer').offset({top: $( document ).height() - 70});
+                }
             }
         else
             {

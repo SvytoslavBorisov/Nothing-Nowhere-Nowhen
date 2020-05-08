@@ -31,7 +31,7 @@
             </div>
             <div id="main_div_questions">
                 <div id="div_question">
-                    {% if question.images == ' ' %}
+                     {% if image_question == ' ' %}
                         <p id="question">{{ question.text }}</p>
                     {% else %}
                         <div id="div_question_text">
@@ -39,7 +39,7 @@
                         </div>
                         <div id="div_question_image">
                             <p class="temp_p">
-                                <img src="{{ question.images }}" alt="" id="question_image">
+                                <img src="{{ image_question }}" alt="" id="question_image">
                             </p>
                         </div>
                     {% endif %}
@@ -62,7 +62,12 @@
                 {% endif %}
                 <form class="login_form" method="post" enctype="multipart/form-data">
                     <div id="button">
-                        <input type="submit" value="Далее" id="b_answer_question_next">
+                        <script>
+                            function gg(){
+                                $( '#b_answer_question_next').css('visibility', 'hidden');
+                            }
+                        </script>
+                        <input type="submit" value="Далее" id="b_answer_question_next" onclick="gg()">
                     </div>
                 </form>
             </div>

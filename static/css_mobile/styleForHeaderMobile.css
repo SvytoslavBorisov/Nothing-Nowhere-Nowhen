@@ -33,10 +33,99 @@ p.navigator_p {
     margin-left: 10px;
 }
 
+#navigator_div5 {
+    width: 25%;
+}
+
 #navigator_div4 {
     width: 25%;
 }
 
+
 #content {
     margin-top: 211px;
+}
+
+#footer_p {
+    float: right;
+    height: 100%;
+    margin: 0px;
+}
+
+#p_name {
+    width: 100%;
+    float: left;
+    color: white;
+    text-align: center;
+    margin: 0px;
+    font-size: 18px;
+}
+
+#logo_and_name {
+    width: 25%;
+    height: 125px;
+    float: left;
+}
+
+#footer_logo {
+    margin-left: 25px;
+    text-align: center;
+}
+
+#links_and_foot_p {
+    width: calc(70% - 50px);
+    float: right;
+    margin-right: 50px;
+    font-size: 23px;
+}
+
+#vk_logo {
+    float: left;
+    padding-left: 20px;
+}
+
+#footer_p_ {
+    float: left;
+}
+
+#div_links {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    font-size: 25px;
+    color: #2A5885;
+    font-weight: bold;
+    border-radius: 10px;
+    margin-top: 0px;
+    float: right;
+}
+
+#vk_line {
+    width: 70%;
+    height: 2px;
+    background-color: gray;
+    opacity: 40%;
+    margin-top: 5px;
+    margin-left: 15%;
+    border-radius: 5px;
+}
+
+#vk_button_join {
+    width: 70%;
+    background-color: #4A76A8;
+    margin-left: 15%;
+    height: 30px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding-top: 5px;
+    border-radius: 10px;
+}
+
+#vk_logo {
+    margin-top: 15px;
+}
+
+#vk_a_join {
+    text-decoration: none;
+    color: white;
 }

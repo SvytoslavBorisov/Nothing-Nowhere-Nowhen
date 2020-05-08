@@ -97,8 +97,13 @@ dataset.reduce(function (prev, curr) {
 }, 0);};
 
 $(document).ready(function() {
-    $('#main_div_user_info').height( $('#div_user_games_and_info').height() + 40);
-    $('#footer').offset({top: $( document ).height() - 169})
+    if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+        $('#main_div_user_info').height( $('#div_user_games_and_info').height() + 40);
+    }
+    else {
+        $('#user_avatar_and_root').height( 600 );
+        $('#footer').css('visibility', 'hidden');
+    }
 });
 
 function copyToClipboard() {
@@ -109,3 +114,4 @@ function copyToClipboard() {
      document.execCommand('copy');
      document.body.removeChild(copytext);
 }
+
