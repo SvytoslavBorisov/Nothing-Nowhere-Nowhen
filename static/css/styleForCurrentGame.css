@@ -5,9 +5,15 @@
     margin: auto;
     margin-top: 101px;
     border-radius: 25px;
-    height: 100%;
     text-align: center;
     overflow: hidden;
+    border: 4px solid black;
+}
+
+#question_image {
+    height: 50%;
+    width: 50%;
+    margin: 0px;
     border: 4px solid black;
 }
 
@@ -230,11 +236,4 @@
     height: 50px;
     font-size: 25px;
     line-height: 50px;
-}
-
-#question_image {
-    height: 50%;
-    width: 50%;
-    margin: 0px;
-    border: 4px solid black;
 }
