@@ -376,6 +376,9 @@ def current_game():
     if current_user.is_authenticated:
         data = open_json('static/json/games.json')
 
+        if not data['current_games'][str(current_user.id)]:
+            return redirect('/change_play')
+
         param = {}
         param['style'] = '/static/css/styleForCurrentGame.css'
         param['style_mobile'] = '/static/css_mobile/styleForCurrentGameMobile.css'
@@ -400,6 +403,7 @@ def current_game():
                 param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
                 param['image_type'] = 'map'
             else:
+                param['image_question'] = param['question'].images
                 param['image_type'] = ''
 
             if param['question'].images.split('!@#')[0] == 'map' and data['current_games'][str(current_user.id)]['create_map']:
@@ -490,6 +494,7 @@ def current_game():
 
                     data['current_games'][str(current_user.id)]['last_answer'] = request.form.get('option') if request.form.get('option') else ' '
                     return redirect(f'/current_game')
+                print(param['image_question'])
                 return render_template('current_game.html', **param)
             elif request.method == 'POST':
                 data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
@@ -520,6 +525,7 @@ def current_game():
                 param['image_type'] = 'map'
             else:
                 param['image_type'] = ''
+                param['image_question'] = param['question'].images
 
             param['current_time'] = 0
             param['result'] = 'Вы ответили правильно' if data['current_games'][str(current_user.id)]['last_result'] else 'Вы ответили неправильно'
@@ -658,6 +664,7 @@ def check_quests():
             return redirect('/user_info/' + current_user.nickname)
     else:
         return redirect('/login')
+
 
 @application.route('/championship/<int:id_>', methods=['POST', 'GET'])
 def championship(id_):

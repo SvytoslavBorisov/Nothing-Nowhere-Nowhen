@@ -49,19 +49,23 @@
                         <div id="div_question_text">
                             <p id="question">{{ question.text }}</p>
                         </div>
-                        <div id="div_question_image">
-                            <p class="temp_p">
-                                {% if image_type == 'map' %}
-                                    <img src="{{ image_question }}" alt="" id="question_image_map" width="375px" height="283px">
-                                {% else %}
+                        {% if image_type == 'map' %}
+                            <div id="div_question_image_map">
+                                <p class="temp_p">
+                                    <img src="{{ image_question }}" alt="" id="question_image_map">
+                                </p>
+                            </div>
+                        {% else %}
+                            <div id="div_question_image_image">
+                                <p class="temp_p">
                                     <img src="{{ image_question }}" alt="" id="question_image">
-                                {% endif %}
-                            </p>
-                        </div>
+                                </p>
+                            </div>
+                        {% endif %}
+
                     {% endif %}
                 </div>
                 {% if type_quest == 'change' %}
-                <p id="p_answers">Варианты:</p>
                 <form class="login_form" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <div id="div_questions_answers">
@@ -110,14 +114,15 @@
                         document.getElementById('checkbox2').style.width = String($('#div_questions_answer2').width()) + 'px';
                         document.getElementById('checkbox3').style.width = String($('#div_questions_answer3').width()) + 'px';
                         document.getElementById('checkbox4').style.width = String($('#div_questions_answer4').width()) + 'px';
-                        $('#game_div').height(Math.max($('#main_div_info').height(), $('#main_div_questions').height()));
-                        $('#main_div_questions').height(Math.max($('#main_div_info').height(), $('#main_div_questions').height()));
-                        $('#main_div_info').height(Math.max($('#main_div_info').height(), $('#main_div_questions').height()));
+                        if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+                            $('#game_div').height(Math.max($('#main_div_info').height(), $('#main_div_questions').height()));
+                            $('#main_div_questions').height(Math.max($('#main_div_info').height(), $('#main_div_questions').height()));
+                            $('#main_div_info').height(Math.max($('#main_div_info').height(), $('#main_div_questions').height()));
+                         };
                     });
 
                 </script>
                 {% elif type_quest == 'write' %}
-                    <p id="p_answers">Наберите ответ:</p>
                     <form class="login_form" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <div id="div_questions_answers">
@@ -129,16 +134,16 @@
                                     }
                                 </script>
                                 <input type="text" name="option" id="input_text" autocomplete="off" oncontextmenu='return false;' oninput="inputAnswer()">
+                                <input type="submit" value="Отправить" id="b_answer_question">
+                                <script>
                                     document.getElementById("b_answer_question").disabled = true;
                                     document.getElementById("b_answer_question").style.background = 'linear-gradient(to top, rgb(180, 180, 180), rgb(200, 200, 200))';
                                     document.getElementById("b_answer_question").style.boxShadow = '0 3px 0 rgb(150, 150, 150)';
-                                <script>
                                   input_text.onpaste = function(event) {
                                     return false;
                                   };
 
                                 </script>
-                                <input type="submit" value="Отправить" id="b_answer_question">
                             </div>
                         </div>
                     </form>
