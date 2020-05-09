@@ -393,13 +393,14 @@ def current_game():
 
         param['answers'] = shuffle_answers
         param['current_number_quest'] = data['current_games'][str(current_user.id)]['current_question']
-        param['image_question'] = param['question'].images
-
 
         if data['current_games'][str(current_user.id)]['quest_or_next'] == 'quest':
 
             if param['question'].images.split('!@#')[0] == 'map' and len(data['current_games'][str(current_user.id)]['delete']):
                 param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
+                param['image_type'] = 'map'
+            else:
+                param['image_type'] = ''
 
             if param['question'].images.split('!@#')[0] == 'map' and data['current_games'][str(current_user.id)]['create_map']:
                 temp_data = param['question'].images.split('!@#')
@@ -407,8 +408,6 @@ def current_game():
                 coord_map = [float(x) for x in temp_data[3].split(', ')]
                 coord_sat = [float(x) for x in temp_data[2].split(', ')]
                 toponym_to_find = temp_data[1]
-
-                print(toponym_to_find )
 
                 geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
 
@@ -518,6 +517,9 @@ def current_game():
 
             if param['question'].images.split('!@#')[0] == 'map':
                 param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
+                param['image_type'] = 'map'
+            else:
+                param['image_type'] = ''
 
             param['current_time'] = 0
             param['result'] = 'Вы ответили правильно' if data['current_games'][str(current_user.id)]['last_result'] else 'Вы ответили неправильно'

@@ -14,9 +14,16 @@
     margin-top: 80px;
 }
 
-#question_image {
-    width: 375px;
+#question_image_map {
     height: 283px;
+    width: 375px;
+    margin: 0px;
+    border: 4px solid black;
+}
+
+#question_image {
+    height: 50%;
+    width: 50%;
     margin: 0px;
     border: 4px solid black;
 }
