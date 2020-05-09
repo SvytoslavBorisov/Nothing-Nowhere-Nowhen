@@ -399,7 +399,8 @@ def current_game():
 
         if data['current_games'][str(current_user.id)]['quest_or_next'] == 'quest':
 
-            if param['question'].images.split('!@#')[0] == 'map':
+            if param['question'].images.split('!@#')[0] == 'map' and data['current_games'][str(current_user.id)]['delete'][-1]:
+                param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
                 param['image_type'] = 'map'
             else:
                 param['image_question'] = param['question'].images
@@ -454,6 +455,7 @@ def current_game():
                 data['current_games'][str(current_user.id)]['delete'].append(image_path)
                 data['current_games'][str(current_user.id)]['create_map'] =  None
                 save_json(data, 'static/json/games.json')
+                print(1)
 
             param['title'] = 'Идёт игра'
             param['type_quest'] = data['current_games'][str(current_user.id)]['type']

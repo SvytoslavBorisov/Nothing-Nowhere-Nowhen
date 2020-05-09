@@ -1,6 +1,6 @@
 #game_div {
     font-family: Arial, Helvetica, sans-serif;
-    width: 90%;
+    width: 95%;
     background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
     margin: auto;
     margin-top: 10px;
@@ -14,13 +14,11 @@
     margin-top: 80px;
 }
 
-
-
 #main_div_questions {
     width: calc(68% - 14px);
     float:left;
     border-left: 4px solid gray;
-    background: linear-gradient(to top, rgb(70, 70, 70), rgb(70, 70, 70));
+    background: linear-gradient(to top, rgb(70, 70, 70), rgb(50, 50, 50));
 }
 
 #main_div_info {
@@ -40,8 +38,8 @@
     color: rgb(200, 200, 200);
     font-size: 30px;
     margin: 0px;
-    margin-top: 15px;
-    margin-bottom: 10px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 #div_questions_answers {
@@ -161,10 +159,9 @@
 
 #b_answer_question, #b_answer_question_next {
     width: 150px;
-    margin-top: 10px;
     padding-top: 7px;
     padding-bottom: 7px;
-    margin-bottom: 10px;
+    margin-bottom: 7px;
     font-size: 20px;
     color: white;
     background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
@@ -207,8 +204,9 @@
 #right_answer, #answer {
     font-size: 25px;
     color: white;
-     margin: 0px;
+    margin: 0px;
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #div_question_text {
