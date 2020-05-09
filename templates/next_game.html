@@ -39,7 +39,11 @@
                         </div>
                         <div id="div_question_image">
                             <p class="temp_p">
-                                <img src="{{ image_question }}" alt="" id="question_image">
+                                {% if image_type == 'map' %}
+                                    <img src="{{ image_question }}" alt="" id="question_image_map">
+                                {% else %}
+                                    <img src="{{ image_question }}" alt="" id="question_image">
+                                {% endif %}
                             </p>
                         </div>
                     {% endif %}
