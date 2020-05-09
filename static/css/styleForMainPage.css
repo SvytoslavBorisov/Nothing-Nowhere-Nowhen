@@ -20,16 +20,10 @@
 }
 
 #div_info {
-    width: 80%;
+    width: 90%;
     border-radius: 20px;
     overflow: hidden;
     margin: auto;
-}
-
-@media only screen and (max-width: 650px) {
-    h1 {
-        color: red;
-    }
 }
 
 #slider_text
@@ -95,7 +89,7 @@
     background: white;
     border: 4px outset black;
     border-radius: 20px;
-    visibility: hidden;
+    opacity: 0;
 }
 
 #div_lenta_news {

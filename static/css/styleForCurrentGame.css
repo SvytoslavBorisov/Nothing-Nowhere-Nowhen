@@ -3,11 +3,15 @@
     width: 80%;
     background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
     margin: auto;
-    margin-top: 101px;
+    margin-top: 10px;
     border-radius: 25px;
     text-align: center;
     overflow: hidden;
     border: 4px solid black;
+}
+
+#content {
+    margin-top: 80px;
 }
 
 #question_image {
@@ -79,8 +83,10 @@
     width: 100%;
     text-align: center;
     color: white;
-    font-size: 25px;
+    font-size: 20px;
     text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+    margin: 0px;
+    margin-top: 5px;
 }
 
 .p_questions_answer {
@@ -196,6 +202,7 @@
 #progressbar {
     margin: auto;
     margin-top: 20px;
+    margin-bottom: 20px;
     width: calc(100% - 100px);
     background: white;
 
@@ -204,6 +211,8 @@
 #right_answer, #answer {
     font-size: 25px;
     color: white;
+        margin: 0px;
+    margin-top: 10px;
 }
 
 #div_question_text {
@@ -234,6 +243,44 @@
     width: 70%;
     margin: auto;
     height: 50px;
-    font-size: 25px;
+    font-size: 20px;
     line-height: 50px;
+    margin-bottom: 20px;
+}
+
+.temp_p {
+    margin: 0px;
+ }
+
+#h3_comment {
+    color: white;
+ }
+
+
+.popup {
+	position: absolute;
+	height:100%;
+	width:100%;
+	top:0;
+	left:0;
+	display:none;
+	text-align:center;
+}
+
+.popup_bg {
+	background:rgba(0,0,0,0.9);
+	position:absolute;
+	z-index:1;
+	height:100%;
+	width:100%;
+}
+
+
+.popup_img {
+	position: relative;
+	margin:0 auto;
+	z-index:2;
+	max-height:94%;
+	max-width:94%;
+	margin:5% 0 0 0;
 }

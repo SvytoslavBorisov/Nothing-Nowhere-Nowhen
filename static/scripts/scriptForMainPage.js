@@ -141,12 +141,31 @@ var slider = multiItemSlider('#div_lenta_news')
 
 $('#main_div').height($('#main_div').height() + 1);
 
-document.getElementById('div_news').style.visibility = 'hidden';
+function fadeIn(el, speed) {
+  var step = 1 / speed;
+  var interval = setInterval(function() {
+    if (+el.style.opacity >= 1)
+      clearInterval(interval);
+
+    el.style.opacity = +div.style.opacity + step;
+  }, speed / 1000);
+};
+
+function fadeOut(el, speed) {
+  var step = 1 / speed;
+  var interval = setInterval(function() {
+    if (el.style.opacity <= 0)
+      clearInterval(interval);
+
+    el.style.opacity = +div.style.opacity - step;
+  }, speed / 1000);
+};
+
+var div = document.getElementById("div_news");
 
 window.addEventListener('scroll', function() {
-  document.getElementById('footer').style.visibility = 'visible';
-  document.getElementById('div_news').style.visibility = 'visible';
-  if ($(window).scrollTop() == 0) {
-    document.getElementById('div_news').style.visibility = 'hidden';
-  };
+    fadeIn(div, 500);
+      if ($(window).scrollTop() == 0) {
+        fadeOut(div, 100);
+      };
 });

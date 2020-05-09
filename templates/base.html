@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <link rel="icon" href="/static/img/icons/icon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="{{ style }}">
     <link rel="stylesheet" type="text/css" href="/static/css/styleForHeader.css">
+    <link rel="stylesheet" type="text/css" href="{{ style }}">
     <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 980px)" href="/static/css_mobile/styleForHeaderMobile.css">
     <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 980px)" href="{{ style_mobile }}">
     <title>{{ title }} | Играть в интеллектуальную бесплатную онлайн игру-викторину Ничто? Нигде? Никогда?</title>
@@ -76,7 +76,7 @@
                             document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
                             document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
                         };};
-        let div = document.createElement('div');
+        /* let div = document.createElement('div');
         div.id = 'footer';
         div.innerHTML = `<div id="logo_and_name">
                              <img src="/static/img/icons/footer_logo.png" alt="" height="100px" width="200px" id="footer_logo">
@@ -105,7 +105,7 @@
         else
             {
                 $('#footer').offset({top: $( window ).height() - 125})
-            };
+            }; */
 
     </script>
     <script src="/static/scripts/scriptForBase.js"></script>

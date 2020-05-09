@@ -54,8 +54,8 @@
                         <p id="answer">Вы не дали ответ</p>
                     {% endif %}
                 </div>
-                {% if question.comment != "" %}
-                    <h3>Комментарий</h3>
+                {% if question.comment != " " %}
+                    <h3 id="h3_comment">Комментарий</h3>
                     <div id="comment">
                         {{ question.comment }}
                     </div>

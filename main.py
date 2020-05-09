@@ -719,7 +719,7 @@ def start_championship(id_):
 @application.route('/championships')
 def championships():
 
-    if  return_to_game():
+    if return_to_game():
         return redirect('/current_game')
 
     param = {}
