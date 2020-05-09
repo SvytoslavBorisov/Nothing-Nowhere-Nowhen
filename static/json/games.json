@@ -1,4 +1,40 @@
 {
     "current_games": {
+        "1": {
+            "questions": [
+                192,
+                197,
+                196,
+                198,
+                194,
+                189,
+                199,
+                193,
+                190,
+                191,
+                195
+            ],
+            "wins": 5,
+            "category": 13,
+            "defeats": 2,
+            "current_question": 7,
+            "time": 1589043181,
+            "quest_or_next": "quest",
+            "last_result": false,
+            "type": "change",
+            "complexity": 1,
+            "last_answer": "Саратов",
+            "delete": [
+                "static/img/questions/1589042942+1.png",
+                "static/img/questions/1589043067+1.png",
+                "static/img/questions/1589043077+1.png",
+                "static/img/questions/1589043084+1.png",
+                "static/img/questions/1589043091+1.png",
+                "static/img/questions/1589043097+1.png",
+                "static/img/questions/1589043105+1.png",
+                "static/img/questions/1589043182+1.png"
+            ],
+            "create_map": null
+        }
     }
 }
