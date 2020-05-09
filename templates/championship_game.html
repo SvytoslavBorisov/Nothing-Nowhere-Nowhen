@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="main_div_championship">
+
+        <form method="post">
+            <div id="div_input">
+                <p id="curr_stage">Стадия: {{ curr_stage }}</p>
+                <p id="stage">{{ stage + 1}} / {{ curr_stage_number }}</p>
+
+                <div id="div_first_input">
+                    <input type="submit" style='background: white url("{{ first_img }}") no-repeat center top;' name="first"  value="" id="first_input"/>
+                    <label id="label_for_first" for="first_input">{{ first }}</label>
+                </div>
+
+                <div id="div_second_input">
+                    <input type="submit" style='background: white url("{{ second_img }}") no-repeat center top;' name="second" value="" id="second_input"/>
+                    <label id="label_for_second" for="second_input">{{ second }}</label>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,52 @@
+input {
+    width: 200px;
+    height: 200px;
+    line-height: 200px;
+    float: left;
+    overflow: hidden;
+}
+
+#div_first_input, #div_second_input{
+    height: 100%;
+    width: 200px;
+    float: left;
+    overflow: hidden;
+    margin: auto;
+}
+
+#label_for_first, #label_for_second {
+    float:left;
+    color: white;
+    font-size: 25px;
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+}
+
+#main_div_championship {
+    width: 70%;
+    margin: auto;
+    height: 600px;
+    overflow: hidden;
+}
+
+#div_input {
+    margin: auto;
+    height: 600px;
+    width: 490px;
+    overflow: hidden;
+}
+
+#curr_stage, #stage {
+    color: white;
+    float:left;
+    width: 80%;
+    font-size: 25px;
+    margin: auto;
+    text-align: center;
+    overflow: hidden;
+}
+
+#stage {
+    font-size: 20px;
+}

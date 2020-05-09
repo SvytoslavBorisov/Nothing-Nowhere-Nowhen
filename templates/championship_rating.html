@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="main_div_championship">
+        <div id="id_wineer">
+            <h1 id="h1_rating">Рейтинг {{ title1 }}</h1>
+            {% for item in players %}
+                <p class="name_and_statistic"> {{ item[0] }} - {{ item[1][:4] }}%</p>
+            {% endfor %}
+            <hr style="color:white;">
+            <p class="name_and_statistic"> Всего сыграло: {{ all_games}}</p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="main_div_championships">
+        <h1 class='header' id="header_championships">Выбор темы</h1>
+        {% for item in championships %}
+            <a href="/championship/{{ item.id }}" id="playChampionship">
+                <div id="championships">
+                    <div id="championshipsName">{{ item.title }}</div>
+                    <div id="championshipsType">{{ item.type }}</div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

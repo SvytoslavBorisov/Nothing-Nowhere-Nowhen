@@ -1,40 +1,5 @@
 {
     "current_games": {
-        "1": {
-            "questions": [
-                199,
-                189,
-                193,
-                192,
-                198,
-                196,
-                197,
-                195,
-                191,
-                190,
-                194
-            ],
-            "wins": 3,
-            "category": 13,
-            "defeats": 5,
-            "current_question": 8,
-            "time": -2208988800,
-            "quest_or_next": "quest",
-            "last_result": true,
-            "type": "change",
-            "complexity": 1,
-            "last_answer": "Мадрид",
-            "delete": [
-                "static/img/questions/1588952533+1.png",
-                "static/img/questions/1588952541+1.png",
-                "static/img/questions/1588952554+1.png",
-                "static/img/questions/1588952560+1.png",
-                "static/img/questions/1588952564+1.png",
-                "static/img/questions/1588952567+1.png",
-                "static/img/questions/1588952571+1.png",
-                "static/img/questions/1588952574+1.png"
-            ],
-            "create_map": "yes"
-        }
+        "1": null
     }
 }

@@ -13,6 +13,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from data.categories import Category
 from data.questions import Question
 from data.users import User
+from data.championship import Championship
 from data.games import Game
 from data.news import News
 from forms.register import RegisterForm
@@ -655,6 +656,205 @@ def check_quests():
             return redirect('/user_info/' + current_user.nickname)
     else:
         return redirect('/login')
+
+@application.route('/championship/<int:id_>', methods=['POST', 'GET'])
+def championship(id_):
+
+    if  return_to_game():
+        return redirect('/current_game')
+
+    if request.method == 'GET':
+        param = {}
+
+        param['title'] = 'Чемпионат'
+        param['style'] = '/static/css/styleForChampionshipStart.css'
+        session = db_session.create_session()
+
+        param['championship'] = session.query(Championship).filter(Championship.id == id_).first()
+        return render_template('championship_start.html', **param)
+    elif request.method == 'POST':
+        return redirect(f'/championship_start/{str(id_)}')
+
+
+@application.route('/championship_start/<int:id_>')
+def start_championship(id_):
+
+    if return_to_game():
+        return redirect('/current_game')
+
+    session = db_session.create_session()
+
+    param = {}
+
+    param['title'] = 'Начать чемпионат'
+    param['style'] = '/static/css/styleForCheckQuests.css'
+
+    param['championship'] = session.query(Championship).filter(Championship.id == id_).first()
+
+    selected = param['championship'].members.split('!@#$%')
+    selected_images = param['championship'].images.split('!@#$%')
+    all_selected = {selected[i] : f'/static/img/championships/{id_}/' + selected_images[i] + '.png' for i in range(len(selected))}
+    shuffle(selected)
+
+    if current_user.is_authenticated:
+        data = open_json('static/json/championships.json')
+        load = {
+            'id': param['championship'].id,
+            'members': selected,
+            'images': all_selected,
+            'all_stage': param['championship'].type,
+            'current_stage': param['championship'].type,
+            'stage': 0,
+            'delete': []
+        }
+        data['current_championships'][str(current_user.id)] = {}
+        for x in load:
+            data['current_championships'][str(current_user.id)][x] = load[x]
+        save_json(data, 'static/json/championships.json')
+
+        return redirect('/championship_game')
+    return redirect('/login')
+
+
+@application.route('/championships')
+def championships():
+
+    if  return_to_game():
+        return redirect('/current_game')
+
+    param = {}
+
+    param['title'] = 'Чемпионаты'
+    param['style'] = '/static/css/styleForChampionships.css'
+    session = db_session.create_session()
+
+    param['championships'] = session.query(Championship).all()
+
+    return render_template('championships.html', **param)
+
+
+@application.route('/championship_game', methods=['POST', 'GET'])
+def current_championship():
+
+    if request.method == 'GET':
+        if current_user.is_authenticated:
+            data = open_json('static/json/championships.json')
+
+            param = {}
+            param['style'] = '/static/css/styleForChampionshipGame.css'
+            #param['style_mobile'] = '/static/css_mobile/styleForCurrentGameMobile.css'
+
+            param['first'] = data['current_championships'][str(current_user.id)]['members'][data['current_championships'][str(current_user.id)]['stage'] * 2]
+            param['first_img'] = data['current_championships'][str(current_user.id)]['images'][param['first']]
+            param['second'] = data['current_championships'][str(current_user.id)]['members'][data['current_championships'][str(current_user.id)]['stage'] * 2 + 1]
+            param['second_img'] = data['current_championships'][str(current_user.id)]['images'][param['second']]
+
+            param['curr_stage_number'] = data['current_championships'][str(current_user.id)]['current_stage']
+            if param['curr_stage_number'] == 2:
+                param['curr_stage'] = 'Полуфинал'
+            elif param['curr_stage_number'] == 4:
+                param['curr_stage'] = 'Четвертьфинал'
+            elif param['curr_stage_number'] == 1:
+                param['curr_stage'] = 'Финал'
+            else:
+                param['curr_stage'] = f'1 / {param["curr_stage_number"]}'
+            param['stage'] = data['current_championships'][str(current_user.id)]['stage']
+
+            return render_template('championship_game.html', **param)
+    elif request.method == 'POST':
+        data = open_json('static/json/championships.json')
+        if request.form.get('first') != None:
+            print('Вы проголосовали за ', data['current_championships'][str(current_user.id)]['members'][data['current_championships'][str(current_user.id)]['stage'] * 2])
+            data['current_championships'][str(current_user.id)]['delete'].append(
+                data['current_championships'][str(current_user.id)]['members'][
+                    data['current_championships'][str(current_user.id)]['stage'] * 2 + 1])
+        else:
+            print('Вы проголосовали за ', data['current_championships'][str(current_user.id)]['members'][data['current_championships'][str(current_user.id)]['stage'] * 2 + 1])
+            data['current_championships'][str(current_user.id)]['delete'].append(
+                data['current_championships'][str(current_user.id)]['members'][
+                    data['current_championships'][str(current_user.id)]['stage'] * 2])
+        data['current_championships'][str(current_user.id)]['stage'] += 1
+        save_json(data, 'static/json/championships.json')
+
+        if data['current_championships'][str(current_user.id)]['current_stage'] == 1:
+            data['current_championships'][str(current_user.id)]['members'].remove(data['current_championships'][str(current_user.id)]['delete'][-1])
+            save_json(data, 'static/json/championships.json')
+
+            session = db_session.create_session()
+
+            championship = session.query(Championship).filter(Championship.id == data['current_championships'][str(current_user.id)]['id']).first()
+            championship_members = championship.members.split('!@#$%')
+
+            temp = championship.procent.split('!@#$%')
+            temp[championship_members.index(data['current_championships'][str(current_user.id)]['members'][0])] = int(temp[championship_members.index(data['current_championships'][str(current_user.id)]['members'][0])])
+            temp[championship_members.index(data['current_championships'][str(current_user.id)]['members'][0])] += 1
+            championship.procent = '!@#$%'.join([str(x) for x in temp])
+
+            championship.games += 1
+
+            session.commit()
+            return redirect('/championship_end')
+
+        if data['current_championships'][str(current_user.id)]['stage'] == data['current_championships'][str(current_user.id)]['current_stage']:
+            for x in data['current_championships'][str(current_user.id)]['delete']:
+                if x in data['current_championships'][str(current_user.id)]['members']:
+                    data['current_championships'][str(current_user.id)]['members'].remove(x)
+            data['current_championships'][str(current_user.id)]['stage'] = 0
+            data['current_championships'][str(current_user.id)]['current_stage'] = data['current_championships'][str(current_user.id)]['current_stage'] // 2
+            shuffle(data['current_championships'][str(current_user.id)]['members'])
+        save_json(data, 'static/json/championships.json')
+        return redirect('/championship_game')
+
+
+@application.route('/championship_end', methods=['POST', 'GET'])
+def championship_end():
+    if current_user.is_authenticated:
+        data = open_json('static/json/championships.json')
+
+        param = {}
+        param['style'] = '/static/css/styleForChampionshipEnd.css'
+        param['win'] = data['current_championships'][str(current_user.id)]['members'][0]
+        param['img'] = data['current_championships'][str(current_user.id)]['images'][param['win']]
+        param['id'] = data['current_championships'][str(current_user.id)]['id']
+        return render_template('championship_end.html', **param)
+    return redirect('/login')
+
+
+@application.route('/championship_rating/<int:id_>', methods=['POST', 'GET'])
+def championship_rating(id_):
+    if current_user.is_authenticated:
+        data = open_json('static/json/championships.json')
+
+        data['current_championships'][str(current_user.id)] = None
+
+        save_json(data, 'static/json/championships.json')
+
+        session = db_session.create_session()
+
+        championship = session.query(Championship).filter(
+            Championship.id == id_).first()
+
+        param = {}
+        param['style'] = '/static/css/styleForChampionshipRating.css'
+        param['title'] = 'Рейтинг чеспионата'
+        param['title1'] = championship.title
+        param['procent'] = championship.procent.split('!@#$%')
+        param['members'] = championship.members.split('!@#$%')
+        param['all_games'] = championship.games
+
+        param['players'] = [[param['members'][i], str((int(param['procent'][i]) * 100) / int(param['all_games']))] for i in range(len(param['members']))]
+        param['players'].sort(key=lambda x: float(x[1]), reverse=True)
+
+        return render_template('championship_rating.html', **param)
+    return redirect('/login')
+
+
+@application.route('/change_play/')
+def change_play():
+    param = {}
+    param['style'] = '/static/css/styleForChangePlay.css'
+    param['title'] = 'Выбор игры'
+    return render_template('change_play.html', **param)
 
 
 #application.run()
