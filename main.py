@@ -399,8 +399,7 @@ def current_game():
 
         if data['current_games'][str(current_user.id)]['quest_or_next'] == 'quest':
 
-            if param['question'].images.split('!@#')[0] == 'map' and len(data['current_games'][str(current_user.id)]['delete']):
-                param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
+            if param['question'].images.split('!@#')[0] == 'map':
                 param['image_type'] = 'map'
             else:
                 param['image_question'] = param['question'].images
@@ -494,7 +493,7 @@ def current_game():
 
                     data['current_games'][str(current_user.id)]['last_answer'] = request.form.get('option') if request.form.get('option') else ' '
                     return redirect(f'/current_game')
-                print(param['image_question'])
+                print(param['image_type'])
                 return render_template('current_game.html', **param)
             elif request.method == 'POST':
                 data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
@@ -524,8 +523,8 @@ def current_game():
                 param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
                 param['image_type'] = 'map'
             else:
-                param['image_type'] = ''
                 param['image_question'] = param['question'].images
+                param['image_type'] = ''
 
             param['current_time'] = 0
             param['result'] = 'Вы ответили правильно' if data['current_games'][str(current_user.id)]['last_result'] else 'Вы ответили неправильно'
