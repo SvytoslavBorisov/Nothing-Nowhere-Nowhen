@@ -60,8 +60,8 @@ def create_user():
         wins=0,
         defeats=0,
         add_questions=0,
-        all_games=0
-    except:
+        all_games=0)
+    except Exception:
         return jsonify({'success': 'id занят'})
     session.add(user)
     session.commit()
