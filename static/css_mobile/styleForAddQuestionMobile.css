@@ -1,0 +1,134 @@
+#login_div {
+    font-size: 20px;
+    color: rgb(200, 200, 200);
+    background-color: rgb(70, 70, 70);
+    margin: 0 auto;
+    width: 95%;
+    padding-top: 40px;
+    padding-bottom: 30px;
+    border-radius: 35px;
+    box-shadow: 0 3px 0 rgb(55, 55, 55);
+    margin-bottom: 100px;
+}
+
+#button_loginIN {
+    width: 50%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 40px;
+    color: white;
+    height: 80px;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+}
+
+#button_loginIN:active {
+    background-color: rgb(190, 0, 0);
+}
+
+#login_button {
+    margin-top: 15px;
+    text-align: center;
+}
+
+#a_for_register {
+    text-decoration: none;
+    color: red;
+}
+
+.login_label {
+    background-color: rgb(60, 60, 60);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 35px;
+    width: calc(100% - 40px);
+    margin: 0 auto;
+}
+
+.login_input {
+    padding-top: 3px;
+    font-size: 35px;
+    height: 70px;
+    width: 100%;
+    border-radius: 1px;
+    outline: none;
+    padding-left: 0px;
+}
+
+.login_input_div {
+    margin-left: 0px;
+    width: calc(100% - 40px);
+    margin: auto;
+    padding-left: 0px;
+}
+
+#category {
+width: 620px;
+}
+
+#register_div {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#login_label_top {
+    border-radius: 10px 10px 0 0;
+    margin: 0px;
+    padding: 0px 0px 0px 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: auto;
+}
+
+#login_input_bottom {
+    border-radius: 0 0 10px 10px;
+    margin: 0px;
+    height: 70px;
+    margin: auto;
+    width: 100%;
+}
+
+#message {
+    text-align: center;
+}
+
+#text {
+    height: 70px;
+    width: 100%;
+    margin: auto;
+}
+
+#category {
+    height: 70px;
+    width: 100%;
+    margin: auto;
+    font-size: 50px;
+}
+
+.login_area {
+    padding-left: 0px;
+    padding-top: 12px;
+    font-size: 35px;
+    height: 150px;
+    width: 100%;
+    border-radius: 1px;
+    resize: none;
+    overflow: hidden;
+    outline: none;
+    margin: auto;
+}
+
+.login_area_div {
+    margin-left: 0px;
+    margin: auto;
+
+    width: calc(100% - 40px);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#header_add_question {
+    margin: 0px;
+    margin-bottom: 10px;
+}

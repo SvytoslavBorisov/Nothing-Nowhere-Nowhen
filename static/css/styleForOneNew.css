@@ -1,0 +1,18 @@
+#text_new {
+    width: 70%;
+    background: rgb(255, 255, 255);
+    border-radius: 25px;
+    overflow: hidden;
+    margin: auto;
+    border: 4px outset black;
+    height: 100%;
+    min-height: 200px;
+}
+
+.p_text {
+    padding: 5px;
+    font-size: 20px;
+    text-indent: 25px;
+    margin: 0px;
+    margin-left: 10px;
+}

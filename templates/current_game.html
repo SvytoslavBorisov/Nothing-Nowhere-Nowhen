@@ -41,6 +41,12 @@
                     setInterval(minusSec, 1000);
                 </script>
             </div>
+            <script>
+                if (!( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)))) {
+                    $('#main_div_info').height(0);
+                    $('#main_div_info').css('opacity', 0);
+                };
+            </script>
             <div id="main_div_questions">
                 <div id="div_question">
                      {% if image_question == ' ' %}

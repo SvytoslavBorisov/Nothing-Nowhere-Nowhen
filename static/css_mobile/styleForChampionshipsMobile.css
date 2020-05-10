@@ -1,8 +1,8 @@
 #main_div_championships {
     overflow: hidden;
-    width: 84%;
-    margin-left: 8%;
+    width: 95%;
     margin-top: 201px;
+    margin: auto;
 }
 
 #championshipsName {

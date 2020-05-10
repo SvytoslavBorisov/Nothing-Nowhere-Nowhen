@@ -45,8 +45,8 @@ label {
 }
 
 #button_submit {
-    margin-left: 5px;
-    margin-bottom: 10px;
+    margin: auto;
+    margin-bottom: 50px;
     width: 80%;
     padding-top: 7px;
     padding-bottom: 7px;
@@ -56,6 +56,7 @@ label {
     border: none;
     box-shadow: 0 3px 0 rgb(190, 0, 0);
     outline: none;
+    height: 100px;
     text-align: center;
 }
 

@@ -163,9 +163,13 @@ function fadeOut(el, speed) {
 
 var div = document.getElementById("div_news");
 
-window.addEventListener('scroll', function() {
-    fadeIn(div, 500);
-      if ($(window).scrollTop() == 0) {
-        fadeOut(div, 100);
-      };
-});
+ if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+    window.addEventListener('scroll', function() {
+        fadeIn(div, 250);
+          if ($(window).scrollTop() == 0) {
+            fadeOut(div, 50);
+          };
+    });}
+else {
+    $('#div_news').css('opacity', 100);
+}

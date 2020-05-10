@@ -5,6 +5,7 @@ from requests import get, post, delete, put
 from datetime import datetime
 import datetime
 import socket
+import time
 import struct
 import random
 import json
@@ -123,7 +124,7 @@ def main_page():
     param['style'] = 'static/css/styleForMainPage.css'
     param['style_mobile'] = '/static/css_mobile/styleForMainPageMobile.css'
 
-    param['news'] = [[x.text, x.image, x.caption] for x in session.query(News).all()]
+    param['news'] = [[x.text, x.image, x.caption, x.id] for x in session.query(News).all()]
 
     return render_template('main_page.html', **param)
 
@@ -235,6 +236,12 @@ def user_info(user):
     param['style_mobile'] = '/static/css_mobile/styleForUserInfoMobile.css'
     param['user'] = session.query(User).filter(User.nickname == user).first()
     param['games'] = param['user'].games
+    param['date'] = [x.when_play for x in param['user'].games]
+    dd = ['Январь', "Февраль", "Март", "Апрель", "Мая", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+    param['date_month'] = [str(x).split('-')[2] + ' ' + dd[int(str(x).split('-')[1]) - 1] for x in param['date']]
+    for i in range(len(param['date_month'])):
+        if param['date_month'][i][0] == '0':
+            param['date_month'][i] = param['date_month'][i][1:]
     if param['user'].all_games:
         param['procent_win'] = int((param['user'].wins / param['user'].all_games) * 100)
         param['procent_def'] = int(100 - param['procent_win'])
@@ -256,6 +263,7 @@ def add_question(user):
 
     param['title'] = 'Создать вопрос'
     param['style'] = '/static/css/styleForAddQuestion.css'
+    param['style_mobile'] = '/static/css_mobile/styleForAddQuestionMobile.css'
     param['categories'] = session.query(Category).all()
 
     form = AddQuestionForm()
@@ -367,8 +375,7 @@ def start_game(id_, comp_, type):
         data['current_games'][str(current_user.id)] = {}
         for x in load:
             data['current_games'][str(current_user.id)][x] = load[x]
-        print(0)
-        print(data)
+
         save_json(data, 'static/json/games.json')
 
     return redirect('/current_game')
@@ -674,7 +681,7 @@ def check_quests():
 @application.route('/championship/<int:id_>', methods=['POST', 'GET'])
 def championship(id_):
 
-    if  return_to_game():
+    if return_to_game():
         return redirect('/current_game')
 
     if request.method == 'GET':
@@ -682,6 +689,7 @@ def championship(id_):
 
         param['title'] = 'Чемпионат'
         param['style'] = '/static/css/styleForChampionshipStart.css'
+        param['style_mobile'] = '/static/css_mobile/styleForChampionshipStartMobile.css'
         session = db_session.create_session()
 
         param['championship'] = session.query(Championship).filter(Championship.id == id_).first()
@@ -701,14 +709,12 @@ def start_championship(id_):
     param = {}
 
     param['title'] = 'Начать чемпионат'
-    param['style'] = '/static/css/styleForCheckQuests.css'
-    param['style_mobile'] = '/static/css_mobile/styleForCheckQuests.css'
 
     param['championship'] = session.query(Championship).filter(Championship.id == id_).first()
 
     selected = param['championship'].members.split('!@#$%')
     selected_images = param['championship'].images.split('!@#$%')
-    all_selected = {selected[i] : f'/static/img/championships/{id_}/' + selected_images[i] + '.png' for i in range(len(selected))}
+    all_selected = {selected[i]: f'/static/img/championships/{id_}/' + selected_images[i] + '.png' for i in range(len(selected))}
     shuffle(selected)
 
     if current_user.is_authenticated:
@@ -756,6 +762,9 @@ def current_championship():
     if request.method == 'GET':
         if current_user.is_authenticated:
             data = open_json('static/json/championships.json')
+
+            if not data['current_championships'][str(current_user.id)]:
+                return redirect('/change_play')
 
             param = {}
 
@@ -856,6 +865,8 @@ def championship_rating(id_):
 
         param = {}
         param['style'] = '/static/css/styleForChampionshipRating.css'
+        param['style_mobile'] = '/static/css_mobile/styleForChampionshipRatingMobile.css'
+
         param['title'] = 'Рейтинг чеспионата'
         param['title1'] = championship.title
         param['procent'] = championship.procent.split('!@#$%')
@@ -876,6 +887,22 @@ def change_play():
     param['style_mobile'] = '/static/css_mobile/styleForChangePlayMobile.css'
     param['title'] = 'Выбор игры'
     return render_template('change_play.html', **param)
+
+
+@application.route('/news/<int:id_>')
+def one_new(id_):
+
+    session = db_session.create_session()
+    param = {}
+
+    param['style'] = '/static/css/styleForOneNew.css'
+    param['style_mobile'] = '/static/css_mobile/styleForOneNewMobile.css'
+
+    param['title'] = 'Новость'
+
+    param['new'] = session.query(News).filter(News.id == id_).first()
+
+    return render_template('one_new.html', **param)
 
 
 #application.run()

@@ -1,5 +1,5 @@
 #div_info {
-    width: 95%;
+    width: calc(100% - 8px);
     border-radius: 20px;
     overflow: hidden;
     margin: auto;
@@ -7,17 +7,6 @@
 
 #slider__item_text {
     font-size: 50px;
-}
-
-.p_news_lenta {
-    font-size: 10px;
-    margin: 0;
-    cursor: pointer;
-}
-
-.p_news_lenta:hover {
-    background: rgb(186, 48, 48);
-    font-size: 13px;
 }
 
 #slider_text
@@ -50,6 +39,53 @@
     font-size: 45px;
 }
 
-.header {
-    font-size: 60px;
+#heading_news {
+    font-size: 50px;
+}
+
+#div_lenta_news {
+    width: calc(100% - 8px);
+}
+
+
+.img_news {
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+    height: 90%;
+    width: 30%;
+}
+
+.p_news {
+    margin: 0px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    font-size: 30px;
+    padding-left: 10px;
+}
+
+.p_news_caption {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    height: 30px;
+    font-size: 40px;
+}
+
+.div_text_news {
+    float: left;
+    width: 66%;
+}
+
+#div_lenta_news {
+    background: rgb(200, 200, 200);
+    margin-bottom: 20px;
+    border: 4px outset black;
+    border-radius: 20px;
+    overflow: hidden;
+    width: 100%;
+}
+
+#div_news {
+    opacity: 100;
 }

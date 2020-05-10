@@ -36,12 +36,21 @@
             </div>
             <div id="div_news">
                 <h2 id="heading_news">Новостная лента</h2>
+                <script>
+                    function ToNew(id_) {
+                        document.location.href = "/news/" + id_;
+                    };
+                </script>
                 {% for new in news %}
-                    <div class="news__item">
-                        <img src="{{ new[1] }}" alt="" class="img_news" height="110px" width="220px">
+                    <div class="news__item" onclick="ToNew({{ new[3] }})">
+                        <img src="{{ new[1] }}" alt="" class="img_news">
                         <div class="div_text_news">
                             <p class="p_news_caption">{{ new[2] }}</p>
-                            <p class="p_news">{{ new[0] }}</p>
+                            {% if new[0][40] %}
+                                <p class="p_news">{{ new[0][:40] }}... Нажмите, чтобы читать дельше</p>
+                            {% else %}
+                                <p class="p_news">{{ new[0][:40] }}</p>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

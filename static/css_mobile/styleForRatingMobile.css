@@ -1,5 +1,5 @@
 #main_div {
-    width: 90%;
+    width: 95%;
     border: 4px solid black;
     background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
     border-radius: 35px;
@@ -11,18 +11,24 @@
     color: #FFF;
     width: 90%;
     cursor: pointer;
+    border-radius: 35px;
 }
 
 #rating_div {
-    font-size: 35px;
+    font-size: 37px;
     color: rgb(200, 200, 200);
     background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
     margin: 0 auto;
     width: 100%;
     border-radius: 35px;
     border-spacing: 0px;
+    padding: 20px;
 }
 
 #header_rating {
     margin-bottom: 10px;
+}
+
+td, tr {
+    padding: 10px;
 }

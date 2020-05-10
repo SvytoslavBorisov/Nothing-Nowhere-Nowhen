@@ -18,6 +18,14 @@
             </p>
             <img src="/static/img/icons/boy_answer.png" alt="" width="100px" height="131px" id="img_boy" class="imgs">
         </div>
+        <script>
+            if (!( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)))) {
+                $('#img_girl').height(0);
+                $('#img_girl').css('opacity', 0);
+                $('#img_boy').height(0);
+                $('#img_boy').css('opacity', 0);
+            };
+        </script>
     </div>
     <script src="/static/scripts/scriptForAboutSite.js"></script>
 {% endblock %}
