@@ -190,6 +190,13 @@
     height: 69px;
 }
 
+#progressbar1 {
+    margin: auto;
+    width: calc(100% - 100px);
+    background: white;
+    height: 69px;
+}
+
 #input_text {
     height: 60px;
     font-size: 40px;

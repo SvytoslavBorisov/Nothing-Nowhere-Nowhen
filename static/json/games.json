@@ -1,6 +1,32 @@
 {
     "current_games": {
-        "1": null,
+        "1": {
+            "questions": [
+                1030,
+                1062,
+                1048,
+                1064,
+                1074,
+                1070,
+                1065,
+                1049,
+                1044,
+                1078,
+                1035
+            ],
+            "wins": 3,
+            "category": 2,
+            "defeats": 3,
+            "current_question": 6,
+            "time": -2208988800,
+            "quest_or_next": "quest",
+            "last_result": false,
+            "type": "change",
+            "complexity": 1,
+            "last_answer": "Режиссер",
+            "delete": [],
+            "create_map": "yes"
+        },
         "2": null,
         "3": null,
         "4": null,
