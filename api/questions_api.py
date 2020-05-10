@@ -15,7 +15,7 @@ def get_one_question(question_id):
     return jsonify(
         {
             'question':
-                questions.to_dict(only=('id', 'text', 'category.name', 'who_add.name', 'answers', 'right_answer'))
+                questions.to_dict(only=('id', 'text', 'category.name', 'who_add.name', 'answers', 'right_answer', 'type', 'images'))
         }
     )
 
@@ -30,7 +30,7 @@ def get_questions():
     return jsonify(
         {
             'questions':
-                [item.to_dict(only=('id', 'text', 'category.name', 'who_add.name', 'answers', 'right_answer'))
+                [item.to_dict(only=('id', 'text', 'category.name', 'who_add.name', 'answers', 'right_answer', 'type', 'images'))
                  for item in questions]
         }
     )

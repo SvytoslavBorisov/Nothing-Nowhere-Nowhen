@@ -355,6 +355,11 @@ def start_game(id_, comp_, type):
         while k in selected:
             k = choice(quests)
         selected.append(k)
+    if len(selected) < 11:
+        return ''' 
+                <script>alert('Недостаточно вопросов данной сложности или типа в этой категории. Выберите другую категорию. Извините за неудобства.');
+                document.location.href = "/categories";</script>
+                '''
 
     data = open_json('static/json/games.json')
     if current_user.is_authenticated:
@@ -380,6 +385,9 @@ def start_game(id_, comp_, type):
         save_json(data, 'static/json/games.json')
 
     return redirect('/current_game')
+
+
+@application.route('/current_game', methods=['POST', 'GET'])
 
 
 @application.route('/current_game', methods=['POST', 'GET'])

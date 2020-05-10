@@ -1,34 +1,6 @@
 {
     "current_games": {
-        "1": {
-            "questions": [
-                198,
-                194,
-                191,
-                197,
-                195,
-                193,
-                189,
-                190,
-                196,
-                199,
-                192
-            ],
-            "wins": 0,
-            "category": 13,
-            "defeats": 1,
-            "current_question": 0,
-            "time": 1589122468,
-            "quest_or_next": "next",
-            "last_result": false,
-            "type": "change",
-            "complexity": 1,
-            "last_answer": "",
-            "delete": [
-                "static/img/questions/1589122469+1.png"
-            ],
-            "create_map": null
-        },
+        "1": null,
         "2": null,
         "3": null,
         "4": null,
