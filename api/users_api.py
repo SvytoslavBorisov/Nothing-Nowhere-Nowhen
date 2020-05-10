@@ -15,7 +15,7 @@ def get_one_user(user_id):
     return jsonify(
         {
             'user':
-                user.to_dict(only=('id', 'surname', 'name', 'nickname', 'email', 'rating', 'start_date', 'avatar',
+                user.to_dict(only=('id', 'surname', 'name', 'nickname', 'email', 'password', 'rating', 'start_date', 'avatar',
                                    'link_vk', 'wins', 'defeats', 'add_questions', 'all_games'))
         }
     )
@@ -31,7 +31,7 @@ def get_users():
     return jsonify(
         {
             'users':
-                [item.to_dict(only=('id', 'surname', 'name', 'nickname', 'email', 'rating', 'start_date', 'avatar',
+                [item.to_dict(only=('id', 'surname', 'name', 'nickname', 'email', 'password', 'rating', 'start_date', 'avatar',
                                    'link_vk', 'wins', 'defeats', 'add_questions', 'all_games'))
                  for item in users]
         }
