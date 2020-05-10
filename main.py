@@ -467,7 +467,7 @@ def current_game():
                 data['current_games'][str(current_user.id)]['delete'].append(image_path)
                 data['current_games'][str(current_user.id)]['create_map'] =  None
                 save_json(data, 'static/json/games.json')
-                print(1)
+                param['image_type'] = 'map'
 
             param['title'] = 'Идёт игра'
             param['type_quest'] = data['current_games'][str(current_user.id)]['type']
