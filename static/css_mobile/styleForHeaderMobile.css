@@ -24,7 +24,7 @@
 }
 
 p.navigator_p {
-    font-size: 32px;
+    font-size: 35px;
 }
 
 #user_avatar_navigator {
@@ -128,4 +128,8 @@ p.navigator_p {
 #vk_a_join {
     text-decoration: none;
     color: white;
+}
+
+.header {
+    font-size: 60px;
 }

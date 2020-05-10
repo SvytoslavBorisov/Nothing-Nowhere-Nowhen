@@ -1,0 +1,111 @@
+#register_div {
+    font-size: 40px;
+    color: rgb(200, 200, 200);
+    background-color: rgb(70, 70, 70);
+    margin: 0 auto;
+    width: 100%;
+    padding-top: 40px;
+    padding-bottom: 30px;
+    border-radius: 35px;
+    box-shadow: 0 3px 0 rgb(55, 55, 55);
+}
+
+#button_registerIN {
+    width: 60%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 50px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+}
+
+#button_registerIN:active {
+    background-color: rgb(190, 0, 0);
+}
+
+#register_button {
+    margin-top: 15px;
+    text-align: center;
+}
+
+#a_for_login {
+    text-decoration: none;
+    color: red;
+    font-size: 50px;
+}
+
+.register_label {
+    background-color: rgb(60, 60, 60);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.register_input {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 40px;
+    width: 100%;
+    border-radius: 1px;
+    outline: none;
+}
+
+.register_input_div {
+    width: 90%
+}
+
+#login_div {
+    margin-top: 15px;
+    text-align: center;
+}
+
+#register_label_top {
+    border-radius: 10px 10px 0 0;
+    width: 90%;
+}
+
+#register_input_bottom {
+    border-radius: 0 0 10px 10px;
+}
+
+#photo {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+#photo_div {
+    width: 90%;
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 40px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    margin: 0 auto;
+}
+
+#photo_div:active {
+    background-color: rgb(190, 0, 0);
+}
+
+#top_from_photo {
+    margin-top: 5px;
+}
+
+#message {
+    text-align: center;
+}
+
+#header_register {
+    margin: 0px;
+    margin-bottom: 10px;
+}

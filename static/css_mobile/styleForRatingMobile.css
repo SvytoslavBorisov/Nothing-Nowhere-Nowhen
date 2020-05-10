@@ -9,7 +9,7 @@
 .user_div {
     text-align: center;
     color: #FFF;
-    width: 84%;
+    width: 90%;
     cursor: pointer;
 }
 
@@ -18,7 +18,11 @@
     color: rgb(200, 200, 200);
     background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
     margin: 0 auto;
-    width: 95%;
+    width: 100%;
     border-radius: 35px;
     border-spacing: 0px;
+}
+
+#header_rating {
+    margin-bottom: 10px;
 }

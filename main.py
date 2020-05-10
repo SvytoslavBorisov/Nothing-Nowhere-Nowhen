@@ -178,6 +178,7 @@ def register():
 
     param['title'] = 'Регистрация'
     param['style'] = '/static/css/styleForRegister.css'
+    param['style_mobile'] = '/static/css_mobile/styleForRegisterMobile.css'
 
     form = RegisterForm()
     if form.validate_on_submit():
@@ -272,6 +273,7 @@ def add_question(user):
         else:
             question.is_promoted = False
         question.comment = request.form['comment']
+        question.images = ' '
         session.add(question)
         session.commit()
 
@@ -304,6 +306,8 @@ def game(id_):
 
     param['title'] = 'Начать игру'
     param['style'] = '/static/css/styleForGame.css'
+    param['style_mobile'] = '/static/css_mobile/styleForGameMobile.css'
+
     param['category'] = session.query(Category).filter(Category.id == id_).first()
 
     if request.method == 'GET':
@@ -399,7 +403,7 @@ def current_game():
 
         if data['current_games'][str(current_user.id)]['quest_or_next'] == 'quest':
 
-            if param['question'].images.split('!@#')[0] == 'map' and data['current_games'][str(current_user.id)]['delete'][-1]:
+            if param['question'].images.split('!@#')[0] == 'map' and len(data['current_games'][str(current_user.id)]['delete']):
                 param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
                 param['image_type'] = 'map'
             else:
@@ -698,6 +702,7 @@ def start_championship(id_):
 
     param['title'] = 'Начать чемпионат'
     param['style'] = '/static/css/styleForCheckQuests.css'
+    param['style_mobile'] = '/static/css_mobile/styleForCheckQuests.css'
 
     param['championship'] = session.query(Championship).filter(Championship.id == id_).first()
 
@@ -715,7 +720,8 @@ def start_championship(id_):
             'all_stage': param['championship'].type,
             'current_stage': param['championship'].type,
             'stage': 0,
-            'delete': []
+            'delete': [],
+            'title': param['championship'].title
         }
         data['current_championships'][str(current_user.id)] = {}
         for x in load:
@@ -736,6 +742,7 @@ def championships():
 
     param['title'] = 'Чемпионаты'
     param['style'] = '/static/css/styleForChampionships.css'
+    param['style_mobile'] = '/static/css_mobile/styleForChampionshipsMobile.css'
     session = db_session.create_session()
 
     param['championships'] = session.query(Championship).all()
@@ -751,8 +758,10 @@ def current_championship():
             data = open_json('static/json/championships.json')
 
             param = {}
+
             param['style'] = '/static/css/styleForChampionshipGame.css'
-            #param['style_mobile'] = '/static/css_mobile/styleForCurrentGameMobile.css'
+            param['style_mobile'] = '/static/css_mobile/styleForChampionshipGameMobile.css'
+            param['title1'] = data['current_championships'][str(current_user.id)]['title']
 
             param['first'] = data['current_championships'][str(current_user.id)]['members'][data['current_championships'][str(current_user.id)]['stage'] * 2]
             param['first_img'] = data['current_championships'][str(current_user.id)]['images'][param['first']]
@@ -823,6 +832,7 @@ def championship_end():
 
         param = {}
         param['style'] = '/static/css/styleForChampionshipEnd.css'
+        param['style_mobile'] = '/static/css_mobile/styleForChampionshipEndMobile.css'
         param['win'] = data['current_championships'][str(current_user.id)]['members'][0]
         param['img'] = data['current_championships'][str(current_user.id)]['images'][param['win']]
         param['id'] = data['current_championships'][str(current_user.id)]['id']
@@ -863,6 +873,7 @@ def championship_rating(id_):
 def change_play():
     param = {}
     param['style'] = '/static/css/styleForChangePlay.css'
+    param['style_mobile'] = '/static/css_mobile/styleForChangePlayMobile.css'
     param['title'] = 'Выбор игры'
     return render_template('change_play.html', **param)
 

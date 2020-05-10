@@ -6,15 +6,15 @@
 }
 
 #categoriesName {
-    font-size: 40px;
+    font-size: 35px;
 }
 
 #categoriesDescription {
-    font-size: 28px;
+    font-size: 25px;
 }
 
 #categoriesImg {
-    width: 73px;
-    height: 73px;
+    width: 120px;
+    height: 120px;
     padding-top: 28px;
 }

@@ -1,38 +1,6 @@
 {
     "current_games": {
-        "1": {
-            "questions": [
-                195,
-                199,
-                197,
-                198,
-                193,
-                194,
-                190,
-                191,
-                192,
-                189,
-                196
-            ],
-            "wins": 1,
-            "category": 13,
-            "defeats": 3,
-            "current_question": 4,
-            "time": 1589053755,
-            "quest_or_next": "quest",
-            "last_result": true,
-            "type": "change",
-            "complexity": 1,
-            "last_answer": "Токио",
-            "delete": [
-                "static/img/questions/1589053409+1.png",
-                "static/img/questions/1589053475+1.png",
-                "static/img/questions/1589053600+1.png",
-                "static/img/questions/1589053695+1.png",
-                "static/img/questions/1589053755+1.png"
-            ],
-            "create_map": null
-        },
+        "1": null,
         "2": null,
         "3": null,
         "4": null,

@@ -73,5 +73,28 @@
             </div>
         </div>
     </div>
+    {% if current_user.id != user.id %}
+        <script>
+          $(document).ready(function() {
+                if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+                    $('#main_div_user_info').height( $('#div_user_games_and_info').height() + 40);
+                }
+                else {
+                    $('#user_avatar_and_root').height( 300 );
+                }
+            });
+        </script>
+    {% else %}
+        <script>
+          $(document).ready(function() {
+                if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+                    $('#main_div_user_info').height( $('#div_user_games_and_info').height() + 40);
+                }
+                else {
+                    $('#user_avatar_and_root').height( 600 );
+                }
+            });
+        </script>
+    {% endif %}
 
 {% endblock %}

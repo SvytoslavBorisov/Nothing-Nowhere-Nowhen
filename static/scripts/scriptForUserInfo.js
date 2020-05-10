@@ -102,7 +102,6 @@ $(document).ready(function() {
     }
     else {
         $('#user_avatar_and_root').height( 600 );
-        $('#footer').css('visibility', 'hidden');
     }
 });
 

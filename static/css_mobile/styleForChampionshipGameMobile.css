@@ -17,14 +17,14 @@ input {
 #label_for_first, #label_for_second {
     float:left;
     color: white;
-    font-size: 25px;
+    font-size: 60px;
     width: 100%;
     overflow: hidden;
     text-align: center;
 }
 
 #main_div_championship {
-    width: 850px;
+    width: 900px;
     margin: auto;
     height: 100%;
     overflow: hidden;
@@ -33,7 +33,7 @@ input {
 #div_input {
     margin: auto;
     height: 100%;
-    width: 850px;
+    width: 900px;
     overflow: hidden;
 }
 
@@ -41,27 +41,22 @@ input {
     color: white;
     float:left;
     width: 100%;
-    font-size: 25px;
+    font-size: 55px;
     margin: auto;
     text-align: center;
     overflow: hidden;
 }
 
 #stage {
-    font-size: 20px;
+    font-size: 40px;
 }
 
 #p_vs {
-    width: 50px;
+    width: 100px;
     margin: 0px;
     float: left;
     height: 400px;
     line-height: 400px;
-    font-size: 37px;
+    font-size: 75px;
     color: white;
-}
-
-#title {
-    color: white;
-    text-align: center;
 }

@@ -1,0 +1,21 @@
+#main_div_change {
+    overflow: hidden;
+    width: 84%;
+    margin-left: 8%;
+    margin-top: 201px;
+}
+
+#categoriesName {
+    font-size: 40px;
+}
+#championshipsName {
+    font-size: 40px;
+}
+
+#categories {
+    width: 100%;
+}
+
+#championships {
+    width: 100%;
+}

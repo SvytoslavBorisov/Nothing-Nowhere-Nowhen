@@ -5,7 +5,7 @@
         <h1 class='header' id="header_championships">Выбор чемпионата</h1>
         {% for item in championships %}
             <a href="/championship/{{ item.id }}" id="playChampionship">
-                <div id="championships">
+                <div class="championships">
                     <div id="championshipsName">{{ item.title }}</div>
                     <div id="championshipsType">Карточек: {{ item.type*2 }}</div>
                 </div>

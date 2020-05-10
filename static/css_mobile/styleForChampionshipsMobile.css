@@ -1,0 +1,18 @@
+#main_div_championships {
+    overflow: hidden;
+    width: 84%;
+    margin-left: 8%;
+    margin-top: 201px;
+}
+
+#championshipsName {
+    font-size: 50px;
+}
+
+#championshipsType {
+    font-size: 35px;
+}
+
+.championships {
+    height: 100%;
+}

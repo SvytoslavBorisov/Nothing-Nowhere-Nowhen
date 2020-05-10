@@ -4,6 +4,7 @@ body{
     background: gray;
     background: url('/static/img/icons/background.webp');
     height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 html {
