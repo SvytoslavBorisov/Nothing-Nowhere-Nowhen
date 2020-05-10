@@ -22,7 +22,7 @@ from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
 from forms.check_quests import CheckQuestionForm
 from random import choice, shuffle
-from api import questions_resources, users_resources, questions_api
+from api import questions_resources, users_resources, questions_api, users_api
 
 
 application = Flask(__name__)
@@ -35,6 +35,7 @@ login_manager.init_app(application)
 application.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db_session.global_init("db/baseDate.sqlite")
 application.register_blueprint(questions_api.blueprint)
+application.register_blueprint(users_api.blueprint)
 
 api.add_resource(questions_resources.QuestionsListResource, '/api/questions')
 api.add_resource(questions_resources.QuestionResource, '/api/question/<question_id>')
@@ -883,6 +884,7 @@ def championship_rating(id_):
 @application.route('/change_play/')
 def change_play():
     param = {}
+
     param['style'] = '/static/css/styleForChangePlay.css'
     param['style_mobile'] = '/static/css_mobile/styleForChangePlayMobile.css'
     param['title'] = 'Выбор игры'
