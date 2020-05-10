@@ -907,4 +907,4 @@ def one_new(id_):
     return render_template('one_new.html', **param)
 
 
-application.run()
+#application.run()
