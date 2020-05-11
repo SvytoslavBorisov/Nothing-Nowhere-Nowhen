@@ -159,16 +159,17 @@
                     $('#main_div_questions').prepend(`<div id="div_progressbar">
                     <progress id="progressbar1" value="{{ 60 - current_time }}" max="60">20</progress>
                 </div>`);
-                var time = {{ 60 - current_time }};
+                var time1 = {{ 60 - current_time }};
 
                 function minusSec() {
-                    time--;
-                    if (time < 0) {
+                    time1--;
+                    if (time1 < 0) {
                         document.location.href = '{{ path }}';
                     } else {
-                        document.getElementById('progressbar1').value = time;
+                        document.getElementById('progressbar1').value = time1;
                     };
                 };
+
 
                 setInterval(minusSec, 1000);
 

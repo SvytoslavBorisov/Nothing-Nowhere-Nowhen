@@ -388,9 +388,6 @@ def start_game(id_, comp_, type):
 
 
 @application.route('/current_game', methods=['POST', 'GET'])
-
-
-@application.route('/current_game', methods=['POST', 'GET'])
 def current_game():
     session = db_session.create_session()
     if current_user.is_authenticated:
@@ -577,7 +574,7 @@ def current_game():
                         user.rating += 20 * int(data['current_games'][str(current_user.id)]['complexity']) if param['defeat'] != 6 else param['win'] * int(data['current_games'][str(current_user.id)]['complexity'])
 
                         game_res = Game()
-                        game_res.category = param['question'].category
+                        game_res.category = int(data['current_games'][str(current_user.id)]['category'])
                         game_res.result = param['defeat'] != 6
                         game_res.who_play = current_user.id
                         game_res.questions = '!@$'.join([str(x) for x in data['current_games'][str(current_user.id)]['questions']])
@@ -590,7 +587,10 @@ def current_game():
                         data['current_games'][str(current_user.id)] = None
 
                         save_json(data, 'static/json/games.json')
-                    return redirect('/end_game/200')
+                    if param['defeat'] != 6:
+                        return redirect('/end_game/200')
+                    else:
+                        return redirect('/end_game/201')
     else:
         return redirect('/login')
 
@@ -624,9 +624,10 @@ def end_game(why):
     param['style'] = '/static/css/styleForEndGame.css'
     if why == '404':
         param['why'] = 'Вы покинули страницу с вопросом и были дискфалифицированы'
+    elif why == '200':
+        param['why'] = 'Вы победили! Результат записан'
     else:
-        param['why'] = 'Результат записан'
-
+        param['why'] = 'Вы проиграли! Результат записан'
     return render_template('end_game.html', **param)
 
 

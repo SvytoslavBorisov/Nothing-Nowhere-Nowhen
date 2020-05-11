@@ -137,7 +137,9 @@
 #question {
     color: rgb(200, 200, 200);
     font-size: 50px;
-    margin: 5px;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
     height: 100%;
 }
 
