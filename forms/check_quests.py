@@ -13,5 +13,5 @@ class CheckQuestionForm(FlaskForm):
     wrong_answer3 = TextAreaField('', validators=[DataRequired()])
     type = SelectField('Тип вопроса', validators=[Optional()], choices=['all', 'write', 'change'], default='all')
     comp = SelectField('Сложность вопроса', validators=[Optional()], choices=['1', '2', '3', '4', '5'], default='1')
-    submit = SubmitField('Добавить вопрос')
-    submitOUT = SubmitField('Не добавлять вопрос')
+    submit = SubmitField('Редактировать вопрос')
+    submitOUT = SubmitField('Удалить вопрос')

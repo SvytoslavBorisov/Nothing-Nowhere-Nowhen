@@ -291,6 +291,65 @@ def add_question(user):
     return render_template('add_question.html', form=form, **param)
 
 
+@application.route('/put_question/<int:id_quest>', methods=['POST', 'GET'])
+def put_question(id_quest):
+    if return_to_game():
+        return redirect('/current_game')
+
+    session = db_session.create_session()
+    param = {}
+
+    param['title'] = 'Редактировать вопрос'
+    param['style'] = '/static/css/styleForCheckQuests.css'
+    param['categories'] = session.query(Category).all()
+
+    question = session.query(Question).filter(Question.id == id_quest).first()
+
+    form = CheckQuestionForm()
+    if current_user.is_authenticated and question and current_user.id == question.who_add:
+
+        if request.method == 'POST':
+            if request.form.get('submit'):
+                question.text = request.form['text']
+                question.category = session.query(Category).filter(Category.name == request.form['category']).first().id
+                question.answers = "!@#$%".join(
+                    [request.form['answer'], request.form['wrong_answer1'], request.form['wrong_answer2'],
+                     request.form['wrong_answer3']])
+                question.right_answer = request.form['answer']
+                question.is_promoted = True
+                question.comment = request.form['comment']
+
+                session.add(question)
+                session.commit()
+                return redirect(f'/user_info/{current_user.nickname}')
+            else:
+                session.delete(question)
+                session.commit()
+                return redirect(f'/user_info/{current_user.nickname}')
+
+        temp = question.answers.split('!@#$%')
+        form.text.default = question.text
+        form.answer.default = temp[0]
+        form.comment.default = question.comment
+        form.category.choices = [(x.name, x.name) for x in param['categories'][1:]]
+        form.category.default = question.orm_with_category.name
+        form.wrong_answer1.default = temp[1]
+        form.wrong_answer2.default = temp[2]
+        form.wrong_answer3.default = temp[3]
+        return render_template('check_quests.html', form=form, **param)
+    else:
+        if current_user.is_authenticated:
+            return f''' 
+                    <script>alert('Неверный id вопроса. Вы не можете редактировать данный вопрос. Извините за неудобства. Вопросы которые вы создали находяться под id: {','.join([str(x.id) for x in session.query(Question).filter(Question.who_add == current_user.id).all()])}');
+                    document.location.href = "/categories";</script>
+                    '''
+        else:
+            return ''' 
+                    <script>alert('Зарегистрируйтесь');
+                    document.location.href = "/categories";</script>
+                    '''
+
+
 @application.route('/about_site', methods=['POST', 'GET'])
 def about_site():
 
