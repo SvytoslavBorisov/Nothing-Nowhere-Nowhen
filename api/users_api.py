@@ -5,8 +5,8 @@ from werkzeug.security import generate_password_hash
 
 blueprint = Blueprint('users_api', __name__, template_folder='templates')
 
-
-@blueprint.route('/api/12345/user/<int:user_id>',  methods=['GET'])
+'''API для получения одного user'''
+@blueprint.route('/api/123456789/user/<int:user_id>',  methods=['GET'])
 def get_one_user(user_id):
     session = db_session.create_session()
     user = session.query(User).get(user_id)
@@ -21,7 +21,8 @@ def get_one_user(user_id):
     )
 
 
-@blueprint.route('/api/12345/users',  methods=['GET'])
+'''API для получения всех user'''
+@blueprint.route('/api/123456789/users',  methods=['GET'])
 def get_users():
     session = db_session.create_session()
     users = session.query(User).all()
@@ -38,7 +39,8 @@ def get_users():
     )
 
 
-@blueprint.route('/api/12345/add_user', methods=['POST'])
+'''API для создания user'''
+@blueprint.route('/api/123456789/add_user', methods=['POST'])
 def create_user():
     if not request.json:
         return jsonify({'error': 'Empty request'})
@@ -68,7 +70,8 @@ def create_user():
     return jsonify({'success': 'OK'})
 
 
-@blueprint.route('/api/12345/delete_user/<int:user_id>', methods=['DELETE'])
+'''API для удаления user'''
+@blueprint.route('/api/123456789/delete_user/<int:user_id>', methods=['DELETE'])
 def delete_questions(user_id):
     session = db_session.create_session()
     user = session.query(User).get(user_id)
@@ -79,7 +82,8 @@ def delete_questions(user_id):
     return jsonify({'success': 'OK'})
 
 
-@blueprint.route('/api/12345/put_user/<int:user_id>', methods=['PUT'])
+'''API для редактирования user'''
+@blueprint.route('/api/123456789/put_user/<int:user_id>', methods=['PUT'])
 def put_questions(user_id):
     session = db_session.create_session()
     user = session.query(User).get(user_id)

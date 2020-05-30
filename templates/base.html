@@ -2,8 +2,14 @@
 <html lang="en">
 <head>
     <link rel="icon" href="/static/img/icons/icon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="/static/css/styleForHeader.css">
-    <link rel="stylesheet" type="text/css" href="{{ style }}">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForBody.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForContent.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForNavigatorDivs.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForText.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForImages.css">
+    {% for item in style %}
+        <link rel="stylesheet" href="/{{ path_for_style + item }}" type="text/css">
+    {% endfor %}
     <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 980px)" href="/static/css_mobile/styleForHeaderMobile.css">
     <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 980px)" href="{{ style_mobile }}">
     <title>{{ title }} | Играть в интеллектуальную бесплатную онлайн игру-викторину Ничто? Нигде? Никогда?</title>
@@ -20,47 +26,45 @@
 </head>
 <body>
     <div id="top_menuDiv">
-        <div style="overflow: hidden; background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));">
-            <a href="/">
-                <div id="title_div">
-                    <p id="heading">Ничто? Нигде? Никогда?</p>
+        <a href="/">
+            <div id="title_div">
+                <p id="heading">Ничто? Нигде? Никогда?</p>
+            </div>
+        </a>
+        <div id="all_navigator_div">
+            <a href="/about_site">
+                <div class="navigator_div" id="navigator_div1">
+                    <p class="navigator_p">О сайте</p>
                 </div>
             </a>
-            <div id="all_navigator_div">
-                <a href="/about_site">
-                    <div class="navigator_div" id="navigator_div1">
-                        <p class="navigator_p">О сайте</p>
+            <a href="/change_play">
+                <div class="navigator_div" id="navigator_div2">
+                    <p class="navigator_p">Играть</p>
+                </div>
+            </a>
+            <a href="/rating">
+                <div class="navigator_div" id="navigator_div3">
+                    <p class="navigator_p">Рейтинг</p>
+                </div>
+            </a>
+            {% if current_user.is_authenticated %}
+                <a class="navbar-brand" href="/user_info/{{ current_user.nickname }}">
+                    <div class="navigator_div" id="navigator_div4">
+                        <img src="/{{ current_user.avatar }}" alt="" width="40px" height="40px" id="user_avatar_navigator">
+                        {% if current_user.nickname[6] %}
+                            <p class="navigator_p" id="user_nickname_p">{{ current_user.nickname[:6] + '...' }}</p>
+                        {% else %}
+                            <p class="navigator_p" id="user_nickname_p">{{ current_user.nickname[:6] }}</p>
+                        {% endif %}
                     </div>
                 </a>
-                <a href="/change_play">
-                    <div class="navigator_div" id="navigator_div2">
-                        <p class="navigator_p">Играть</p>
+            {% else %}
+                <a href="/login" class="navigator_p">
+                    <div class="navigator_div" id="navigator_div5">
+                        <p class="navigator_p" id="user_nickname_p">Войти</p>
                     </div>
                 </a>
-                <a href="/rating">
-                    <div class="navigator_div" id="navigator_div3">
-                        <p class="navigator_p">Рейтинг</p>
-                    </div>
-                </a>
-                {% if current_user.is_authenticated %}
-                    <a class="navbar-brand" href="/user_info/{{ current_user.nickname }}">
-                        <div class="navigator_div" id="navigator_div4">
-                            <img src="/{{ current_user.avatar }}" alt="" width="40px" height="40px" id="user_avatar_navigator">
-                            {% if current_user.nickname[6] %}
-                                <p class="navigator_p" id="user_nickname_p">{{ current_user.nickname[:6] + '...' }}</p>
-                            {% else %}
-                                <p class="navigator_p" id="user_nickname_p">{{ current_user.nickname[:6] }}</p>
-                            {% endif %}
-                        </div>
-                    </a>
-                {% else %}
-                    <a href="/login" class="navigator_p">
-                        <div class="navigator_div" id="navigator_div5">
-                            <p class="navigator_p" id="user_nickname_p">Войти</p>
-                        </div>
-                    </a>
-                {% endif %}
-            </div>
+            {% endif %}
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.0.0.js"></script>

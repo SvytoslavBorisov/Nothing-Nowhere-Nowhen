@@ -1,3 +1,6 @@
+
+/* КОД ДЛЯ РЕАЛИЗАЦИИ ДИАГРАММ В ПРОФИЛЕ */
+
 function showDiagramm(procent_def, procent_win) {var dataset = [
   {
     value: procent_def,
@@ -96,6 +99,8 @@ dataset.reduce(function (prev, curr) {
   })(curr, prev);
 }, 0);};
 
+
+/*  ВЫРАВНИВАНИЕ СТРАНИЦЫ ДЛЯ ТЕЛЕФОНА/КОМПА */
 $(document).ready(function() {
     if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
         $('#main_div_user_info').height( $('#div_user_games_and_info').height() + 40);

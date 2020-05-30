@@ -1,0 +1,15 @@
+#main_div_change {
+    overflow: hidden;
+    width: 60%;
+    margin-left: 20%;
+}
+
+
+#categories {
+    width: 100%;
+    margin-top: 20px;
+    background: rgb(220, 220, 220);
+    border-radius: 4px;
+    overflow: hidden;
+    height: 92px;
+}

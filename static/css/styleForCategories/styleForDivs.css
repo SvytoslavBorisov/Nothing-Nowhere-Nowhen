@@ -1,0 +1,14 @@
+#main_div_categories {
+    overflow: hidden;
+    width: 60%;
+    margin-left: 20%;
+    margin-bottom: 20px;
+}
+
+#categories {
+    width: 100%;
+    margin-top: 20px;
+    background: rgb(220, 220, 220);
+    border-radius: 4px;
+    overflow: hidden;
+}

@@ -1,0 +1,15 @@
+#header_change {
+    margin: 0px;
+}
+
+#categoriesName {
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 3%;
+    margin-top: 2.5%;
+}
+
+#playCategory {
+    text-decoration: none;
+    color: black;
+}

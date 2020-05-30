@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 
 
+''' Форма для регистрации '''
 class RegisterForm(FlaskForm):
     surname = StringField('Фамилия', validators=[DataRequired()])
     name = StringField('Имя', validators=[DataRequired()])

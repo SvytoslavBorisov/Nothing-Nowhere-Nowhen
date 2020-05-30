@@ -3,6 +3,7 @@ from wtforms import StringField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Optional
 
 
+''' Форма для модерации нового вопроса '''
 class CheckQuestionForm(FlaskForm):
     text = TextAreaField('Текст вопроса', validators=[DataRequired()], default='')
     answer = TextAreaField('Правильный ответ', validators=[DataRequired()], default='')

@@ -3,6 +3,7 @@ from wtforms import StringField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Optional
 
 
+''' Форма для добавления нового вопроса '''
 class AddQuestionForm(FlaskForm):
     text = TextAreaField('Текст вопроса', validators=[DataRequired()], default='')
     answer = StringField('Правильный ответ', validators=[DataRequired()], default='')

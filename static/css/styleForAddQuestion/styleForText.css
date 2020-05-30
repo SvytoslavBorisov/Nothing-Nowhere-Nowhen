@@ -1,0 +1,35 @@
+#a_for_register {
+    text-decoration: none;
+    color: red;
+}
+
+.login_label {
+    background-color: rgb(60, 60, 60);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 600px;
+    margin: 0 auto;
+    margin-top: -3px;
+}
+
+#message {
+    text-align: center;
+}
+
+#text {
+    height: 100px;
+}
+
+.label_add_photo {
+    background-color: rgb(60, 60, 60);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 600px;
+    margin: 0 auto;
+}
+
+#login_label_top {
+    border-radius: 10px 10px 0 0;
+}

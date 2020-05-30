@@ -11,31 +11,28 @@
                                 <div id='slider__item_text'>
                                     <img src="{{ new[1] }}" alt="" class="image_news_lenta">
                                 </div>
+                                <div class="slider_news" id="slider_news_{{ loop.index }}">
+                                    <h1 class="slider_news_caption">{{ new[2] }}</h1>
+                                    <hr class="hr_slider_news">
+                                    <div class="div_a_slider_news">
+                                        <a href="/news/{{ loop.index }}" class="a_slider_news">
+                                            Подробнее
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         {% endfor %}
                     </div>
                     <a class="slider__control slider__control_left" href="#" role="button"></a>
                     <a class="slider__control slider__control_right slider__control_show" href="#" role="button"></a>
                 </div>
-                <div id="slider_text">
-                    {% for new in news[:5] %}
-                        <div class="inner">
-                            <p class="p_news_lenta" id="slider_text_{{ loop.index - 1 }}">{{ new[2] }}</p>
-                        </div>
-                    {% endfor %}
-                </div>
-                <script>
-                    $('#slider__item_text').height($('.slider').width() * 0.47 + 28);
-
-                    $('.image_news_lenta').height($('#slider__item_text').height());
-                    $('.image_news_lenta').width($('#slider__item_text').width());
-                    $('#slider_text').height($('.image_news_lenta').height() + 8);
-                    $('.inner').height($('#slider_text').height() / 5 + 1);
-                    $('.p_news_lenta').css('line-height', String($('.inner').height() - 1) + 'px');
-                </script>
             </div>
             <div id="div_news">
-                <h2 id="heading_news">Новостная лента</h2>
+                <h2 id="heading_news">
+                    Новостная лента
+                    <hr class="hr_news_lenta">
+                </h2>
+
                 <script>
                     function ToNew(id_) {
                         document.location.href = "/news/" + id_;

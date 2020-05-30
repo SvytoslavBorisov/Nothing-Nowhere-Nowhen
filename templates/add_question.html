@@ -4,7 +4,7 @@
     <h1 class='header' id="header_add_question">Создать вопрос</h1>
 
     <div id="login_div">
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div class="login_label" id="login_label_top">{{ form.text.label }}</div>
             <div class="login_area_div">{{ form.text(class="login_area", id="text") }}</div>
@@ -27,6 +27,13 @@
                     {{ error }}
                 </div>
             {% endfor %}
+
+            <div class="label_add_photo">Добавить фото</div>
+            <div id="photo_div">
+                <input type="file" id="photo" name="file">
+                <label for="photo" class="input__file-button">Выберите файл</label>
+            </div>
+
             <div class="login_label">{{ form.category.label }}</div>
             <div class="login_input_div">{{ form.category(class="login_input")}}</div>
             {% for error in form.category.errors %}

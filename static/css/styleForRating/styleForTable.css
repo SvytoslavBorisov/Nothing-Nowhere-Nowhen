@@ -1,0 +1,34 @@
+td, th {
+    border: 3px solid rgb(70, 70, 70);
+    border-left: 0px;
+    height: 44px;
+}
+
+td {
+    border-top: 0px;
+}
+
+.first_td_left {
+    border-left: 3px solid rgb(70, 70, 70);
+}
+
+.user_div {
+    text-align: center;
+    color: #FFF;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 600px;
+    cursor: pointer;
+}
+
+#rating_div {
+    font-size: 20px;
+    color: rgb(200, 200, 200);
+    background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
+    margin: 0 auto;
+    width: 700px;
+    padding: 40px;
+    border-radius: 35px;
+    border-spacing: 0px;
+}

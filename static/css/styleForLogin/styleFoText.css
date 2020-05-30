@@ -1,0 +1,40 @@
+#a_for_register {
+    text-decoration: none;
+    color: red;
+}
+
+#message {
+    text-align: center;
+}
+
+#header_login {
+   margin-bottom: 18px;
+   margin-top: 101px;
+}
+
+.login_label {
+    background-color: rgb(60, 60, 60);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 600px;
+    margin: 0 auto;
+}
+
+.login_input {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 20px;
+    width: 606px;
+    border-radius: 1px;
+    outline: none;
+}
+
+#login_label_top {
+    border-radius: 10px 10px 0 0;
+}
+
+#login_input_bottom {
+    border-radius: 0 0 10px 10px;
+}

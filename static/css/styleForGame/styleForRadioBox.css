@@ -1,0 +1,38 @@
+input[type=radio] {
+    display: none;
+}
+
+label:before {
+	content: "";
+	display: inline-block;
+	width: 31px;
+	height: 31px;
+	line-height: 15px;
+	float: left;
+	background-color: #aaa;
+	box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+	border-radius: 100px;
+}
+
+input[type=radio]:checked + label:before {
+	content: "\2713";
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+	font-size: 40px;
+	float: left;
+	color: #f3f3f3;
+	line-height: 25px;
+	line-width: 25px;
+}
+
+.form-check-comp {
+
+   text-align: left;
+   margin: 20px;
+   margin-left: 35px;
+}
+
+.form-check-type {
+   text-align: left;
+   margin: 20px;
+   margin-left: 90px;
+}

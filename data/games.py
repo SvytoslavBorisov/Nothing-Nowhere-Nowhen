@@ -2,6 +2,7 @@ import sqlalchemy
 from sqlalchemy import orm
 import datetime
 from .db_session import SqlAlchemyBase
+from secondary_functions import format_date
 
 
 class Game(SqlAlchemyBase):
@@ -23,3 +24,20 @@ class Game(SqlAlchemyBase):
 
     orm_with_users = orm.relation('User')
     orm_with_category = orm.relation('Category', back_populates='orm_with_game')
+
+    def get_date(self):
+        return format_date(self.when_play)
+
+
+'''
+    id                   - ID
+    category             - Категория игры
+    result               - Итог игры
+    who_play             - Кто играл
+    when_play            - Время игры
+    questions            - Вопросы в течение игры
+    result_questions     - Результаты ответов на каждый вопрос
+    orm_with_users       - Связь с игроком
+    orm_with_category    - Связь с категорией
+    get_date()           - Вернуть дату в человеческом формате
+'''

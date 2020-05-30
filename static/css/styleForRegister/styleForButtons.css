@@ -1,0 +1,20 @@
+#button_registerIN {
+    width: 40%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+}
+
+#button_registerIN:active {
+    background-color: rgb(190, 0, 0);
+}
+
+#register_button {
+    margin-top: 15px;
+    text-align: center;
+}

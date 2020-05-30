@@ -1,0 +1,15 @@
+td, tr {
+    border: 2px solid rgb(70, 70, 70);
+    cellspacing: 2px;
+    font-size: 19px;
+    border-collapse: collapse;
+}
+
+#table_games {
+    width: calc(100% - 20px);
+    cellspacing: 0px;
+    border-collapse: collapse;
+    margin: auto;
+    margin-right: 5px;
+    margin-left: 10px;
+}

@@ -1,0 +1,95 @@
+#user_info_p_name {
+    padding: 0px;
+    font-size: 25px;
+    text-align: center;
+    padding-top: 15px;
+}
+
+#user_info_p_rating, #user_info_p_email, #user_info_p_vk {
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+    padding-left: 10px;
+    width: 473px;
+    float: left;
+    padding-top: 5px;
+}
+
+#p_statistic {
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.p_windef {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#statistic_user {
+   text-align:center;
+   margin: auto;
+   width: 100%;
+}
+
+.p_procent {
+   padding-left: 0px;
+   padding-top: 16px;
+   font-size: 14px;
+}
+
+#p_games {
+    margin-top: -10px;
+    padding: 0px;
+    font-size: 25px;
+    text-align: center;
+    padding-top: 15px;
+    margin-bottom: 0px;
+}
+
+#p_game {
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+    padding-left: 10px;
+    width: 473px;
+    float: left;
+    padding-top: 5px;
+}
+
+#a_vk {
+    text-decoration: none;
+    color: white;
+}
+
+#header_table_number, #header_table_category, #header_table_result, #header_table_date {
+    width: 5px;
+    border: 2px solid rgb(70, 70, 70);
+    cellspacing: 0px;
+    border-collapse: collapse;
+}
+
+#wins_cont, #defeats_cont {
+  margin: auto;
+  padding-left: 20px;
+  float:left;
+}
+
+#wins_cont {
+  margin-left: 28%;
+}
+
+#logoutLink, #addQuestionLink, #adminLink {
+    text-decoration: none;
+    color: #FFF;
+}
+
+#allLinks {
+    margin-top: 10px;
+}
+
+#nickname {
+    color: red;
+    display: inline-block;
+    padding-top: 15px;
+}

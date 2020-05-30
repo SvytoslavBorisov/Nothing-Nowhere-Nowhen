@@ -16,6 +16,9 @@
                         {{ error }}
                     </div>
                 {% endfor %}
+
+                <img src="{{ quest.images }}" alt="">
+                
                 <div class="login_label">{{ form.answer.label }}</div>
                 <div class="login_input_div">{{ form.answer(class="login_input", id='answer') }}</div>
                 <script>

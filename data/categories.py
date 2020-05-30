@@ -11,4 +11,15 @@ class Category(SqlAlchemyBase):
 
     description = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
+    image = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+
     orm_with_game = orm.relation("Game")
+
+
+'''
+    id             - ID
+    name           - Название категории
+    description    - Описание категории
+    image          - Картинка категории
+    orm_with_game  - Связь с играми
+'''

@@ -36,19 +36,11 @@
                         <div id="div_question_text">
                             <p id="question">{{ question.text }}</p>
                         </div>
-                        {% if image_type == 'map' %}
-                            <div id="div_question_image_map">
-                                <p class="temp_p">
-                                    <img src="{{ image_question }}" alt="" id="question_image_map">
-                                </p>
-                            </div>
-                        {% else %}
-                            <div id="div_question_image_image">
-                                <p class="temp_p">
-                                    <img src="{{ image_question }}" alt="" id="question_image">
-                                </p>
-                            </div>
-                        {% endif %}
+                        <div id="div_question_image_image">
+                            <p class="temp_p">
+                                <img src="{{ image_question }}" alt="" id="question_image">
+                            </p>
+                        </div>
                     {% endif %}
                 </div>
                 <div id="div_answer">

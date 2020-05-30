@@ -17,3 +17,12 @@ class News(SqlAlchemyBase, SerializerMixin):
     image = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     date = sqlalchemy.Column(sqlalchemy.Date, default=datetime.datetime.now)
+
+
+'''
+    id              - ID
+    text            - Текст новости
+    caption         - Заголовок новости
+    image           - Картинка новости
+    date            - Время создания новости
+'''

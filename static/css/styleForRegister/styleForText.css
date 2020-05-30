@@ -1,0 +1,35 @@
+#a_for_login {
+    text-decoration: none;
+    color: red;
+}
+
+.register_label {
+    background-color: rgb(60, 60, 60);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 600px;
+    margin: 0 auto;
+}
+
+.register_input {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 20px;
+    width: 606px;
+    border-radius: 1px;
+    outline: none;
+}
+
+#register_label_top {
+    border-radius: 10px 10px 0 0;
+}
+
+#register_input_bottom {
+    border-radius: 0 0 10px 10px;
+}
+
+#message {
+    text-align: center;
+}

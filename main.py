@@ -1,141 +1,69 @@
+'''Библиотека FLASK'''
 from flask import Flask, render_template, redirect, request, make_response, jsonify
 from flask_restful import Api
-from data import db_session
-from requests import get, post, delete, put
-from datetime import datetime
-import datetime
-import socket
-import time
-import struct
-import random
-import json
-import os
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+
+'''Классы для работы с таблицами Базы Данных(папка data)'''
+from data import db_session
 from data.categories import Category
 from data.questions import Question
 from data.users import User
 from data.championship import Championship
 from data.games import Game
 from data.news import News
+
+'''Библиотека для работы с элементом случайности'''
+from random import choice, shuffle
+
+'''Классы для работы с файлами json, временем, словарями'''
+from secondary_functions import open_json, save_json, get_time, format_date, fill_dict
+
+'''Библиотека для работы с ОС'''
+import os
+import configparser
+
+'''Cоздаём объекта парсера. Читаем конфигурационный файл'''
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+'''Классы для работы с формами для работы с польхователем'''
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.add_question import AddQuestionForm
 from forms.check_quests import CheckQuestionForm
-from random import choice, shuffle
-from api import questions_resources, users_resources, questions_api, users_api
+
+'''Классы для работы с собственным API(папка api)'''
+from api import questions_api, users_api
 
 
+'''Запуск приложения FLASK'''
 application = Flask(__name__)
+
+'''Настройка приложения для того, чтобы можно было сохранять русские символы в json'''
 application.config.update(
     JSON_AS_ASCII=False
 )
-api = Api(application)
-login_manager = LoginManager()
-login_manager.init_app(application)
-application.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-db_session.global_init("db/baseDate.sqlite")
+
+'''Регистрация API в приложении'''
 application.register_blueprint(questions_api.blueprint)
 application.register_blueprint(users_api.blueprint)
 
-api.add_resource(questions_resources.QuestionsListResource, '/api/questions')
-api.add_resource(questions_resources.QuestionResource, '/api/question/<question_id>')
+'''Соединение с Базой Данных'''
+db_session.global_init("db/baseDate.sqlite")
 
-api.add_resource(users_resources.UsersListResource, '/api/users')
-api.add_resource(users_resources.UserResource, '/api/user/<user_id>')
-
-
-def get_bbox(GeoObject, k=0, k1=0, k2=0, k3=0):
-
-    toponym_down_coords = list(map(float, GeoObject["boundedBy"]['Envelope']['lowerCorner'].split()))
-    toponym_up_coords = list(map(float, GeoObject["boundedBy"]['Envelope']['upperCorner'].split()))
-
-    return ",".join(
-        [str(toponym_down_coords[0] + k), str(toponym_down_coords[1] + k1)]) + '~' + ",".join(
-        [str(toponym_up_coords[0] + k2), str(toponym_up_coords[1] + k3)])
+'''Инициализируем LoginManager'''
+login_manager = LoginManager()
+login_manager.init_app(application)
 
 
-def open_json(file):
-    with open(file, "r", errors='ignore') as f:
-        return json.load(f)
-
-
-def save_json(data, file):
-    with open(file, "w") as f:
-        json.dump(data, f, indent=4, ensure_ascii=False)
-
-
-def return_to_game():
-    data = open_json('static/json/games.json')
-    if current_user.is_authenticated and str(current_user.id) in data['current_games'] and data['current_games'][str(current_user.id)] is not None:
-        print("yes")
-        return 1
-    return 0
-
-
-def get_time():
-    address = ('pool.ntp.org', 123)
-    msg = '\x1b' + '\0' * 47
-
-    client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    client.sendto(bytes(msg, encoding='utf-8'), address)
-    msg, _ = client.recvfrom(1024)
-
-    secs = struct.unpack("!12I", msg)[10] - 2208988800
-    return secs
-
-
-@application.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
-
-
-@application.route('/categories')
-def categories():
-    if return_to_game():
-        return redirect('/current_game')
-
-    session = db_session.create_session()
-
-    param = {}
-
-    param['title'] = 'Играть'
-
-    param['style'] = '/static/css/styleForCategories.css'
-    param['style_mobile'] = '/static/css_mobile/styleForCategoriesMobile.css'
-    param['script'] = ''
-    param['categories'] = session.query(Category).all()
-    param['img'] = [int(x.split('.')[0]) for x in os.listdir('static/img/categories')]
-
-    if request.method == 'GET':
-        return render_template('categories.html', **param)
-    elif request.method == 'POST':
-        return render_template('categories.html', **param)
-
-
-@application.route('/', methods=['POST', 'GET'])
-def main_page():
-    if return_to_game():
-        return redirect('/current_game')
-
-    session = db_session.create_session()
-
-    param = {}
-
-    param['title'] = 'Главная страница'
-    param['style'] = 'static/css/styleForMainPage.css'
-    param['style_mobile'] = '/static/css_mobile/styleForMainPageMobile.css'
-
-    param['news'] = [[x.text, x.image, x.caption, x.id] for x in session.query(News).all()]
-
-    return render_template('main_page.html', **param)
-
-
+'''Функция для получения пользователя'''
 @login_manager.user_loader
 def load_user(user_id):
     session = db_session.create_session()
     return session.query(User).get(user_id)
 
 
+'''Выход из аккаунта для пользователя'''
 @application.route('/logout')
 @login_required
 def logout():
@@ -143,777 +71,873 @@ def logout():
     return redirect("/")
 
 
-@application.route('/login', methods=['GET', 'POST'])
+'''Эта настройка защитит наше приложение от межсайтовой подделки запросов'''
+application.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
+
+'''
+    Функция для возвращения пользователя в игру, 
+    если она была прервана по каким-либо причинам
+    1. Открытие файла с сохранёнными играми для пользователей
+    2. Проверка пользователь зашёл в аккаунт или нет & Проверка была ли не закончена игра у текущего пользователя 
+'''
+def return_to_game():
+    data = open_json('static/json/games.json')                          # 1
+    if current_user.is_authenticated and \
+            str(current_user.id) in data['current_games'] and \
+            data['current_games'][str(current_user.id)] is not None:    # 2
+        return 1
+    return 0
+
+
+@application.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+
+'''
+    Страница для выбора категории для следующей игры.
+    1. Проверка была ли начата игра текущим пользователем
+    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    3. Подключение к базе данных
+    4. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'categories'       - Все элементы Category из БД
+    5. Рендеринг
+'''
+@application.route('/categories')
+def categories():
+    if return_to_game():                          # 1
+        return redirect('/current_game')          # 2
+
+    session = db_session.create_session()         # 3
+
+    param = fill_dict(                            # 4
+        title='Категории',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForCategories/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForCategories/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForCategoriesMobile.css',
+        categories=session.query(Category).all())
+    return render_template('categories.html', **param)  # 5
+
+
+'''
+    Главная страница сайта.
+    1. Проверка была ли начата игра текущим пользователем
+    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    3. Подключение к базе данных
+    4. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'news'             - Все элементы News из БД [ Текст новости, картинка, заголовок, id]
+    5. Рендеринг
+'''
+@application.route('/')
+def main_page():
+    if return_to_game():                   # 1
+        return redirect('/current_game')   # 2
+
+    session = db_session.create_session()  # 3
+
+    param = fill_dict(                     # 4
+        title='Главная страница',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForMainPage/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForMainPage/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForMainPageMobile.css',
+        news=[[new.text, new.image, new.caption, new.id] for new in session.query(News).all()])
+
+    return render_template('main_page.html', **param)  # 5
+
+
+'''
+    Страница авторизации на сайте.
+    1. Проверка была ли начата игра текущим пользователем
+    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    3. Подключение к базе данных
+    4. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+    5. Создание формы для авторизации пользователя
+    6. Проверка, была ли отправлена форма.
+    7. Проверка правильности введённых пароля и email
+    8. Перемещаем пользователя в стартовое меню для выбора игры
+    9. Если пароль или email неверны, то пользователю буден показано сообщение 
+об ошибке и предложено ввести данные ещё раз.
+    10. Рендеринг
+'''
+@application.route('/login', methods=['POST', 'GET'])
 def login():
-    if return_to_game():
-        return redirect('/current_game')
+    if return_to_game():                   # 1
+        return redirect('/current_game')   # 2
 
-    session = db_session.create_session()
+    session = db_session.create_session()  # 3
 
-    param = {}
+    param = fill_dict(                     # 4
+        title='Вход',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForLogin/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForLogin/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForLoginMobile.css')
 
-    param['title'] = 'Вход'
-    param['style'] = '/static/css/styleForLogin.css'
-    param['style_mobile'] = '/static/css_mobile/styleForLoginMobile.css'
-    param['script'] = ''
-
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = session.query(User).filter(User.email == form.email.data).first()
-        if user and user.check_password(form.password.data):
+    form = LoginForm()                     # 5
+    if form.validate_on_submit():          # 6
+        user = session.query(User).filter(User.email == form.email.data).first()  # 7
+        if user and user.check_password(form.password.data):                      # 7
             login_user(user)
-            return redirect('/change_play')
-        return render_template('login.html',
-                               message="Неправильный логин или пароль",
-                               form=form, **param)
-    return render_template('login.html', form=form, **param)
+            return redirect('/change_play')                                       # 8
+        return render_template('login.html',                                      # 9
+                               message="Неправильный логин или пароль",           # 9
+                               form=form, **param)                                # 9
+    return render_template('login.html', form=form, **param)                      # 10
 
 
+'''
+    Страница регистрации на сайте.
+    1. Проверка была ли начата игра текущим пользователем
+    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    3. Подключение к базе данных
+    4. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+    5. Создание формы для авторизации пользователя
+    6. Проверка, была ли отправлена форма.
+    7. Проверка есть ли пользователь с таким же email
+    8. Проверка есть ли пользователь с таким же ником
+    9. Создание нового пользователя, коммит
+об ошибке и предложено ввести данные ещё раз.
+    10. Если пользователь указал аватар, то установить его, иначе стандартный
+    11. Перемещаем пользователя в стартовое меню для выбора игры
+    12. Рендеринг
+'''
 @application.route('/register', methods=['POST', 'GET'])
 def register():
-    if return_to_game():
-        return redirect('/current_game')
+    if return_to_game():                   # 1
+        return redirect('/current_game')   # 2
 
-    session = db_session.create_session()
+    session = db_session.create_session()  # 3
 
-    param = {}
+    param = fill_dict(                     # 4
+        title='Регистрация',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForRegister/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForRegister/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForRegisterMobile.css')
 
-    param['title'] = 'Регистрация'
-    param['style'] = '/static/css/styleForRegister.css'
-    param['style_mobile'] = '/static/css_mobile/styleForRegisterMobile.css'
-
-    form = RegisterForm()
-    if form.validate_on_submit():
-        user = session.query(User).filter(User.email == form.email.data).first()
-        if user:
-            return render_template('register.html',
-                                   message="Пользователь с такой почтой уже есть",
-                                   form=form, **param)
+    form = RegisterForm()                  # 5
+    if form.validate_on_submit():          # 6
+        user = session.query(User).filter(User.email == form.email.data).first()    # 7
+        if user:                                                                    # 7
+            return render_template('register.html',                                 # 7
+                                   message="Пользователь с такой почтой уже есть",  # 7
+                                   form=form, **param)                              # 7
         else:
-            user = session.query(User).filter(User.nickname == form.nickname.data).first()
-            if user:
-                return render_template('register.html',
-                                       message="Пользователь с таким ником уже есть",
-                                       form=form, **param)
+            user = session.query(User).filter(User.nickname == form.nickname.data).first()  # 8
+            if user:                                                                        # 8
+                return render_template('register.html',                                     # 8
+                                       message="Пользователь с таким ником уже есть",       # 8
+                                       form=form, **param)                                  # 8
             else:
-                user = User()
-                user.name = request.form['name']
-                user.surname = request.form['surname']
-                user.nickname = request.form['nickname']
-                user.email = request.form['email']
-                user.set_password(request.form['password'])
-                user.rating = 0
-                user.wins = 0
-                user.defeats = 0
-                user.add_questions = 0
-                user.all_games = 0
-                session.add(user)
-                session.commit()
-                if request.files.get('file'):
-                    f = request.files['file']
-                    user.avatar = f'static/img/users_avatars/{user.id}.png'
-                    with open(user.avatar, 'wb') as f1:
-                        f1.write(f.read())
-                else:
-                    user.avatar = f'static/img/users_avatars/no_photo.png'
-                session.commit()
-                login_user(user)
+                user = User()                                                               # 9
+                user.name = request.form['name']                                            # 9
+                user.surname = request.form['surname']                                      # 9
+                user.nickname = request.form['nickname']                                    # 9
+                user.email = request.form['email']                                          # 9
+                user.set_password(request.form['password'])                                 # 9
+                user.rating, user.defeats, user.add_questions, user.all_games = 0, 0, 0, 0  # 9
+                session.add(user)                                                           # 9
+                session.commit()                                                            # 9
+                if request.files.get('file'):                                            # 10
+                    f = request.files['file']                                            # 10
+                    user.avatar = f'static/img/users_avatars/{user.id}.png'              # 10
+                    with open(user.avatar, 'wb') as f1:                                  # 10
+                        f1.write(f.read())                                               # 10
+                else:                                                                    # 10
+                    user.avatar = f'static/img/users_avatars/no_photo.png'               # 10
+                session.commit()                                                         # 10
+                login_user(user)                                                         # 9
 
-                return redirect('/categories')
+                return redirect('/categories')                                        # 11
 
-    return render_template('register.html', form=form, **param)
+    return render_template('register.html', form=form, **param)                       # 12
 
 
-@application.route('/user_info/<string:user>')
+'''
+    Страница информации о пользователе.
+    1. Проверка была ли начата игра текущим пользователем
+    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    3. Подключение к базе данных
+    4. В пути указывается никнейм пользователя, чей это профиль
+    5. Получаем пользователя из БД, чей это профиль
+    6. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'user'             - Пользователь, чей это профиль
+        'games'            - Игры пользователя, чей это профиль
+        'procent_win'      - Процент побед
+        'procent_def'      - Процент поражений
+    7. Рендеринг
+'''
+@application.route('/user_info/<string:user>')  # 4
 def user_info(user):
-    k = return_to_game()
-    if k:
-        return redirect('/current_game')
-    session = db_session.create_session()
-    param = {}
+    if return_to_game():                    # 1
+        return redirect('/current_game')    # 2
 
-    param['title'] = 'Профиль'
-    param['style'] = '/static/css/styleForUserInfo.css'
-    param['style_mobile'] = '/static/css_mobile/styleForUserInfoMobile.css'
-    param['user'] = session.query(User).filter(User.nickname == user).first()
-    param['games'] = param['user'].games
-    param['date'] = [x.when_play for x in param['user'].games]
-    dd = ['Январь', "Февраль", "Март", "Апрель", "Мая", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
-    param['date_month'] = [str(x).split('-')[2] + ' ' + dd[int(str(x).split('-')[1]) - 1] for x in param['date']]
-    for i in range(len(param['date_month'])):
-        if param['date_month'][i][0] == '0':
-            param['date_month'][i] = param['date_month'][i][1:]
-    if param['user'].all_games:
-        param['procent_win'] = int((param['user'].wins / param['user'].all_games) * 100)
-        param['procent_def'] = int(100 - param['procent_win'])
-    else:
-        param['procent_win'] = 50
-        param['procent_def'] = 50
+    session = db_session.create_session()   # 3
 
-    return render_template('user_info.html', **param)
+    user = session.query(User).filter(User.nickname == user).first()  # 5
+
+    param = fill_dict(                      # 6
+        title='Профиль',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForUserInfo/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForUserInfo/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForUserInfoMobile.css',
+        user=user,
+        games=user.games,
+        procent_win=user.get_procent_win(),
+        procent_def=100 - user.get_procent_win())
+
+    return render_template('user_info.html', **param)  # 7
 
 
-@application.route('/add_question/<string:user>', methods=['POST', 'GET'])
+'''
+    Страница доавления вопроса.
+    1. Проверка была ли начата игра текущим пользователем
+    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    3. Подключение к базе данных
+    4. Получение всех категорий
+    5. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'categories'       - Все элементы Category из БД
+    6. Создание формы для добавления пользователя
+    7. Проверка, была ли отправлена форма.
+    8. Добавление в SelectField категорий
+    9. Установка начальной категорией под номером 1
+    10. Создание нового объекта Question 
+    11. Устанавливаем текст вопроса
+    12. Устанавливаем категорию вопроса
+    13. Устанавливаем варианты ответа
+    14. Устанавливаем правильный вариант ответа
+    15. Устанавливаем id человека, который добавил вопрос
+    16. Устанавливаем статус вопроса, если его добавил админ - то он готов к использованию, если обычный пользователь, 
+то вопрос отправиться на модерацию админом
+    17. Устанавливаем комментарий к вопросу
+    18. Устанавливаем картинку к вопросу
+    19. Добавляем вопрос в БД, коммит
+    20. Добавление картинки к вопросу, если она есть
+    21. Возвращаемся в профиль пользователя
+    22. Рендеринг
+'''
+@application.route('/add_question', methods=['POST', 'GET'])
 @login_required
-def add_question(user):
-    if return_to_game():
-        return redirect('/current_game')
+def add_question():
+    if return_to_game():                        # 1
+        return redirect('/current_game')        # 2
 
-    session = db_session.create_session()
-    param = {}
+    session = db_session.create_session()       # 3
+    categories = session.query(Category).all()  # 4
 
-    param['title'] = 'Создать вопрос'
-    param['style'] = '/static/css/styleForAddQuestion.css'
-    param['style_mobile'] = '/static/css_mobile/styleForAddQuestionMobile.css'
-    param['categories'] = session.query(Category).all()
+    param = fill_dict(                          # 5
+        title='Добавить вопрос',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForAddQuestion/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForAddQuestion/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAddQuestionMobile.css',
+        categories=categories)
 
-    form = AddQuestionForm()
-    form.category.choices = [(x.name, x.name) for x in param['categories'][1:]]
-    form.category.default = param['categories'][0].name
-    if form.validate_on_submit():
-        question = Question()
-        question.text = request.form['text']
-        question.category = session.query(Category).filter(Category.name == request.form['category']).first().id
-        question.answers = "!@#$%".join([request.form['answer'], request.form['wrong_answer1'], request.form['wrong_answer2'], request.form['wrong_answer3']])
-        question.right_answer = request.form['answer']
-        question.who_add = current_user.id
-        if current_user.state == "admin":
-            question.is_promoted = True
-        else:
-            question.is_promoted = False
-        question.comment = request.form['comment']
-        question.images = ' '
-        session.add(question)
-        session.commit()
+    form = AddQuestionForm()                    # 6
+    form.category.choices = [(category.name, category.name) for category in categories[1:]]  # 8
+    form.category.default = categories[1].name                                               # 9
+    if form.validate_on_submit():               # 7
+        question = Question()                   # 10
+        question.text = request.form['text']    # 11
+        question.category = session.query(Category).filter(Category.name ==                      # 12
+                                                           request.form['category']).first().id  # 12
+        question.answers = "!@#$%".join([request.form['answer'],               # 13
+                                         request.form['wrong_answer1'],        # 13
+                                         request.form['wrong_answer2'],        # 13
+                                         request.form['wrong_answer3']])       # 13
+        question.right_answer = request.form['answer']             # 14
+        question.who_add = current_user.id                         # 15
+        question.is_promoted = current_user.state == "admin"       # 16
+        question.comment = request.form['comment']                 # 17
+        session.add(question)                       # 19
+        session.commit()                            # 19
 
-        return redirect(f'/user_info/{user}')
+        if request.files.get('file'):                                                       # 20
+            f = request.files['file']                                                       # 20
+            question.images = config['PATH']['to_img'] + f'questions/{question.id}.png'     # 20
+            with open(question.images[1:], 'wb') as f1:                                     # 20
+                f1.write(f.read())                                                          # 20
+        else:                                                                               # 20
+            question.images = ' '                                                           # 20
+        session.commit()                                                                    # 20
 
-    return render_template('add_question.html', form=form, **param)
+        return redirect(f'/user_info/{current_user.nickname}')       # 21
+
+    return render_template('add_question.html', form=form, **param)  # 22
 
 
+'''
+    Страница информации о сайте.
+    1. Проверка была ли начата игра текущим пользователем
+    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    3. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+    4. Рендеринг
+'''
 @application.route('/about_site', methods=['POST', 'GET'])
 def about_site():
+    if return_to_game():                      # 1
+        return redirect('/current_game')      # 2
 
-    if return_to_game():
-        return redirect('/current_game')
-    param = {}
+    param = fill_dict(                        # 3
+        title='О сайте',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForAboutSite/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForAboutSite/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAboutSiteMobile.css')
 
-    param['title'] = 'О сайте'
-    param['style'] = '/static/css/styleForAboutSite.css'
-    param['style_mobile'] = '/static/css_mobile/styleForAboutSiteMobile.css'
-    return render_template('about_site.html', **param)
+    return render_template('about_site.html', **param)  # 4
 
 
-@application.route('/game/<int:id_>', methods=['POST', 'GET'])
+'''
+    Страница информации о сайте.
+    1. Проверка была ли начата игра текущим пользователем
+    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    3. В пути указывается катнгория игры, которую выбрал пользователь
+    4-5. Если пользователь выбрал сложность и тип вопроса, то переходим к старту игры
+    6. Подключение к базе данных
+    7. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Путь к файлу с css стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'category'         - Выбранная пользователем категория
+    8. Рендеринг
+'''
+@application.route('/game/<int:id_>', methods=['POST', 'GET'])  # 3
 def game(id_):
+    if return_to_game():                    # 1
+        return redirect('/current_game')    # 2
 
-    if return_to_game():
-        return redirect('/current_game')
-    session = db_session.create_session()
+    if request.method == 'POST':             # 4
+        return redirect(f'/start_game/{str(id_)}+{str(request.form["complexity"])}+{str(request.form["type"])}')  # 5
 
-    param = {}
+    session = db_session.create_session()   # 6
 
-    param['title'] = 'Начать игру'
-    param['style'] = '/static/css/styleForGame.css'
-    param['style_mobile'] = '/static/css_mobile/styleForGameMobile.css'
+    param = fill_dict(                      # 7
+        title='Начать игру',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForGame/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForGame/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForGameMobile.css',
+        category=session.query(Category).filter(Category.id == id_).first())
 
-    param['category'] = session.query(Category).filter(Category.id == id_).first()
-
-    if request.method == 'GET':
-        return render_template('game.html', **param)
-    elif request.method == 'POST':
-
-        return redirect(f'/start_game/{str(id_)}+{str(request.form["complexity"])}+{str(request.form["type"])}')
+    return render_template('game.html', **param)  # 8
 
 
-@application.route('/start_game/<int:id_>+<int:comp_>+<type>')
-def start_game(id_, comp_, type):
+'''
+    Функция старта игры.
+    1. Проверка была ли начата игра текущим пользователем, 
+если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    2. Подключение к базе данных
+    3. ID категории, сложность и тип вопроса
+    4. Переменная для подходящих вопросов
+    5. Проверка, авторизовался ли пользователь
+    6. Если категория не "Общая", 
+    ТО
+    7-8. Добавляем вопросы, только выбранной категории, сложности, типа и те которые не создал сам игрок 
+    ИНАЧЕ
+    9-10. Добавляем вопросы, всех категорий, выбранной сложности, типа и те которые не создал сам игрок 
+    11. Если пользователь не авторизовался, то переводим его на страницу авторизации
+    12. Переменная для выбора итоговых 11 вопросов
+    13. Подбираем итоговые случайные вопросы для игры
+    14. Открываем файл с сохранениями
+    15. Записываем в него текущую игру
+        'questions'                - Вопросы
+        'wins'                     - Правильно отвечено
+        'category'                 - Категория игры 
+        'defeats'                  - Неправильно отвечено
+        'current_question'         - Текущий номер вопроса
+        'time': get_time()         - Текущее время
+        'quest_or_next'            - Идет игра или Показывается ответ на вопрос
+        'last_result'              - Последний результат
+        'type'                     - Тип вопроса
+        'complexity'               - Сложность вопроса
+        'last_answer'              - Последний ответ
+    16. Проверяем, есть ли в данной категории хотя бы 11 вопросов, 
+если нет, то выводим уведомление, что категория в разработке
+    17. Создаём новую игру в сохранениях 
+    18. Заполняем сохранение данными
+    19. Сохраняем изменения
+    20. Переходим на страницу игры
+'''
+@application.route('/start_game/<int:id_>+<int:comp_>+<type>', methods=['POST', 'GET'])
+def start_game(id_, comp_, type):  # 3
+    if return_to_game():                   # 1
+        return redirect('/current_game')   # 1
 
-    if return_to_game():
-        return redirect('/current_game')
-    session = db_session.create_session()
+    quests = []                                # 4
+    if current_user.is_authenticated:          # 5
+        session = db_session.create_session()  # 2
 
-    quests = []
-    if current_user.is_authenticated:
-        if id_ != 1:
-            for question in session.query(Question).filter(Question.category == id_, Question.who_add != current_user.id, (Question.type == type) | (Question.type == 'all'), Question.complexity == int(comp_)):
-                quests.append(question)
+        if id_ != 1:                           # 6
+            for question in session.query(Question).filter(Question.category == id_,                            # 7
+                                                           Question.who_add != current_user.id,                 # 7
+                                                           (Question.type == type) | (Question.type == 'all'),  # 7
+                                                           Question.complexity == int(comp_)):                  # 7
+                quests.append(question)    # 8
         else:
-            for question in session.query(Question).filter(Question.who_add != current_user.id, Question.complexity == int(comp_)):
-                quests.append(question)
+            for question in session.query(Question).filter(Question.who_add != current_user.id,  # 9
+                                                           Question.complexity == int(comp_)):   # 9
+                quests.append(question)    # 10
     else:
-        if id_ != 1:
-            for question in session.query(Question).filter(Question.category == id_, (Question.type == type) | (Question.type == 'all'), Question.complexity == int(comp_)):
-                quests.append(question)
-        else:
-            for question in session.query(Question):
-                quests.append(question)
+        return redirect('/login')          # 11
 
-    selected = []
-    for _ in range(min(len(quests), 11)):
-        k = choice(quests)
-        while k in selected:
-            k = choice(quests)
-        selected.append(k)
-    if len(selected) < 11:
+    if len(quests) < 11:      # 16
         return ''' 
-                <script>alert('Недостаточно вопросов данной сложности или типа в этой категории. Выберите другую категорию. Извините за неудобства.');
-                document.location.href = "/categories";</script>
+                <script>
+                    alert('Недостаточно вопросов данной сложности или типа в этой категории. Выберите другую категорию. Извините за неудобства.');
+                    document.location.href = "/categories";
+                </script>
                 '''
+    selected = []                       # 12
+    for _ in range(11):                 # 13
+        k = choice(quests)              # 13
+        while k in selected:            # 13
+            k = choice(quests)          # 13
+        selected.append(k)              # 13
 
-    data = open_json('static/json/games.json')
-    if current_user.is_authenticated:
-        load = {
-            'questions': [x.id for x in selected],
-            'wins': 0,
-            'category': id_,
-            'defeats': 0,
-            'current_question': 0,
-            'time': get_time(),
-            'quest_or_next': 'quest',
-            'last_result': None,
-            'type': type,
-            'complexity': comp_,
-            'last_answer': '',
-            'delete': [],
-            'create_map': 'yes'
-        }
-        data['current_games'][str(current_user.id)] = {}
-        for x in load:
-            data['current_games'][str(current_user.id)][x] = load[x]
+    data = open_json(config['PATH']['games'])      # 14
 
-        save_json(data, 'static/json/games.json')
+    load = {                                       # 15
+        'questions': [x.id for x in selected],
+        'wins': 0,
+        'category': id_,
+        'defeats': 0,
+        'current_question': 0,
+        'time': get_time(),
+        'quest_or_next': 'quest',
+        'last_result': None,
+        'type': type,
+        'complexity': comp_,
+        'last_answer': '',
+        'delete': [],
+        'create_map': 'yes'
+    }
 
-    return redirect('/current_game')
+    data['current_games'][str(current_user.id)] = {}  # 17
+    for x in load:                                                # 18
+        data['current_games'][str(current_user.id)][x] = load[x]  # 18
+
+    save_json(data, config['PATH']['games'])         # 19
+
+    return redirect('/current_game')                  # 20
 
 
+'''
+    Страница текущей игры
+    1. Проверка зашёл ли пользователь в аккаунт
+    2. Подключение к базе данных
+    3. Открытие файла с сохранением игры
+    4. Если игрок не начинал игру, то его перемещают в стартовое меню
+    5. Данные текущей игры в удобную переменную
+    6. Получаем ID текущего вопроса
+    7. Получаем текущий вопрос
+    8. Если в данный момент идет ожидание ответа на вопрос
+    ТО
+        9. Создаём рандомную расстановку вариантов ответа
+        10. Получаем из вопроса ответы на него
+        11. Расставляем варианты вопросов по созданной расстановке
+        12. Создание словаря для работы с переменными в html коде
+            'title'                - Заголовок страницы
+            'style'                - Названия файлов, в которых храняться стили для данной страницы
+            'path_for_style'       - Путь к папке со стилями
+            'style_for_mobile'     - Путь к файлу с css стилями для мобильного устройства
+            'question'             - Текущий вопрос
+            'answers'              - Ответы на вопрос
+            'current_number_quest' - Номер текущего вопроса
+            'image_question'       - Картинка к вопросу
+            'type_quest'           - Тип вопроса
+            'current_time'         - Оставшееся время
+            'user'                 - Создатель вопроса
+            'win'                  - Количество правильных ответов на вопрос
+            'defeat'               - Количество неправильных ответов на вопрос
+        13. Если игрок нажал на "Отправить" или закончилось время
+        ТО
+            14. Меняем статус игры на "Ответ"
+            15. Если игрок не оставил поле ответа пустым
+            ТО
+                16-17. Приравниваем вариант пользователя и правильный ответ. 
+                Делаем выввод правильно ответил пользователь или нет. Если неправильно, то создателю вопроса +1 к рейтингу
+            ИНАЧЕ
+                18. Ответ неправильный. Создателю вопроса +1 к рейтингу
+            19. Сохраняеи изменения в БД
+            20. Обновляем данные игры
+            21. В зависимости от результата прибавляем побед/поражений
+            22. Сохраняем изменения в файле
+            23. Переходим к показу правильного ответа
+        ИНАЧЕ
+            24. Игра начинается или продолжается 
+    ИНАЧЕ
+        25. (СМ.ПУНКТ 12) Создание словаря для работы с переменными в html коде
+            'result'                  - Результат ответа на вопрос
+        26. Показывается ответ на вопрос
+        27. Если пользователь продолжил игру
+        28. Меняем статус игры на "Вопрос"
+        29. Увеличиваем кол-во вопросов на которые ответил игрок
+        30. Устанавливаем время показа вопроса
+        31-32. Если еще никто не набрал 6 баллов, то игра продолжается. Сохраняем изменения и переходим к игре
+        33. Если игра закончена, то получаем из БД играющего игрока
+        34. Увеличиваем ему количество сыгранных игр
+        35. Увеличиваем ему количество побед или поражений
+        36. Увеличиваем рейтинг по формуле
+        37. Создаёи объект класса Game и сохраняем данные о игре в БД
+        38. Сохранение данных
+        39. Обнудение текущей игры
+        40. Переходим к странице завершения игры, передавая в пути результат игры 
+    41. Если игрок не зарегистрирован, то переводим его на страницу регистрации
+'''
 @application.route('/current_game', methods=['POST', 'GET'])
 def current_game():
-    session = db_session.create_session()
-    if current_user.is_authenticated:
-        data = open_json('static/json/games.json')
+    if current_user.is_authenticated:                           # 1
+        session = db_session.create_session()                   # 2
+        data = open_json(config['PATH']['games'])               # 3
 
-        if not data['current_games'][str(current_user.id)]:
-            return redirect('/change_play')
+        if not data['current_games'][str(current_user.id)]:     # 4
+            return redirect('/change_play')                     # 4
 
-        param = {}
-        param['style'] = '/static/css/styleForCurrentGame.css'
-        param['style_mobile'] = '/static/css_mobile/styleForCurrentGameMobile.css'
+        this_game_data = data['current_games'][str(current_user.id)]                         # 5
 
-        cur_quest_id = data['current_games'][str(current_user.id)]['questions'][data['current_games'][str(current_user.id)]['current_question']]
-        param['question'] = session.query(Question).filter(Question.id == cur_quest_id).first()
+        cur_quest_id = this_game_data['questions'][this_game_data['current_question']]       # 6
+        this_question = session.query(Question).filter(Question.id == cur_quest_id).first()  # 7
 
-        temp_data = [0, 1, 2, 3]  # порядок вариантов
-        shuffle(temp_data)        # рандомно изменяем его
+        if this_game_data['quest_or_next'] == 'quest':  # 8
 
-        answers = param['question'].answers.split('!@#$%')
-        shuffle_answers = []
-        for x in temp_data:
-            shuffle_answers.append(answers[x])
+            temp_shuffle_answers = [0, 1, 2, 3]  # 9
+            shuffle(temp_shuffle_answers)        # 9
 
-        param['answers'] = shuffle_answers
-        param['current_number_quest'] = data['current_games'][str(current_user.id)]['current_question']
+            answers = this_question.answers.split('!@#$%')  # 10
+            shuffle_answers = []                    # 11
+            for x in temp_shuffle_answers:          # 11
+                shuffle_answers.append(answers[x])  # 11
 
-        if data['current_games'][str(current_user.id)]['quest_or_next'] == 'quest':
+            param = fill_dict(                      # 12
+                title='Идёт игра',
+                style=os.listdir(config["PATH"]['to_css'] + 'styleForCurrentGame/'),
+                path_for_style=config["PATH"]['to_css'] + 'styleForCurrentGame/',
+                style_mobile=config["PATH"]['to_css_mobile'] + 'styleForCurrentGameMobile.css',
+                question=this_question,
+                answers=shuffle_answers,
+                current_number_quest=this_game_data['current_question'],
+                image_question=this_question.images,
+                type_quest=this_game_data['type'],
+                current_time=get_time() - this_game_data['time'],
+                user=session.query(User).filter(User.id == this_question.who_add).first(),
+                win=this_game_data['wins'],
+                defeat=this_game_data['defeats'])
 
-            if param['question'].images.split('!@#')[0] == 'map' and len(data['current_games'][str(current_user.id)]['delete']):
-                param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
-                param['image_type'] = 'map'
-            else:
-                param['image_question'] = param['question'].images
-                param['image_type'] = ''
+            if request.method == 'POST' or param['current_time'] > 60:  # 13
+                this_game_data['quest_or_next'] = 'next'                # 14
 
-            if param['question'].images.split('!@#')[0] == 'map' and data['current_games'][str(current_user.id)]['create_map']:
-                temp_data = param['question'].images.split('!@#')
-
-                coord_map = [float(x) for x in temp_data[3].split(', ')]
-                coord_sat = [float(x) for x in temp_data[2].split(', ')]
-                toponym_to_find = temp_data[1]
-
-                geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
-
-                geocoder_params = {
-                    "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
-                    "geocode": toponym_to_find,
-                    "format": "json"}
-
-                response = get(geocoder_api_server, params=geocoder_params)
-
-                json_response = response.json()
-                toponym = json_response["response"]["GeoObjectCollection"][
-                    "featureMember"][0]["GeoObject"]
-
-                toponym_coodrinates = toponym["Point"]["pos"]
-                toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
-
-                type_map = random.choice([0, 1])
-
-                if type_map:
-                    typeMap = 'map'
-                    coord = coord_map
-                else:
-                    typeMap = 'sat'
-                    coord = coord_sat
-
-                map_params = {
-                    "ll": ",".join([toponym_longitude, toponym_lattitude]),
-                    "l": typeMap,
-                    'bbox': get_bbox(toponym, k=coord[0], k1=coord[1], k2=coord[2], k3=coord[3])
-                }
-
-                map_api_server = "http://static-maps.yandex.ru/1.x/"
-                response = get(map_api_server, params=map_params)
-
-                image_path = f'static/img/questions/{get_time()}+{current_user.id}.png'
-                with open(image_path, 'wb') as f:
-                    f.write(response.content)
-
-                param['image_question'] = image_path
-                data['current_games'][str(current_user.id)]['delete'].append(image_path)
-                data['current_games'][str(current_user.id)]['create_map'] =  None
-                save_json(data, 'static/json/games.json')
-                param['image_type'] = 'map'
-
-            param['title'] = 'Идёт игра'
-            param['type_quest'] = data['current_games'][str(current_user.id)]['type']
-
-            param['current_time'] = get_time() - data['current_games'][str(current_user.id)]['time']  # Разница между текущим и тем, когда началась игра
-
-            param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
-
-            param['win'] = data['current_games'][str(current_user.id)]['wins']
-            param['defeat'] = data['current_games'][str(current_user.id)]['defeats']
-
-            param['path'] = f'/current_game'
-
-            if request.method == 'GET':
-                if param['current_time'] > 60:
-                    data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
-                    save_json(data, 'static/json/games.json')
-                    if request.form.get('option'):
-                        if request.form['option'].lower().strip().replace('ё', 'е') in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):
-                            result = True
-                        else:
-                            result = False
-                            user = session.query(User).filter(User.id == param['question'].who_add).first()
-                            user.rating += 1
-                            session.commit()
-                    else:
-                        result = False
-                        user = session.query(User).filter(User.id == param['question'].who_add).first()
-                        user.rating += 1
-                        session.commit()
-                    data['current_games'][str(current_user.id)]['last_result'] = result
-                    if result:
-                        data['current_games'][str(current_user.id)]['wins'] += 1
-                    else:
-                        data['current_games'][str(current_user.id)]['defeats'] += 1
-                    save_json(data, 'static/json/games.json')
-
-                    data['current_games'][str(current_user.id)]['last_answer'] = request.form.get('option') if request.form.get('option') else ' '
-                    return redirect(f'/current_game')
-                print(param['image_type'])
-                return render_template('current_game.html', **param)
-            elif request.method == 'POST':
-                data['current_games'][str(current_user.id)]['quest_or_next'] = 'next'
-                save_json(data, 'static/json/games.json')
-                if request.form.get('option'):
-                    if request.form['option'].lower().strip().replace('ё', 'е') in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):
+                if request.form.get('option'):                          # 15
+                    if request.form['option'].lower().strip().replace('ё', 'е') \
+                            in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):  # 16
                         result = True
                     else:
                         result = False
-                        user = session.query(User).filter(User.id == param['question'].who_add).first()
-                        user.rating += 1
-                        session.commit()
+                        user = session.query(User).filter(User.id == param['question'].who_add).first()  # 17
+                        user.rating += 1                                                                 # 17
                 else:
-                    result = None
-                data['current_games'][str(current_user.id)]['last_result'] = result
-                data['current_games'][str(current_user.id)]['last_answer'] = request.form.get('option') if request.form.get('option') else ' '
-                if result:
-                    data['current_games'][str(current_user.id)]['wins'] += 1
-                else:
-                    data['current_games'][str(current_user.id)]['defeats'] += 1
-                save_json(data, 'static/json/games.json')
-                return redirect(f'/current_game')
+                    result = False                                                                       # 18
+                    user = session.query(User).filter(User.id == param['question'].who_add).first()      # 18
+                    user.rating += 1                                                                     # 18
+                session.commit()  # 19
+
+                this_game_data['last_result'] = result                                                             # 20
+                this_game_data['last_answer'] = request.form.get('option') if request.form.get('option') else ' '  # 20
+                if result:                             # 21
+                    this_game_data['wins'] += 1        # 21
+                else:                                  # 21
+                    this_game_data['defeats'] += 1     # 21
+
+                data['current_games'][str(current_user.id)] = this_game_data   # 22
+
+                save_json(data, config['PATH']['games'])                       # 22
+                return redirect('/current_game')       # 23
+            elif request.method == 'GET':
+                return render_template('current_game.html', **param)  # 24
         else:
-            param['title'] = 'Ответ'
+            param = fill_dict(  # 25
+                title='Ответ',
+                style=os.listdir(config["PATH"]['to_css'] + 'styleForCurrentGame/'),
+                path_for_style=config["PATH"]['to_css'] + 'styleForCurrentGame/',
+                style_mobile=config["PATH"]['to_css_mobile'] + 'styleForCurrentGameMobile.css',
+                question=this_question,
+                current_number_quest=this_game_data['current_question'],
+                image_question=this_question.images,
+                type_quest=this_game_data['type'],
+                current_time=0,
+                user=session.query(User).filter(User.id == this_question.who_add).first(),
+                win=this_game_data['wins'],
+                defeat=this_game_data['defeats'],
+                result='Вы ответили правильно' if this_game_data['last_result'] else 'Вы ответили неправильно',
+                last_answer=this_game_data['last_answer'])
 
-            if param['question'].images.split('!@#')[0] == 'map':
-                param['image_question'] = data['current_games'][str(current_user.id)]['delete'][-1]
-                param['image_type'] = 'map'
-            else:
-                param['image_question'] = param['question'].images
-                param['image_type'] = ''
-
-            param['current_time'] = 0
-            param['result'] = 'Вы ответили правильно' if data['current_games'][str(current_user.id)]['last_result'] else 'Вы ответили неправильно'
-
-            param['user'] = session.query(User).filter(User.id == param['question'].who_add).first()
-
-            param['win'] = data['current_games'][str(current_user.id)]['wins']
-            param['defeat'] = data['current_games'][str(current_user.id)]['defeats']
-
-            param['last_answer'] = data['current_games'][str(current_user.id)]['last_answer']
-
-            if request.method == 'GET':
-                return render_template('next_game.html', **param)
-            elif request.method == 'POST':
-                data['current_games'][str(current_user.id)]['quest_or_next'] = 'quest'
-                data['current_games'][str(current_user.id)]['current_question'] += 1
-                data['current_games'][str(current_user.id)]['time'] = get_time()
-                data['current_games'][str(current_user.id)]['create_map'] = 'yes'
-                save_json(data, 'static/json/games.json')
-                if param['win'] != 6 and param['defeat'] != 6:
-                    return redirect('/current_game')
+            if request.method == 'GET':                                 # 26
+                return render_template('next_game.html', **param)       # 26
+            elif request.method == 'POST':                         # 27
+                this_game_data['quest_or_next'] = 'quest'          # 28
+                this_game_data['current_question'] += 1            # 29
+                this_game_data['time'] = get_time()                # 30
+                if param['win'] != 6 and param['defeat'] != 6:                    # 31
+                    data['current_games'][str(current_user.id)] = this_game_data  # 32
+                    save_json(data, config['PATH']['games'])                      # 32
+                    return redirect('/current_game')                              # 32
                 else:
-                    if current_user.is_authenticated:
-                        user = session.query(User).filter(User.id == current_user.id).first()
-                        user.all_games += 1
-                        user.wins += param['defeat'] != 6
-                        user.defeats += param['win'] != 6
-                        user.rating += 20 * int(data['current_games'][str(current_user.id)]['complexity']) if param['defeat'] != 6 else param['win'] * int(data['current_games'][str(current_user.id)]['complexity'])
+                    user = session.query(User).filter(User.id == current_user.id).first()              # 33
+                    user.all_games += 1                                                                # 33
+                    user.wins += param['defeat'] != 6                                                  # 34
+                    user.defeats += param['win'] != 6                                                  # 34
+                    user.rating += 20 * int(this_game_data['complexity']) if param['defeat'] != 6 \
+                        else param['win'] * int(this_game_data['complexity'])                          # 35
 
-                        game_res = Game()
-                        game_res.category = int(data['current_games'][str(current_user.id)]['category'])
-                        game_res.result = param['defeat'] != 6
-                        game_res.who_play = current_user.id
-                        game_res.questions = '!@$'.join([str(x) for x in data['current_games'][str(current_user.id)]['questions']])
-                        game_res.result_questions = f"{param['win']}:{param['defeat']}"
-                        session.add(game_res)
-                        session.commit()
+                    game_res = Game()                                                                  # 36
+                    game_res.category = int(this_game_data['category'])                                # 37
+                    game_res.result = param['defeat'] != 6                                             # 37
+                    game_res.who_play = current_user.id                                                # 37
+                    game_res.questions = '!@$'.join([str(x) for x in this_game_data['questions']])     # 37
+                    game_res.result_questions = f"{param['win']}:{param['defeat']}"                    # 37
+                    session.add(game_res)                                            # 38
+                    session.commit()                                                 # 38
 
-                        for x in data['current_games'][str(current_user.id)]['delete']:
-                            os.remove(x)
-                        data['current_games'][str(current_user.id)] = None
+                    data['current_games'][str(current_user.id)] = None             # 39
 
-                        save_json(data, 'static/json/games.json')
-                    if param['defeat'] != 6:
-                        return redirect('/end_game/200')
-                    else:
-                        return redirect('/end_game/201')
+                    save_json(data, 'static/json/games.json')                      # 39
+                if param['defeat'] != 6:                  # 40
+                    return redirect('/end_game/200')      # 40
+                else:                                     # 40
+                    return redirect('/end_game/201')      # 40
     else:
-        return redirect('/login')
+        return redirect('/login')    # 41
 
 
-@application.route('/rating')
-def rating():
-
-    if return_to_game():
-        return redirect('/current_game')
-    session = db_session.create_session()
-    param = {}
-
-    param['title'] = 'Рейтинг'
-    param['style'] = '/static/css/styleForRating.css'
-    param['style_mobile'] = '/static/css_mobile/styleForRatingMobile.css'
-    all_users = session.query(User).all()
-    all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))
-    param['users'] = all_users
-
-    return render_template('rating.html', **param)
-
-
+'''
+    Страница завершения игры.
+    1. Проверка была ли начата игра текущим пользователем, 
+если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    2. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'why'              - Результат игры
+    3. Рендеринг
+'''
 @application.route('/end_game/<why>')
 def end_game(why):
-    k = return_to_game()
-    if k:
-        return redirect('/current_game')
-    param = {}
+    if return_to_game():                  # 1
+        return redirect('/current_game')  # 1
 
-    param['title'] = 'Конец игры'
-    param['style'] = '/static/css/styleForEndGame.css'
-    if why == '404':
-        param['why'] = 'Вы покинули страницу с вопросом и были дискфалифицированы'
-    elif why == '200':
-        param['why'] = 'Вы победили! Результат записан'
-    else:
-        param['why'] = 'Вы проиграли! Результат записан'
-    return render_template('end_game.html', **param)
+    param = fill_dict(  # 2
+        title='Конец игры',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForEndGame/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForEndGame/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForEndGame.css',
+        why='Вы победили! Результат записан' if why == '200' else 'Вы проиграли! Результат записан')
+
+    return render_template('end_game.html', **param)  # 3
 
 
+'''
+    Страница рейтинга.
+    1. Проверка была ли начата игра текущим пользователем, 
+если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    2. Подключение к базе данных
+    3. Получаем всех пользователей и сортируем их по рейтингу и имени
+    4. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'users'            - Отсортированные все пользователи
+    5. Рендеринг
+'''
+@application.route('/rating')
+def rating():
+    if return_to_game():  # 1
+        return redirect('/current_game')  # 1
+
+    session = db_session.create_session()  # 2
+
+    all_users = session.query(User).all()  # 3
+    all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))  # 3
+
+    param = fill_dict(  # 4
+        title='Рейтинг',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForRating/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForRating/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForRatingMobile.css',
+        users=all_users)
+
+    return render_template('rating.html', **param)  # 5
+
+
+'''
+    Страница модерации вопросов(admin).
+    1. Проверка была ли начата игра текущим пользователем, 
+если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    2. Создание формы для редактирования вопроса
+    3. Если игрок вошел в аккаунт и имеет статус ADMIN
+    ТО
+        4. Подключение к базе данных
+        5. Если админ посылает POST запрос 
+        6. Если он нажал кнопку Добавить
+        ТО
+            7. Берем из БД первый непроверенный вопрос
+            8. Изменияем вопрос и делаем его проверенным
+            9. Сохраняем изменения, коммит
+        ИНАЧЕ
+            10. Удаляем вопрос из БД
+        11. Создание словаря для работы с переменными в html коде
+            'title'            - Заголовок страницы
+            'style'            - Названия файлов, в которых храняться стили для данной страницы
+            'path_for_style'   - Путь к папке со стилями
+            'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+            'categories'       - Все категории вопросов из БД
+            'quest'            - Первый непроверенный вопрос
+        12. Если есть непроверенный вопрос, то тогда заполняем форму вопроса стандартными данными
+        13. Переходим к html
+        14. Если нет непроверенных вопросов, то тогда переходим в профиль
+    ИНАЧЕ
+        15. Предлагаем игроку войти
+'''
 @application.route('/check_quests', methods=['POST', 'GET'])
 def check_quests():
-    if return_to_game():
-        return redirect('/current_game')
+    if return_to_game():                      # 1
+        return redirect('/current_game')      # 1
 
-    form = CheckQuestionForm()
-    if current_user.is_authenticated and current_user.state == 'admin':
+    form = CheckQuestionForm()                                            # 2
+    if current_user.is_authenticated and current_user.state == 'admin':   # 3
 
-        session = db_session.create_session()
+        session = db_session.create_session()       # 4
 
-        if request.method == 'POST':
-            if request.form.get('submit'):
-                question = session.query(Question).filter(Question.is_promoted == 0).first()
+        if request.method == 'POST':    # 5
+            if request.form.get('submit'):                                                      # 6
+                question = session.query(Question).filter(Question.is_promoted == 0).first()    # 7
 
-                question.text = request.form['text']
-                question.category = session.query(Category).filter(Category.name == request.form['category']).first().id
+                question.text = request.form['text']                                            # 8
+                question.category = session.query(Category).filter(Category.name ==
+                                                                   request.form['category']).first().id  # 8
                 question.answers = "!@#$%".join(
                     [request.form['answer'], request.form['wrong_answer1'], request.form['wrong_answer2'],
-                     request.form['wrong_answer3']])
-                question.right_answer = request.form['answer']
-                question.is_promoted = True
-                question.comment = request.form['comment']
-                question.type = request.form['type']
-                question.comp = request.form['comp']
+                     request.form['wrong_answer3']])            # 8
+                question.right_answer = request.form['answer']  # 8
+                question.is_promoted = True                     # 8
+                question.comment = request.form['comment']      # 8
+                question.type = request.form['type']            # 8
+                question.comp = request.form['comp']            # 8
 
-                session.add(question)
-                session.commit()
+                session.add(question)                           # 9
+                session.commit()                                # 9
             else:
-                question = session.query(Question).filter(Question.is_promoted == 0).first()
-                session.delete(question)
-                session.commit()
+                question = session.query(Question).filter(Question.is_promoted == 0).first()  # 10
+                session.delete(question)                                                      # 10
+                session.commit()                                                              # 10
 
-        param = {}
+        param = fill_dict(       # 11
+            title='Просмотр вопросов',
+            style=os.listdir(config["PATH"]['to_css'] + 'styleForCheckQuests/'),
+            path_for_style=config["PATH"]['to_css'] + 'styleForCheckQuests/',
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForCheckQuests.css',
+            categories=session.query(Category).all(),
+            quest=session.query(Question).filter(Question.is_promoted == 0).first())
 
-        param['title'] = 'Просмотр вопросов'
-        param['style'] = '/static/css/styleForCheckQuests.css'
-
-        param['categories'] = session.query(Category).all()
-        param['quest'] = session.query(Question).filter(Question.is_promoted == 0).first()
-
-        if param['quest']:
-            temp = param['quest'].answers.split('!@#$%')
-            form.text.default = param['quest'].text
-            form.answer.default = temp[0]
-            form.comment.default = param['quest'].comment
-            form.category.choices = [(x.name, x.name) for x in param['categories'][1:]]
-            form.category.default = param['quest'].orm_with_category.name
-            form.wrong_answer1.default = temp[1]
-            form.wrong_answer2.default = temp[2]
-            form.wrong_answer3.default = temp[3]
-            return render_template('check_quests.html', form=form, **param)
+        if param['quest']:                                                                   # 12
+            temp = param['quest'].answers.split('!@#$%')                                     # 12
+            form.text.default = param['quest'].text                                          # 12
+            form.answer.default = temp[0]                                                    # 12
+            form.comment.default = param['quest'].comment                                    # 12
+            form.category.choices = [(x.name, x.name) for x in param['categories'][1:]]      # 12
+            form.category.default = param['quest'].orm_with_category.name                    # 12
+            form.wrong_answer1.default = temp[1]                                             # 12
+            form.wrong_answer2.default = temp[2]                                             # 12
+            form.wrong_answer3.default = temp[3]                                             # 12
+            return render_template('check_quests.html', form=form, **param)    # 13
         else:
-            return redirect('/user_info/' + current_user.nickname)
+            return redirect('/user_info/' + current_user.nickname)             # 14
     else:
-        return redirect('/login')
+        return redirect('/login')      # 15
 
 
-@application.route('/championship/<int:id_>', methods=['POST', 'GET'])
-def championship(id_):
-
-    if return_to_game():
-        return redirect('/current_game')
-
-    if request.method == 'GET':
-        param = {}
-
-        param['title'] = 'Чемпионат'
-        param['style'] = '/static/css/styleForChampionshipStart.css'
-        param['style_mobile'] = '/static/css_mobile/styleForChampionshipStartMobile.css'
-        session = db_session.create_session()
-
-        param['championship'] = session.query(Championship).filter(Championship.id == id_).first()
-        return render_template('championship_start.html', **param)
-    elif request.method == 'POST':
-        return redirect(f'/championship_start/{str(id_)}')
-
-
-@application.route('/championship_start/<int:id_>')
-def start_championship(id_):
-
-    if return_to_game():
-        return redirect('/current_game')
-
-    session = db_session.create_session()
-
-    param = {}
-
-    param['title'] = 'Начать чемпионат'
-
-    param['championship'] = session.query(Championship).filter(Championship.id == id_).first()
-
-    selected = param['championship'].members.split('!@#$%')
-    selected_images = param['championship'].images.split('!@#$%')
-    all_selected = {selected[i]: f'/static/img/championships/{id_}/' + selected_images[i] + '.png' for i in range(len(selected))}
-    shuffle(selected)
-
-    if current_user.is_authenticated:
-        data = open_json('static/json/championships.json')
-        load = {
-            'id': param['championship'].id,
-            'members': selected,
-            'images': all_selected,
-            'all_stage': param['championship'].type,
-            'current_stage': param['championship'].type,
-            'stage': 0,
-            'delete': [],
-            'title': param['championship'].title
-        }
-        data['current_championships'][str(current_user.id)] = {}
-        for x in load:
-            data['current_championships'][str(current_user.id)][x] = load[x]
-        save_json(data, 'static/json/championships.json')
-
-        return redirect('/championship_game')
-    return redirect('/login')
-
-
-@application.route('/championships')
-def championships():
-
-    if return_to_game():
-        return redirect('/current_game')
-
-    param = {}
-
-    param['title'] = 'Чемпионаты'
-    param['style'] = '/static/css/styleForChampionships.css'
-    param['style_mobile'] = '/static/css_mobile/styleForChampionshipsMobile.css'
-    session = db_session.create_session()
-
-    param['championships'] = session.query(Championship).all()
-
-    return render_template('championships.html', **param)
-
-
-@application.route('/championship_game', methods=['POST', 'GET'])
-def current_championship():
-
-    if request.method == 'GET':
-        if current_user.is_authenticated:
-            data = open_json('static/json/championships.json')
-
-            if not data['current_championships'][str(current_user.id)]:
-                return redirect('/change_play')
-
-            param = {}
-
-            param['style'] = '/static/css/styleForChampionshipGame.css'
-            param['style_mobile'] = '/static/css_mobile/styleForChampionshipGameMobile.css'
-            param['title1'] = data['current_championships'][str(current_user.id)]['title']
-
-            param['first'] = data['current_championships'][str(current_user.id)]['members'][data['current_championships'][str(current_user.id)]['stage'] * 2]
-            param['first_img'] = data['current_championships'][str(current_user.id)]['images'][param['first']]
-            param['second'] = data['current_championships'][str(current_user.id)]['members'][data['current_championships'][str(current_user.id)]['stage'] * 2 + 1]
-            param['second_img'] = data['current_championships'][str(current_user.id)]['images'][param['second']]
-
-            param['curr_stage_number'] = data['current_championships'][str(current_user.id)]['current_stage']
-            if param['curr_stage_number'] == 2:
-                param['curr_stage'] = 'Полуфинал'
-            elif param['curr_stage_number'] == 4:
-                param['curr_stage'] = 'Четвертьфинал'
-            elif param['curr_stage_number'] == 1:
-                param['curr_stage'] = 'Финал'
-            else:
-                param['curr_stage'] = f'1 / {param["curr_stage_number"]}'
-            param['stage'] = data['current_championships'][str(current_user.id)]['stage']
-
-            return render_template('championship_game.html', **param)
-    elif request.method == 'POST':
-        data = open_json('static/json/championships.json')
-        if request.form.get('first') != None:
-            print('Вы проголосовали за ', data['current_championships'][str(current_user.id)]['members'][data['current_championships'][str(current_user.id)]['stage'] * 2])
-            data['current_championships'][str(current_user.id)]['delete'].append(
-                data['current_championships'][str(current_user.id)]['members'][
-                    data['current_championships'][str(current_user.id)]['stage'] * 2 + 1])
-        else:
-            print('Вы проголосовали за ', data['current_championships'][str(current_user.id)]['members'][data['current_championships'][str(current_user.id)]['stage'] * 2 + 1])
-            data['current_championships'][str(current_user.id)]['delete'].append(
-                data['current_championships'][str(current_user.id)]['members'][
-                    data['current_championships'][str(current_user.id)]['stage'] * 2])
-        data['current_championships'][str(current_user.id)]['stage'] += 1
-        save_json(data, 'static/json/championships.json')
-
-        if data['current_championships'][str(current_user.id)]['current_stage'] == 1:
-            data['current_championships'][str(current_user.id)]['members'].remove(data['current_championships'][str(current_user.id)]['delete'][-1])
-            save_json(data, 'static/json/championships.json')
-
-            session = db_session.create_session()
-
-            championship = session.query(Championship).filter(Championship.id == data['current_championships'][str(current_user.id)]['id']).first()
-            championship_members = championship.members.split('!@#$%')
-
-            temp = championship.procent.split('!@#$%')
-            temp[championship_members.index(data['current_championships'][str(current_user.id)]['members'][0])] = int(temp[championship_members.index(data['current_championships'][str(current_user.id)]['members'][0])])
-            temp[championship_members.index(data['current_championships'][str(current_user.id)]['members'][0])] += 1
-            championship.procent = '!@#$%'.join([str(x) for x in temp])
-
-            championship.games += 1
-
-            session.commit()
-            return redirect('/championship_end')
-
-        if data['current_championships'][str(current_user.id)]['stage'] == data['current_championships'][str(current_user.id)]['current_stage']:
-            for x in data['current_championships'][str(current_user.id)]['delete']:
-                if x in data['current_championships'][str(current_user.id)]['members']:
-                    data['current_championships'][str(current_user.id)]['members'].remove(x)
-            data['current_championships'][str(current_user.id)]['stage'] = 0
-            data['current_championships'][str(current_user.id)]['current_stage'] = data['current_championships'][str(current_user.id)]['current_stage'] // 2
-            shuffle(data['current_championships'][str(current_user.id)]['members'])
-        save_json(data, 'static/json/championships.json')
-        return redirect('/championship_game')
-
-
-@application.route('/championship_end', methods=['POST', 'GET'])
-def championship_end():
-    if current_user.is_authenticated:
-        data = open_json('static/json/championships.json')
-
-        param = {}
-        param['style'] = '/static/css/styleForChampionshipEnd.css'
-        param['style_mobile'] = '/static/css_mobile/styleForChampionshipEndMobile.css'
-        param['win'] = data['current_championships'][str(current_user.id)]['members'][0]
-        param['img'] = data['current_championships'][str(current_user.id)]['images'][param['win']]
-        param['id'] = data['current_championships'][str(current_user.id)]['id']
-        return render_template('championship_end.html', **param)
-    return redirect('/login')
-
-
-@application.route('/championship_rating/<int:id_>', methods=['POST', 'GET'])
-def championship_rating(id_):
-    if current_user.is_authenticated:
-        data = open_json('static/json/championships.json')
-
-        data['current_championships'][str(current_user.id)] = None
-
-        save_json(data, 'static/json/championships.json')
-
-        session = db_session.create_session()
-
-        championship = session.query(Championship).filter(
-            Championship.id == id_).first()
-
-        param = {}
-        param['style'] = '/static/css/styleForChampionshipRating.css'
-        param['style_mobile'] = '/static/css_mobile/styleForChampionshipRatingMobile.css'
-
-        param['title'] = 'Рейтинг чеспионата'
-        param['title1'] = championship.title
-        param['procent'] = championship.procent.split('!@#$%')
-        param['members'] = championship.members.split('!@#$%')
-        param['all_games'] = championship.games
-
-        param['players'] = [[param['members'][i], str((int(param['procent'][i]) * 100) / int(param['all_games']))] for i in range(len(param['members']))]
-        param['players'].sort(key=lambda x: float(x[1]), reverse=True)
-
-        return render_template('championship_rating.html', **param)
-    return redirect('/login')
-
-
+'''
+    Страница выбора игры.
+    1. Проверка была ли начата игра текущим пользователем, 
+если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    2. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилямии
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+    3. Рендеринг
+'''
 @application.route('/change_play/')
 def change_play():
-    param = {}
+    if return_to_game():                  # 1
+        return redirect('/current_game')  # 1
 
-    param['style'] = '/static/css/styleForChangePlay.css'
-    param['style_mobile'] = '/static/css_mobile/styleForChangePlayMobile.css'
-    param['title'] = 'Выбор игры'
-    return render_template('change_play.html', **param)
+    param = fill_dict(  # 2
+        title='Выбор игры',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForChangePlay/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForChangePlay/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css')
+
+    return render_template('change_play.html', **param)   # 3
 
 
+'''
+    Страница выбора игры.
+    1. Проверка была ли начата игра текущим пользователем, 
+если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    2. Подключение к базе данных
+    3. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'new'              - Новость
+    4. Рендеринг
+'''
 @application.route('/news/<int:id_>')
 def one_new(id_):
+    if return_to_game():                   # 1
+        return redirect('/current_game')   # 1
 
-    session = db_session.create_session()
-    param = {}
+    session = db_session.create_session()  # 2
 
-    param['style'] = '/static/css/styleForOneNew.css'
-    param['style_mobile'] = '/static/css_mobile/styleForOneNewMobile.css'
+    param = fill_dict(                     # 3
+        title='Новость',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForOneNew/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForOneNew/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForOneNewMobile.css',
+        new=session.query(News).filter(News.id == id_).first())
 
-    param['title'] = 'Новость'
-
-    param['new'] = session.query(News).filter(News.id == id_).first()
-
-    return render_template('one_new.html', **param)
+    return render_template('one_new.html', **param)  # 4
 
 
-#application.run()
+''' 
+    Запуск приложения. Сайт открывается на http://127.0.0.1:5000/ 
+    ИЛИ на сайте https://nothing-nowhere-nowhen.ru
+'''
+application.run()

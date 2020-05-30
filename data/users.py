@@ -43,3 +43,30 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    def get_procent_win(self):
+        if self.all_games:
+            return int((self.wins / self.all_games) * 100)
+        return 50
+
+
+'''
+    id                 - ID
+    surname            - Фамилия
+    name               - Имя
+    nickname           - Никнейм
+    email              - Почта
+    password           - Пароль
+    rating             - Рейтинг
+    start_date         - Дата регистрации
+    avatar             - Аватарка
+    link_vk            - Ссылка на VK
+    state              - Статус пользователя (admin, user)
+    wins               - Кол-во побед
+    defeats            - Кол-вл поражений
+    all_games          - Всего игр
+    add_questions      - Количество добавленных вопросов
+    games              - Связь с таблицей Games
+    set_password()     - Установить пароль
+    check_password()   - Проверить пароль 
+    get_procent_win()  - Вернуть проценты побед/поражений
+'''

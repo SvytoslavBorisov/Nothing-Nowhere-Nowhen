@@ -9,7 +9,7 @@
             {% if current_user.id == user.id %}
                 <div id="user_root">
                     <div id="allLinks">
-                        <a id="addQuestionLink" href="/add_question/{{ user.nickname }}">
+                        <a id="addQuestionLink" href="/add_question">
                             <div id="addQuestion">Создать вопрос</div>
                         </a>
                         <a id="adminLink" href="/check_quests">
@@ -62,11 +62,11 @@
                                 <td>{{ loop.index }}</td>
                                 <td>{{ game.orm_with_category.name }}</td>
                                 {% if game.result == '1' %}
-                                    <td>Выйграно</td>
+                                    <td>Выиграно</td>
                                 {% else %}
                                     <td>Проиграно</td>
                                 {% endif %}
-                                <td>{{ date_month[loop.index - 1]}}</td>
+                                <td>{{ game.get_date() }}</td>
                             </tr>
                         {% endfor %}
                     </table>

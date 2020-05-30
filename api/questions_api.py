@@ -6,7 +6,8 @@ from data import db_session
 blueprint = Blueprint('questions_api', __name__, template_folder='templates')
 
 
-@blueprint.route('/api/question/<int:question_id>',  methods=['GET'])
+'''API для получения одного вопроса'''
+@blueprint.route('/api/123456789/question/<int:question_id>',  methods=['GET'])
 def get_one_question(question_id):
     session = db_session.create_session()
     questions = session.query(Question).get(question_id)
@@ -20,7 +21,8 @@ def get_one_question(question_id):
     )
 
 
-@blueprint.route('/api/questions',  methods=['GET'])
+'''API для получения всех вопросов'''
+@blueprint.route('/api/123456789/questions',  methods=['GET'])
 def get_questions():
     session = db_session.create_session()
     questions = session.query(Question).all()
@@ -36,7 +38,8 @@ def get_questions():
     )
 
 
-@blueprint.route('/api/add_quest', methods=['POST'])
+'''API для создания вопроса'''
+@blueprint.route('/api/123456789/add_quest', methods=['POST'])
 def create_questions():
     if not request.json:
         return jsonify({'error': 'Empty request'})
@@ -57,7 +60,8 @@ def create_questions():
     return jsonify({'success': 'OK'})
 
 
-@blueprint.route('/api/quests/<int:quest_id>', methods=['DELETE'])
+'''API для удаления вопроса'''
+@blueprint.route('/api/123456789/quests/<int:quest_id>', methods=['DELETE'])
 def delete_questions(quest_id):
     session = db_session.create_session()
     quest = session.query(Question).get(quest_id)
@@ -68,7 +72,8 @@ def delete_questions(quest_id):
     return jsonify({'success': 'OK'})
 
 
-@blueprint.route('/api/quests/<int:quest_id>', methods=['PUT'])
+'''API для редактирования вопроса'''
+@blueprint.route('/api/123456789/quests/<int:quest_id>', methods=['PUT'])
 def put_questions(quest_id):
     session = db_session.create_session()
     quest = session.query(Question).get(quest_id)

@@ -1,0 +1,87 @@
+#h1_quest {
+    color: #FFF;
+    margin: 0px;
+    margin-top: 10px;
+}
+
+#question {
+    color: rgb(200, 200, 200);
+    font-size: 30px;
+    margin: 0px;
+    margin:auto;
+    margin-top: 8px;
+    width: 90%;
+    margin-bottom: 8px;
+}
+
+#p_answers {
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+    margin: 0px;
+    margin-top: 5px;
+}
+
+.p_questions_answer {
+    font-size: 20px;
+    padding-top: 12px;
+}
+
+.player_name {
+    font-size: 22px;
+    color: white;
+}
+
+#p_vs {
+    float:left;
+    line-height: 100px;
+    width: calc(100% - 238px);
+    font-size: 37px;
+    margin: 0px;
+    margin-top: 15px;
+    color: white;
+    overflow: hidden;
+}
+
+#right_answer, #answer {
+    font-size: 25px;
+    color: white;
+    margin: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#result {
+    width: 90%;
+    margin: auto;
+    height: 70px;
+    font-size: 20px;
+    line-height: 70px;
+    margin-bottom: 20px;
+}
+
+.temp_p {
+    margin: 0px;
+ }
+
+#h3_comment {
+    color: white;
+ }
+
+ #progress {
+    font-size: 37px;
+    text-align: center;
+    margin-top: 60px;
+    text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+    color: white;
+}
+
+#category {
+    font-size: 27px;
+    text-align: center;
+    margin-top: 20px;
+    text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+    color: white;
+}

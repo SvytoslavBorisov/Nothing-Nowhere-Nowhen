@@ -1,21 +1,23 @@
+
+/* СЛАЙДЕР НА ГЛАВНОЙ СТРАНИЦЕ */
+
 'use strict';
 var multiItemSlider = (function () {
   return function (selector, config) {
     var
-      _mainElement = document.querySelector(selector), // основный элемент блока
-      _sliderWrapper = _mainElement.querySelector('.slider__wrapper'), // обертка для .slider-item
-      _sliderItems = _mainElement.querySelectorAll('.slider__item'), // элементы (.slider-item)
-      _sliderControls = _mainElement.querySelectorAll('.slider__control'), // элементы управления
-      _sliderControlsButton = _mainElement.querySelectorAll('.p_news_lenta'), // элементы управления
-      _sliderControlLeft = _mainElement.querySelector('.slider__control_left'), // кнопка "LEFT"
-      _sliderControlRight = _mainElement.querySelector('.slider__control_right'), // кнопка "RIGHT"
-      _wrapperWidth = parseFloat(getComputedStyle(_sliderWrapper).width), // ширина обёртки
-      _itemWidth = parseFloat(getComputedStyle(_sliderItems[0]).width), // ширина одного элемента
-      _positionLeftItem = 0, // позиция левого активного элемента
-      _transform = 0, // значение транфсофрмации .slider_wrapper
-      _step = _itemWidth / _wrapperWidth * 100, // величина шага (для трансформации)
-      _items = []; // массив элементов
-    // наполнение массива _items
+      _mainElement = document.querySelector(selector),
+      _sliderWrapper = _mainElement.querySelector('.slider__wrapper'),
+      _sliderItems = _mainElement.querySelectorAll('.slider__item'),
+      _sliderControls = _mainElement.querySelectorAll('.slider__control'),
+      _sliderControlsButton = _mainElement.querySelectorAll('.p_news_lenta'),
+      _sliderControlLeft = _mainElement.querySelector('.slider__control_left'),
+      _sliderControlRight = _mainElement.querySelector('.slider__control_right'),
+      _wrapperWidth = parseFloat(getComputedStyle(_sliderWrapper).width),
+      _itemWidth = parseFloat(getComputedStyle(_sliderItems[0]).width),
+      _positionLeftItem = 0,
+      _transform = 0,
+      _step = _itemWidth / _wrapperWidth * 100,
+      _items = [];
     _sliderItems.forEach(function (item, index) {
       _items.push({ item: item, position: index, transform: 0 });
     });
@@ -44,6 +46,13 @@ var multiItemSlider = (function () {
 
         $('#slider_text_' + _positionLeftItem).css('background', 'rgb(186, 48, 48)');
         _transform -= _step;
+        $('#slider_news_' + '1').css('visibility', 'hidden');
+        $('#slider_news_' + '2').css('visibility', 'hidden');
+        $('#slider_news_' + '3').css('visibility', 'hidden');
+        $('#slider_news_' + '4').css('visibility', 'hidden');
+        $('#slider_news_' + '5').css('visibility', 'hidden');
+        $('#slider_news_' + String(_positionLeftItem + 1)).css('visibility', 'visible');
+        $('#slider_news_' + String(_positionLeftItem + 1)).offset({left:_positionLeftItem * $( window ).width() + $('#slider_news_' + String(_positionLeftItem + 1)).position().left});
       };
       if (direction === 'left') {
         if (_positionLeftItem <= position.getMin) {
@@ -62,6 +71,14 @@ var multiItemSlider = (function () {
         }
 
         $('#slider_text_' + _positionLeftItem).css('background', 'rgb(186, 48, 48)');
+        $('#slider_news_' + '1').css('visibility', 'hidden');
+        $('#slider_news_' + '2').css('visibility', 'hidden');
+        $('#slider_news_' + '3').css('visibility', 'hidden');
+        $('#slider_news_' + '4').css('visibility', 'hidden');
+        $('#slider_news_' + '5').css('visibility', 'hidden');
+        $('#slider_news_' + String(_positionLeftItem + 1)).css('visibility', 'visible');
+
+        $('#slider_news_' + String(_positionLeftItem + 1)).offset({left:_positionLeftItem * $( window ).width() + $('#slider_news_' + String(_positionLeftItem + 1)).position().left});
       };
       if (direction === 'no') {
 
@@ -90,7 +107,6 @@ var multiItemSlider = (function () {
       _sliderWrapper.style.transform = 'translateX(' + _transform + '%)';
     };
 
-    // обработчик события click для кнопок "назад" и "вперед"
     var _controlClick = function (e) {
       if (e.target.classList.contains('slider__control')) {
         e.preventDefault();
@@ -112,7 +128,7 @@ var multiItemSlider = (function () {
     };
 
     var _setUpListeners = function () {
-      // добавление к кнопкам "назад" и "вперед" обрботчика _controlClick для событя click
+
       _sliderControls.forEach(function (item) {
         item.addEventListener('click', _controlClick);
       });
@@ -122,14 +138,13 @@ var multiItemSlider = (function () {
       _transformItem('no', 0);
     }
 
-    // инициализация
     _setUpListeners();
 
     return {
-      right: function () { // метод right
+      right: function () {
         _transformItem('right');
       },
-      left: function () { // метод left
+      left: function () {
         _transformItem('left');
       }
     }
@@ -138,10 +153,19 @@ var multiItemSlider = (function () {
 }());
 
 var slider = multiItemSlider('#div_lenta_news')
+$('#slider_news_' + '1').css('visibility', 'visible');
 
-$('#main_div').height($('#main_div').height() + 1);
 
-function fadeIn(el, speed) {
+$( window ).resize(function (){
+    $('.image_news_lenta').width('100%');
+    $('.slider__item').height($('.image_news_lenta').height());
+});
+
+$('.image_news_lenta').width('100%');
+$('.slider__item').height($('.image_news_lenta').height());
+
+/* ПОЯВЛЕНИЕ И ИСЧЕЗАНИЕ НОВОСТНОЙ ЛЕНТЫ */
+/*function fadeIn(el, speed) {
   var step = 1 / speed;
   var interval = setInterval(function() {
     if (+el.style.opacity >= 1)
@@ -172,4 +196,4 @@ var div = document.getElementById("div_news");
     });}
 else {
     $('#div_news').css('opacity', 100);
-}
+} */

@@ -6,13 +6,14 @@
         {% for item in categories %}
             <a href="/game/{{ item.id }}" id="playCategory">
                 <div id="categories">
-                    {% if item.id in img %}
-                        <img id="categoriesImg" src="/static/img/categories/{{ item.id }}.png" alt="{{ item.id }}">
-                    {% endif %}
+                    <img id="categoriesImg" src="{{ item.image }}" alt="{{ item.name }}">
                     <div id="categoriesName">{{ item.name }}</div>
                     <div id="categoriesDescription">{{ item.description }}</div>
                 </div>
             </a>
         {% endfor %}
     </div>
+    <script>
+        $('#categoriesImg').css('padding-top', ($('#categories').height() - 60) / 2 );
+    </script>
 {% endblock %}

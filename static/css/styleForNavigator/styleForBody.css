@@ -1,0 +1,13 @@
+body {
+    margin: 0px;
+    overflow-y: scroll;
+    background: gray;
+    background: url('/static/img/icons/background.webp');
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+html {
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
