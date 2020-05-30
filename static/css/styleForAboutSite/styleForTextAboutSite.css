@@ -11,11 +11,14 @@
     margin-top: 5px;
 }
 
-#h2_text_1 {
-    margin-top: 15px;
-}
-
 #p_text_2 {
     width: calc(100% - 146px);
     float:left;
+}
+
+#header_about_site {
+    text-align: center;
+    color: black;
+    font-size: 35px;
+    margin: 0px;
 }

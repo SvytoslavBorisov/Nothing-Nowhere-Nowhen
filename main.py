@@ -125,17 +125,19 @@ def categories():
 
 
 '''
-    Главная страница сайта.
+    Главная страница сайта. Рейтинг. Новости.
     1. Проверка была ли начата игра текущим пользователем
     2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
     3. Подключение к базе данных
-    4. Создание словаря для работы с переменными в html коде
+    4. Получение всех пользователей сайта. Сортировка по рейтингу
+    5. Создание словаря для работы с переменными в html коде
         'title'            - Заголовок страницы
         'style'            - Названия файлов, в которых храняться стили для данной страницы
         'path_for_style'   - Путь к папке со стилями
         'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
         'news'             - Все элементы News из БД [ Текст новости, картинка, заголовок, id]
-    5. Рендеринг
+        'users'            - Все пользователи, отсортированные по рейтингу
+    6. Рендеринг
 '''
 @application.route('/')
 def main_page():
@@ -144,14 +146,52 @@ def main_page():
 
     session = db_session.create_session()  # 3
 
-    param = fill_dict(                     # 4
+    all_users = session.query(User).all()                                                              # 4
+    all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))  # 4
+
+    param = fill_dict(                     # 5
         title='Главная страница',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForMainPage/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForMainPage/',
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForMainPageMobile.css',
-        news=[[new.text, new.image, new.caption, new.id] for new in session.query(News).all()])
+        news=[[new.text, new.image, new.caption, new.id] for new in session.query(News).all()],
+        users=all_users)
 
-    return render_template('main_page.html', **param)  # 5
+    return render_template('main_page.html', **param)  # 6
+
+
+'''
+    Рейтинг.
+    1. Проверка была ли начата игра текущим пользователем
+    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    3. Подключение к базе данных
+    4. Получение всех пользователей сайта. Сортировка по рейтингу
+    5. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'users'            - Все пользователи, отсортированные по рейтингу
+    6. Рендеринг
+'''
+@application.route('/rating')
+def rating():
+    if return_to_game():                   # 1
+        return redirect('/current_game')   # 2
+
+    session = db_session.create_session()  # 3
+
+    all_users = session.query(User).all()                                                              # 4
+    all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))  # 4
+
+    param = fill_dict(                     # 5
+        title='Главная страница',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForMainPage/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForMainPage/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForMainPageMobile.css',
+        users=all_users)
+
+    return render_template('rating.html', **param)  # 6
 
 
 '''
@@ -761,40 +801,6 @@ def end_game(why):
 
 
 '''
-    Страница рейтинга.
-    1. Проверка была ли начата игра текущим пользователем, 
-если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
-    2. Подключение к базе данных
-    3. Получаем всех пользователей и сортируем их по рейтингу и имени
-    4. Создание словаря для работы с переменными в html коде
-        'title'            - Заголовок страницы
-        'style'            - Названия файлов, в которых храняться стили для данной страницы
-        'path_for_style'   - Путь к папке со стилями
-        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
-        'users'            - Отсортированные все пользователи
-    5. Рендеринг
-'''
-@application.route('/rating')
-def rating():
-    if return_to_game():  # 1
-        return redirect('/current_game')  # 1
-
-    session = db_session.create_session()  # 2
-
-    all_users = session.query(User).all()  # 3
-    all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))  # 3
-
-    param = fill_dict(  # 4
-        title='Рейтинг',
-        style=os.listdir(config["PATH"]['to_css'] + 'styleForRating/'),
-        path_for_style=config["PATH"]['to_css'] + 'styleForRating/',
-        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForRatingMobile.css',
-        users=all_users)
-
-    return render_template('rating.html', **param)  # 5
-
-
-'''
     Страница модерации вопросов(admin).
     1. Проверка была ли начата игра текущим пользователем, 
 если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
@@ -940,4 +946,5 @@ def one_new(id_):
     Запуск приложения. Сайт открывается на http://127.0.0.1:5000/ 
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 '''
-application.run()
+
+#application.run()

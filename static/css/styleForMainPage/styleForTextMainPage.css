@@ -41,6 +41,7 @@
 
 .slider_news_caption {
     font-size: 30px;
+    margin: 20px 0px;
 }
 
 .a_slider_news {
@@ -50,6 +51,11 @@
     color: black;
     background: white;
     margin: 0px;
-    margin-top: 15px;
+    margin-top: 25px;
     font-weight: bold;
+    padding: 10px 20%;
+}
+
+.a_slider_news:hover {
+    text-decoration: underline;
 }

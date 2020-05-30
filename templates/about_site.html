@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div id="main_div_about_site">
-        <h1 class='header' id="header_about_site">О сайте</h1>
+    <div id="div_about_site">
+        <h1 id="header_about_site">
+            О сайте
+            <hr class="hr_news_lenta">
+        </h1>
         <div id="text_about_us">
             <img src="/static/img/icons/girl_answer.png" alt="" width="100px" height="131px" id="img_girl" class="imgs">
             <h2 class='h2_text' id="h2_text_1">Что это?</h2>
@@ -27,5 +30,4 @@
             };
         </script>
     </div>
-    <script src="/static/scripts/scriptForAboutSite.js"></script>
 {% endblock %}

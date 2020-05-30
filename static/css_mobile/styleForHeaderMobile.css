@@ -1,11 +1,16 @@
 #heading {
     font-size: 60px;
     text-align: center;
+    transform: skewX(0deg);
+    background: white;
 }
 
 #title_div {
     width: 100%;
     font-weight: bold;
+    margin-left: 0px;
+    transform: skewX(0deg);
+    background: white;
 }
 
 #all_navigator_div {
@@ -21,10 +26,17 @@
     padding-left: 0px;
     padding-right: 0px;
     padding-bottom: 20px;
+    transform: skewX(0deg);
+    background: #FDB913;
 }
 
 p.navigator_p {
     font-size:40px;
+    transform: skewX(0deg);
+}
+
+#user_nickname_p {
+    transform: skewX(0deg);
 }
 
 #user_avatar_navigator {
@@ -35,6 +47,10 @@ p.navigator_p {
 
 #navigator_div5 {
     width: 25%;
+    transform: skewX(0deg);
+    margin-right: 0px;
+    background: #FDB913;
+    margin-top: 1px;
 }
 
 #navigator_div4 {

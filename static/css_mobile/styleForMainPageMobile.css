@@ -89,4 +89,95 @@
 
 #div_news {
     opacity: 100;
+    padding-bottom: 40px;
+}
+
+#header_rating {
+    font-size: 45px;
+    margin: 10px 0px;
+}
+
+td, th {
+    border: 3px white rgb(70, 70, 70);
+    border-left: 0px;
+    height: 44px;
+    color: black;
+}
+
+td {
+    border-top: 0px;
+}
+
+th {
+    background: #FDB913;
+    color: white;
+}
+
+.user_div {
+    text-align: center;
+    color: #FFF;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 600px;
+    cursor: pointer;
+}
+
+#rating_div {
+    font-size: 30px;
+    color: rgb(200, 200, 200);
+    background: white;
+    margin: 0 auto;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 5px;
+    border-spacing: 0px;
+}
+
+#text_about_us {
+    width: 100%;
+    background: rgb(255, 255, 255);
+    border-radius: 25px;
+    overflow: hidden;
+    margin: auto;
+    border: 4px outset black;
+    height: 100%;
+}
+
+#div_about_site {
+    background: white;
+    padding-top: 20px;
+}
+
+.p_text {
+    padding: 5px;
+    font-size: 35px;
+    margin: 0px;
+}
+
+.h2_text {
+    margin: 0;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 45px;
+}
+
+#h2_text_1 {
+    font-size: 35px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#p_text_2 {
+    width: 100%;
+    float:left;
+    height: 100%;
+}
+
+
+#header_about_site {
+    text-align: center;
+    color: black;
+    font-size: 45px;
+    margin: 0px;
 }

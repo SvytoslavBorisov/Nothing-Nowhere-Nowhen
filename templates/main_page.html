@@ -16,7 +16,7 @@
                                     <hr class="hr_slider_news">
                                     <div class="div_a_slider_news">
                                         <a href="/news/{{ loop.index }}" class="a_slider_news">
-                                            Подробнее
+                                            Узнать
                                         </a>
                                     </div>
                                 </div>
@@ -52,7 +52,66 @@
                     </div>
                 {% endfor %}
             </div>
+            <div id="div_rating">
+                <a href="/rating" id="a_lenta_rating">
+                    <h2 id="header_rating">
+                        Рейтинг
+                        <hr class="hr_news_lenta">
+                    </h2>
+                </a>
+                <table id="rating_div">
+                    <tr class="user_div">
+                        <th class="first_td_left" >Место</th>
+                        <th>Ник</th>
+                        <th>Процент побед</th>
+                        <th>Рейтинг</th>
+                    </tr>
+                    {% for user in users[:10] %}
+
+                    <tr class="user_div" onclick="toUser('{{ user.nickname }}')">
+                        <td class="first_td_left">{{ loop.index }}</td>
+                        <td>{{ user.nickname }}</td>
+                        <td>{{ user.get_procent_win() }}%</td>
+                        <td>{{ user.rating }}</td>
+                    </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+            <div id="div_about_site">
+                <h1 id="header_about_site">
+                    О сайте
+                    <hr class="hr_news_lenta">
+                </h1>
+                <div id="text_about_us">
+                    <img src="/static/img/icons/girl_answer.png" alt="" width="100px" height="131px" id="img_girl" class="imgs">
+                    <h2 class='h2_text' id="h2_text_1">Что это?</h2>
+                    <p class='p_text' id="p_text_1">
+                        Ничего? Нигде? Никогда? – это бесплатная интеллектуальная игра-викторина. Для победы в игре Вам понадобится проявить знания в самых разных областях.
+                        В ходе игры Вам будут заданы 11 вопросов, которые были составлены другими участниками или нашей администрацией, различной сложности с возможностью
+                        выбрать ответ из нескольких вариантов или написать свой (опечатки не приветствуются). Ваша цель обыграть составителей вопросов, выигрывает тот, кто первый наберет 6 баллов(за 1 вопрос 1 балл).
+                    </p>
+                    <h2 class='h2_text'>Как вы можете помочь</h2>
+                    <p class='p_text' id="p_text_2">
+                        Мы будем рады получить от Вас новые вопросы для викторины. Для этого зайдите в личный кабинет и нажмите кнопку «Создать вопрос».
+                        Введите текст вопроса, правильный ответ, комментарий к ответу, выберите категорию вопроса и введите варианты (неправильные) ответов и отправьте вопрос для проверки модератором сайта.
+                    </p>
+                    <img src="/static/img/icons/boy_answer.png" alt="" width="100px" height="131px" id="img_boy" class="imgs">
+                </div>
+                <script>
+                    if (!( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)))) {
+                        $('#img_girl').height(0);
+                        $('#img_girl').width(0);
+                        $('#img_girl').css('opacity', 0);
+                        $('#img_boy').height(0);
+                        $('#img_boy').width(0);
+                        $('#img_boy').css('opacity', 0);
+                    };
+                </script>
+            </div>
         </div>
     </div>
     <script src="/static/scripts/scriptForMainPage.js"></script>
+    <script src="/static/scripts/scriptForRating.js"></script>
+    <script src="/static/scripts/scriptForAboutSite.js"></script>
 {% endblock %}

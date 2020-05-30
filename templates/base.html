@@ -32,21 +32,17 @@
             </div>
         </a>
         <div id="all_navigator_div">
-            <a href="/about_site">
-                <div class="navigator_div" id="navigator_div1">
-                    <p class="navigator_p">О сайте</p>
-                </div>
-            </a>
+            <div class="navigator_div" id="navigator_div1">
+                <p class="navigator_p">О сайте</p>
+            </div>
             <a href="/change_play">
                 <div class="navigator_div" id="navigator_div2">
                     <p class="navigator_p">Играть</p>
                 </div>
             </a>
-            <a href="/rating">
-                <div class="navigator_div" id="navigator_div3">
-                    <p class="navigator_p">Рейтинг</p>
-                </div>
-            </a>
+            <div class="navigator_div" id="navigator_div3">
+                <p class="navigator_p">Рейтинг</p>
+            </div>
             {% if current_user.is_authenticated %}
                 <a class="navbar-brand" href="/user_info/{{ current_user.nickname }}">
                     <div class="navigator_div" id="navigator_div4">
@@ -68,12 +64,14 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+    <script src="/static/scripts/scriptForBase.js"></script>
     <div id="main">
         <div id="content">
             {% block content %}
             {% endblock %}
         </div>
     </div>
+
     <script>
         window.onresize = function () {
                         if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
@@ -112,7 +110,7 @@
             }; */
 
     </script>
-    <script src="/static/scripts/scriptForBase.js"></script>
+
     <!-- Yandex.Metrika counter -->
             <script type="text/javascript" >
                (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};

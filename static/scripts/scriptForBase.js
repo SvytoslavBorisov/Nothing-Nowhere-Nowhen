@@ -7,3 +7,21 @@ if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IE
     document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
     document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
 };
+
+$('#navigator_div3').on('click', function() {
+  if (document.location.href[document.location.href.length - 2] == '0') {
+     $('html, body').animate({scrollTop:$('#div_rating').offset().top - 75 + "px"},{duration:1E3});
+  }
+  else {
+     document.location.href = '/rating';
+  };
+});
+
+$('#navigator_div1').on('click', function() {
+  if (document.location.href[document.location.href.length - 2] == '0') {
+     $('html, body').animate({scrollTop:$('#div_about_site').offset().top - 75 + "px"},{duration:1E3});
+  }
+  else {
+     document.location.href = '/about_site';
+  };
+});

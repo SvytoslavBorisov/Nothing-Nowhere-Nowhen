@@ -7,3 +7,8 @@
     border: 4px outset black;
     height: 100%;
 }
+
+#div_about_site {
+    background: white;
+    padding-top: 20px;
+}

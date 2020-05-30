@@ -1,15 +1,17 @@
 td, th {
-    border: 3px solid rgb(70, 70, 70);
+    border: 3px white rgb(70, 70, 70);
     border-left: 0px;
     height: 44px;
+    color: black;
 }
 
 td {
     border-top: 0px;
 }
 
-.first_td_left {
-    border-left: 3px solid rgb(70, 70, 70);
+th {
+    background: #FDB913;
+    color: white;
 }
 
 .user_div {
@@ -25,10 +27,9 @@ td {
 #rating_div {
     font-size: 20px;
     color: rgb(200, 200, 200);
-    background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
+    background: white;
     margin: 0 auto;
-    width: 700px;
-    padding: 40px;
+    margin-top: 20px;
     border-radius: 35px;
     border-spacing: 0px;
 }
