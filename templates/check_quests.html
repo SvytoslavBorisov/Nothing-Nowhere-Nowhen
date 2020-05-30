@@ -2,7 +2,7 @@
 
 {% block content %}
     <div id="main_div">
-        <h1 class='header' id="header_categories">Добавить вопрос в игру</h1>
+        <h1 class='header' id="header_categories">Редактировать или Удалить вопрос в игру</h1>
         <div id="main_div_quests">
             <form action="" method="post">
                 {{ form.hidden_tag() }}
@@ -73,20 +73,6 @@
                     $( '#wrong_answer3' ).text('{{ form.wrong_answer3.default }}');
                 </script>
                 {% for error in form.wrong_answer3.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ error }}
-                    </div>
-                {% endfor %}
-                <div class="login_label">{{ form.type.label }}</div>
-                <div class="login_input_div">{{ form.type(class="login_input", id='type') }}</div>
-                {% for error in form.type.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ error }}
-                    </div>
-                {% endfor %}
-                <div class="login_label">{{ form.comp.label }}</div>
-                <div class="login_input_div">{{ form.comp(class="login_input", id='comp') }}</div>
-                {% for error in form.comp.errors %}
                     <div class="alert alert-danger" role="alert">
                         {{ error }}
                     </div>
