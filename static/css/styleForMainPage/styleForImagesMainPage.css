@@ -1,7 +1,5 @@
 .img_news {
     float: left;
-    margin-left: 10px;
-    margin-top: 10px;
-    height: 110px;
-    width: 220px;
+    height: 100%;
+    width: 230px;
 }

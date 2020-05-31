@@ -15,11 +15,6 @@
     margin: auto;
 }
 
-.div_text_news {
-    float: left;
-    width: 66%;
-}
-
 #div_news {
     background: white;
     padding-top: 10px;
@@ -57,9 +52,9 @@
     margin-top: 2px;
     margin-bottom: 2px;
     background-image: -webkit-linear-gradient(left, rgb(150, 150, 150), #FDB913, rgb(150, 150, 150));
-    background-image: -moz-linear-gradient(left, rgb(200, 200, 200), #FDB913, rgb(200, 200, 200));
-    background-image: -ms-linear-gradient(left, rgb(200, 200, 200), #FDB913, rgb(200, 200, 200));
-    background-image: -o-linear-gradient(left, rgb(200, 200, 200), #FDB913, grgb(200, 200, 200));
+    background-image: -moz-linear-gradient(left, rgb(150, 150, 150), #FDB913, rgb(150, 150, 150));
+    background-image: -ms-linear-gradient(left, rgb(150, 150, 150), #FDB913, rgb(150, 150, 150));
+    background-image: -o-linear-gradient(left, rgb(150, 150, 150), #FDB913, rgb(150, 150, 150));
 }
 
 .hr_news_lenta {
@@ -74,4 +69,11 @@
     width: 100%;
     height: 130px;
     cursor: pointer;
+    padding: 15px;
+    margin-right: 10px;
+}
+
+.div_text_news {
+    float: left;
+    width: calc(100% - 255px);
 }

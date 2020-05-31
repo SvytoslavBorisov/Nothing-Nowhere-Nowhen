@@ -90,14 +90,14 @@
 }
 
 #header_rating {
-    font-size: 45px;
+    font-size: 55px;
     margin: 10px 0px;
 }
 
 td, th {
     border: 3px white rgb(70, 70, 70);
-    border-left: 0px;
-    height: 44px;
+    height: 70px;
+    font-size: 40px;
     color: black;
 }
 
@@ -125,11 +125,12 @@ th {
     color: rgb(200, 200, 200);
     background: white;
     margin: 0 auto;
-    width: 100%;
+    width: 99%;
     margin-top: 20px;
     border-radius: 5px;
     border-spacing: 0px;
 }
+
 
 #text_about_us {
     width: 100%;

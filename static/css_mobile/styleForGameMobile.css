@@ -1,5 +1,8 @@
 #main_div_game {
     width: 100%;
+    border-radius: 0px;
+    border: 0px;
+    background: rgb(16, 16, 16);
 }
 
 #links {
@@ -8,6 +11,10 @@
     font-size: 40px;
     color: rgb(200, 200, 200);
     text-align: center;
+}
+
+#a_for_login {
+    color: #FDB913;
 }
 
 #change_comp {
@@ -34,14 +41,14 @@
    margin-left: 25%;
 }
 
-label {
+.form-check-label {
     cursor: pointer;
     font-size: 35px;
     margin-left: 10px;
 }
 
 #button_registerIN:active {
-    background-color: rgb(190, 0, 0);
+    background-color: linear-gradient(to top, #FFC920, #FDB913);
 }
 
 #button_submit {
@@ -52,12 +59,16 @@ label {
     padding-bottom: 7px;
     font-size: 50px;
     color: white;
-    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    background: linear-gradient(to top, #FDB913, #FFC920);
     border: none;
     box-shadow: 0 3px 0 rgb(190, 0, 0);
     outline: none;
     height: 100px;
     text-align: center;
+}
+
+#button_submit:active {
+    linear-gradient(to top, #FFC920, #FDB913);
 }
 
 #header_category {
@@ -68,7 +79,7 @@ label {
     font-size: 40px;
 }
 
-label:before {
+.form-check-label:before {
 	content: "";
 	display: inline-block;
 	width: 50px;
@@ -80,7 +91,7 @@ label:before {
 	border-radius: 100px;
 }
 
-input[type=radio]:checked + label:before {
+input[type=radio]:checked + .form-check-label:before {
 	content: "\2713";
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
 	font-size: 75px;

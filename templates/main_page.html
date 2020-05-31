@@ -6,7 +6,7 @@
             <div id="div_lenta_news">
                 <div class="slider">
                     <div class="slider__wrapper">
-                        {% for new in news[:5] %}
+                        {% for new in news[:3] %}
                             <div class="slider__item">
                                 <div id='slider__item_text'>
                                     <img src="{{ new[1] }}" alt="" class="image_news_lenta">
@@ -17,7 +17,7 @@
                     <a class="slider__control slider__control_left" href="#" role="button"></a>
                     <a class="slider__control slider__control_right slider__control_show" href="#" role="button"></a>
                 </div>
-                {% for new in news[:5] %}
+                {% for new in news[:3] %}
                     <div class="slider_news" id="slider_news_{{ loop.index }}">
                         <h1 class="slider_news_caption">{{ new[2] }}</h1>
                         <hr class="hr_slider_news">
@@ -34,21 +34,21 @@
                     Новостная лента
                     <hr class="hr_news_lenta">
                 </h2>
-
                 <script>
                     function ToNew(id_) {
                         document.location.href = "/news/" + id_;
                     };
                 </script>
-                {% for new in news %}
+                {% for new in news[3:] %}
                     <div class="news__item" onclick="ToNew({{ new[3] }})">
                         <img src="{{ new[1] }}" alt="" class="img_news">
                         <div class="div_text_news">
                             <p class="p_news_caption">{{ new[2] }}</p>
-                            {% if new[0][40] %}
-                                <p class="p_news">{{ new[0][:40] }}... Нажмите, чтобы читать дельше</p>
+                            {% if new[0][30] %}
+                                <p class="p_news">{{ new[0][:30] }}...</p>
+                                <p class="p_read_next">Нажмите, чтобы читать дельше</p>
                             {% else %}
-                                <p class="p_news">{{ new[0][:40] }}</p>
+                                <p class="p_news">{{ new[0][:30] }}</p>
                             {% endif %}
                         </div>
                     </div>

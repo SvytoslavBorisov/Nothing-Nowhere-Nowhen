@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <script src="/static/scripts/scriptForSendMessage.js"></script>
+    <div id="main_div_send_message">
+        <form action="" method="post" enctype="multipart/form-data">
+            <div id="div_send_message">
+                <label for="input_text_message" id="label_for_input_text_message">
+                    Ваше письмо
+                </label>
+            </div>
+            <div id="form_div_send_message">
+
+                <table border="1" cellpadding="0" cellspacing="0" width="100%" style="margin:0; padding:0;" bgcolor="white">
+                    <tr>
+                        <th height="75px" id="th2_title" bgcolor="black" width="60%" style="color:white; font-size: 30px;">Ничто? Нигде? Никогда?</th>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            <h3>Здравствуй, Уважаемый {name}!</h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea name="text_message" id="input_text_message" oninput="inputMessage()">Тело письма</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            <h5 style="margin: 0; padding:0; text-align: right; width: 100%;">Посетите наш сайт <a href="nothing-nowhere-nowhen.ru">nothing-nowhere-nowhen.ru</a></h5>
+                            <h5 style="margin: 0; padding:0; text-align: right; width: 100%;">С уважением, Администрация сайта.</h5>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <input type="submit" value="Отправить всем пользователям" id="submit_send_message">
+        </form>
+    </div>
+{% endblock %}

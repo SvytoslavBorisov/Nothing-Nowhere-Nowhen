@@ -59,3 +59,13 @@
 .a_slider_news:hover {
     text-decoration: underline;
 }
+
+.p_read_next {
+    text-decoration: underline;
+    color: rgb(16, 16, 16);
+    margin: 0px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    padding-left: 10px;
+}

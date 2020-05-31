@@ -35,6 +35,8 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     add_questions = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
+    agree_newsletter = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+
     games = orm.relation("Game", back_populates='orm_with_users')
 
     def set_password(self, password):
@@ -65,6 +67,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     defeats            - Кол-вл поражений
     all_games          - Всего игр
     add_questions      - Количество добавленных вопросов
+    agree_newsletter   - Согласие на рассылку новостей
     games              - Связь с таблицей Games
     set_password()     - Установить пароль
     check_password()   - Проверить пароль 

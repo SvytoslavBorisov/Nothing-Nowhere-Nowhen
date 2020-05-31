@@ -5,8 +5,8 @@
 
 #main_div_categories {
     overflow: hidden;
-    width: 84%;
-    margin-left: 8%;
+    width: 95%;
+    margin: auto;
 }
 
 #categoriesName {
@@ -37,7 +37,7 @@
     width: 60%;
 }
 
-#categoriesImg {
+.categoriesImg {
     float: left;
     padding-top: 25px;
     padding-left: 15px;

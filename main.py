@@ -35,6 +35,15 @@ from forms.check_quests import CheckQuestionForm
 '''Классы для работы с собственным API(папка api)'''
 from api import questions_api, users_api
 
+'''Библиотеки для реализации отправки писем'''
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email import encoders
+from platform import python_version
+
 
 '''Запуск приложения FLASK'''
 application = Flask(__name__)
@@ -279,6 +288,10 @@ def register():
                 user.email = request.form['email']                                          # 9
                 user.set_password(request.form['password'])                                 # 9
                 user.rating, user.defeats, user.add_questions, user.all_games = 0, 0, 0, 0  # 9
+                if request.form.get('remember'):                                            # 9
+                    user.agree_newsletter = 1                                               # 9
+                else:                                                                       # 9
+                    user.agree_newsletter = 0                                               # 9
                 session.add(user)                                                           # 9
                 session.commit()                                                            # 9
                 if request.files.get('file'):                                            # 10
@@ -531,7 +544,12 @@ def start_game(id_, comp_, type):  # 3
                                                            Question.complexity == int(comp_)):   # 9
                 quests.append(question)    # 10
     else:
-        return redirect('/login')          # 11
+        return ''' 
+                <script>
+                    alert('Для того, чтобы поиграть в викторину, нужно зарегистрироваться.');
+                    document.location.href = "/";
+                </script>
+                '''          # 11
 
     if len(quests) < 11:      # 16
         return ''' 
@@ -930,9 +948,176 @@ def one_new(id_):
     return render_template('one_new.html', **param)  # 4
 
 
+@application.route('/send_message', methods=['POST', 'GET'])
+def send_message():
+
+    if current_user.is_authenticated and current_user.state == 'admin':
+
+        param = fill_dict(  # 3
+            title='Рассылка',
+            style=os.listdir(config["PATH"]['to_css'] + 'styleForSendMessage/'),
+            path_for_style=config["PATH"]['to_css'] + 'styleForSendMessage/',
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForOneNewMobile.css')
+
+        session = db_session.create_session()
+
+        if request.method == 'POST':
+            recipients = [[user.nickname, user.email] for user in session.query(User).filter(User.agree_newsletter == 1).all()]
+
+            server = 'smtp.mail.ru'
+
+            user = config['INFO']['email']
+            password = config['INFO']['password']
+
+            text = request.form['text_message']
+            sender = user
+            subject = 'Рассылка'
+
+            for recipient in recipients:
+                text = request.form['text_message']
+                html = '''
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Викторина</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body style="margin: 0; padding: 0;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:0; padding:0;" bgcolor="white">
+        <tr>
+            <th height="75px" id="th2_title" bgcolor="black" width="60%" style="color:white; font-size: 30px;">Ничто? Нигде? Никогда?</th>
+        </tr>
+        <tr>
+            <td style="text-align: center;">
+                <h3>Здравствуй, Уважаемый ''' + recipient[0] + '''</h3>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">
+                <p>''' + text + '''</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">
+                <h5 style="margin: 0; padding:0; text-align: right; width: 100%;">Посетите наш сайт <a href="nothing-nowhere-nowhen.ru">nothing-nowhere-nowhen.ru</a></h5>
+                <h5 style="margin: 0; padding:0; text-align: right; width: 100%;">С уважением, Администрация сайта.</h5>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+                   '''
+
+                text = ''
+
+                # filepath = "/var/log/maillog"
+                # basename = os.path.basename(filepath)
+                # filesize = os.path.getsize(filepath)
+
+                msg = MIMEMultipart('alternative')
+                msg['Subject'] = subject
+                msg['From'] = 'Python script <' + sender + '>'
+                msg['To'] = recipient[1]
+                msg['Reply-To'] = sender
+                msg['Return-Path'] = sender
+                msg['X-Mailer'] = 'Python/' + (python_version())
+
+                part_text = MIMEText(text, 'plain')
+                part_html = MIMEText(html, 'html')
+
+                # part_file = MIMEBase('application', 'octet-stream; name="{}"'.format(basename))
+                # part_file.set_payload(open(filepath, "rb").read())
+                # part_file.add_header('Content-Description', basename)
+                # part_file.add_header('Content-Disposition', 'attachment; filename="{}"; size={}'.format(basename, filesize))
+                # encoders.encode_base64(part_file)
+                if request.files.get('file_message'):
+                    img = MIMEImage(request.files['file_message'].read())
+                    msg.attach(img)
+
+                msg.attach(part_text)
+                msg.attach(part_html)
+                # msg.attach(part_file)
+
+                mail = smtplib.SMTP_SSL(server)
+                mail.login(user, password)
+                mail.sendmail(sender,  recipient[1], msg.as_string())
+                mail.quit()
+            return redirect('/')
+
+        return render_template('send_message.html', **param)
+    else:
+        return redirect('/login')
+
+
 ''' 
     Запуск приложения. Сайт открывается на http://127.0.0.1:5000/ 
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 '''
+
+session = db_session.create_session()
+
+'''cinema = session.query(Question).filter(Question.category == 2).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 3).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 4).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 5).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 6).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 7).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 8).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 9).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 10).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 11).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 12).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))
+cinema = session.query(Question).filter(Question.category == 13).all()
+print(cinema[0].orm_with_category.name)
+print(len([x for x in cinema if x.complexity == 1]))
+print(len([x for x in cinema if x.complexity == 2]))
+print(len([x for x in cinema if x.complexity == 3]))'''
+
+
+
 
 #application.run()
