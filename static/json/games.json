@@ -1,32 +1,6 @@
 {
     "current_games": {
-        "1": {
-            "questions": [
-                1181,
-                1178,
-                1175,
-                1177,
-                1182,
-                1174,
-                1184,
-                1185,
-                1183,
-                1176,
-                1179
-            ],
-            "wins": 5,
-            "category": 13,
-            "defeats": 3,
-            "current_question": 8,
-            "time": 1590790834,
-            "quest_or_next": "quest",
-            "last_result": true,
-            "type": "change",
-            "complexity": 1,
-            "last_answer": "Мадрид",
-            "delete": [],
-            "create_map": "yes"
-        },
+        "1": null,
         "2": null,
         "3": null,
         "4": null,

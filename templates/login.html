@@ -1,24 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class='header' id="header_login">Авторизация</h1>
+    <h1 class='header' id="header_login">
+        Авторизация
+        <hr class="hr_news_lenta">
+    </h1>
     <div id="login_div">
         <form action="" method="post">
             {{ form.hidden_tag() }}
-            <div class="login_label" id="login_label_top">{{ form.email.label }}</div>
-            <div class="login_input_div">{{ form.email(class="login_input", type="email") }}</div>
-            {% for error in form.email.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-            {% endfor %}
-            <div class="login_label">{{ form.password.label }}</div>
-            <div class="login_input_div">{{ form.password(class="login_input", type="password", id="login_input_bottom") }}</div>
-            {% for error in form.password.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-            {% endfor %}
+            <div class="div_login_input_div_and_login_label_top">
+                <div class="login_label" id="login_label_top">{{ form.email.label }}</div>
+                <div class="login_input_div">{{ form.email(class="login_input", type="email") }}</div>
+                {% for error in form.email.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="div_login_input_div_and_login_label_top">
+                <div class="login_label">{{ form.password.label }}</div>
+                <div class="login_input_div">{{ form.password(class="login_input", type="password", id="login_input_bottom") }}</div>
+                {% for error in form.password.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </div>
             <div id="login_button">{{ form.submit(type="submit", class="btn btn-primary", id='button_loginIN') }}</div>
             <div id="register_div">Еще не с нами? <a href="/register" id="a_for_register">Зарегистрироваться</a></div>
             <div id="message">{{ message }}</div>

@@ -34,13 +34,13 @@
 .slider_news {
     position: absolute;
     text-align: center;
-    top: 7%;
-    left: 13%;
+    top: 10%;
+    left: 11.5%;
     background: rgb(0, 0, 0, 0.6);
     height: 200px;
     width: 380px;
     border-radius: 5px;
-    z-index: 3;
+    z-index: 2;
     color: white;
     visibility: hidden;
 }

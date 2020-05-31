@@ -1,17 +1,17 @@
 #main_div_user_info {
     font-family: Arial, Helvetica, sans-serif;
     margin: auto;
-    margin-top: 202px;
+    margin-top: 192px;
     width: 100%;
     border: 4px outset black;
-    background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
+    background: rgb(16, 16, 16);
     border-radius: 35px;
     height:100%;
 }
 
 #div_user_games_and_info {
     height: 100%;
-    background: linear-gradient(to top, rgb(70, 70, 70), rgb(30, 30, 30));;
+    background: rgb(16, 16, 16);
     float: left;
     width: 100%;
 }
@@ -28,38 +28,35 @@
 
 #user_avatar {
     width: 30%;
-    margin: auto;
 }
-
 
 #user_avatar_and_root {
    width: 100%;
-   background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));;
+   background: rgb(16, 16, 16);
    float: left;
    border-radius: 0px;
    margin-right: 0px;
-   height: 100%;
-   border-top-left-radius: 20px;
-   border-top-right-radius: 20px;
+   height: 50%;
 }
 
 #user_root {
    border-radius: 10px;
    margin-top: 10px;
    border: 0px solid gray;
-   width: 100%;
+   width: 65%;
    text-align: center;
    margin: auto;
    background: none;
    padding-left: 0px;
    padding-right: 0px;
+   float: right;
 }
 
 #addQuestion {
     margin: 0px;
     margin-bottom: 10px;
     padding: 0px;
-    width: 100%;
+    width: 80%;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 50px;
@@ -76,7 +73,7 @@
     margin: 0px;
     margin-bottom: 10px;
     padding: 0px;
-    width: 100%;
+    width: 80%;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 50px;
@@ -94,7 +91,7 @@
 margin: 0px;
     margin-bottom: 10px;
     padding: 0px;
-    width: 100%;
+    width: 80%;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 50px;
@@ -273,46 +270,45 @@ td, tr {
 
 
 #div_user_games::-webkit-scrollbar-button {
-background-image:url('');
-background-repeat:no-repeat;
-width:6px;
-height:0px;
-visibility: hidden;
+    background-image:url('');
+    background-repeat:no-repeat;
+    width:6px;
+    height:0px;
+    visibility: hidden;
 }
 
 #div_user_games::-webkit-scrollbar-track {
-background: #32312e;
-box-shadow:0px 0px 3px #000 inset;
-visibility: hidden;
-border-radius: 15px;
+    background: #32312e;
+    box-shadow:0px 0px 3px #000 inset;
+    visibility: hidden;
+    border-radius: 15px;
 }
 
 #div_user_games::-webkit-scrollbar-thumb {
--webkit-border-radius: 5px;
-background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
-box-shadow:0px 1px 1px #fff inset;
-background-position:center;
-background-repeat:no-repeat;
-border-radius: 15px;
-visibility: hidden;
-height: 80px;
+    -webkit-border-radius: 5px;
+    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    box-shadow:0px 1px 1px #fff inset;
+    background-position:center;
+    background-repeat:no-repeat;
+    border-radius: 15px;
+    visibility: hidden;
+    height: 80px;
 }
 
 #div_user_games::-webkit-resizer{
-background-image:url('');
-background-repeat:no-repeat;
-width:10px;
-height:0px;
-border-radius: 15px;
-visibility: hidden;
+    background-image:url('');
+    background-repeat:no-repeat;
+    width:10px;
+    height:0px;
+    border-radius: 15px;
+    visibility: hidden;
 }
 
 #div_user_games::-webkit-scrollbar{
-width: 30px;
-border-radius: 15px;
-padding: 100px;
-visibility: hidden;
-
+    width: 30px;
+    border-radius: 15px;
+    padding: 100px;
+    visibility: hidden;
 }
 
 #user_info_p_name {

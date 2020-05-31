@@ -10,15 +10,15 @@
             <tr class="user_div">
                 <th class="first_td_left" >Место</th>
                 <th>Ник</th>
-                <th>Имя</th>
+                <th>Процент побед</th>
                 <th>Рейтинг</th>
             </tr>
-            {% for user in users %}
+            {% for user in users[:10] %}
 
             <tr class="user_div" onclick="toUser('{{ user.nickname }}')">
                 <td class="first_td_left">{{ loop.index }}</td>
                 <td>{{ user.nickname }}</td>
-                <td>{{ user.surname }} {{user.name}}</td>
+                <td>{{ user.get_procent_win() }}%</td>
                 <td>{{ user.rating }}</td>
             </tr>
 

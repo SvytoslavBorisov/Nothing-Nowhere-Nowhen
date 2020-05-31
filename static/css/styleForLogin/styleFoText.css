@@ -13,22 +13,26 @@
 }
 
 .login_label {
-    background-color: rgb(60, 60, 60);
+    background-color: #FDB913;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 20px;
-    width: 600px;
+    width: 100%;
     margin: 0 auto;
+    border: 2px solid gray;
+    color: rgb(16, 16, 16);
+    font-weight: bold;
 }
 
 .login_input {
-    padding-left: 10px;
     padding-top: 5px;
+    padding-left: 20px;
+    padding-right: 0px;
     padding-bottom: 5px;
     font-size: 20px;
-    width: 606px;
+    width: 100%;
     border-radius: 1px;
-    outline: none;
+    margin: 0 auto;
 }
 
 #login_label_top {

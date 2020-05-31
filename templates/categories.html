@@ -2,7 +2,10 @@
 
 {% block content %}
     <div id="main_div_categories">
-        <h1 class='header' id="header_categories">Выбор темы</h1>
+        <h1 class='header' id="header_categories">
+            Выбор темы
+            <hr class="hr_news_lenta">
+        </h1>
         {% for item in categories %}
             <a href="/game/{{ item.id }}" id="playCategory">
                 <div id="categories">
@@ -14,6 +17,10 @@
         {% endfor %}
     </div>
     <script>
-        $('#categoriesImg').css('padding-top', ($('#categories').height() - 60) / 2 );
+        if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+            document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
+            document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
+            $('#categoriesImg').css('padding-top', ($('#categories').height() - 60) / 2 );
+        };
     </script>
 {% endblock %}

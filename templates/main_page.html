@@ -11,21 +11,23 @@
                                 <div id='slider__item_text'>
                                     <img src="{{ new[1] }}" alt="" class="image_news_lenta">
                                 </div>
-                                <div class="slider_news" id="slider_news_{{ loop.index }}">
-                                    <h1 class="slider_news_caption">{{ new[2] }}</h1>
-                                    <hr class="hr_slider_news">
-                                    <div class="div_a_slider_news">
-                                        <a href="/news/{{ loop.index }}" class="a_slider_news">
-                                            Узнать
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         {% endfor %}
                     </div>
                     <a class="slider__control slider__control_left" href="#" role="button"></a>
                     <a class="slider__control slider__control_right slider__control_show" href="#" role="button"></a>
                 </div>
+                {% for new in news[:5] %}
+                    <div class="slider_news" id="slider_news_{{ loop.index }}">
+                        <h1 class="slider_news_caption">{{ new[2] }}</h1>
+                        <hr class="hr_slider_news">
+                        <div class="div_a_slider_news">
+                            <a href="/news/{{ loop.index }}" class="a_slider_news">
+                                Узнать
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
             <div id="div_news">
                 <h2 id="heading_news">
@@ -111,6 +113,18 @@
             </div>
         </div>
     </div>
+
+    <script>
+    // Get the modal
+    var modal = document.getElementById('id01');
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    </script>
     <script src="/static/scripts/scriptForMainPage.js"></script>
     <script src="/static/scripts/scriptForRating.js"></script>
     <script src="/static/scripts/scriptForAboutSite.js"></script>

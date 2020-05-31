@@ -28,6 +28,11 @@ var multiItemSlider = (function () {
     }
 
     var _transformItem = function (direction, _id) {
+        $('#slider_news_' + '1').css('visibility', 'hidden');
+        $('#slider_news_' + '2').css('visibility', 'hidden');
+        $('#slider_news_' + '3').css('visibility', 'hidden');
+        $('#slider_news_' + '4').css('visibility', 'hidden');
+        $('#slider_news_' + '5').css('visibility', 'hidden');
       if (direction === 'right') {
         if ((_positionLeftItem + _wrapperWidth / _itemWidth - 1) >= position.getMax) {
           return;
@@ -46,14 +51,8 @@ var multiItemSlider = (function () {
 
         $('#slider_text_' + _positionLeftItem).css('background', 'rgb(186, 48, 48)');
         _transform -= _step;
-        $('#slider_news_' + '1').css('visibility', 'hidden');
-        $('#slider_news_' + '2').css('visibility', 'hidden');
-        $('#slider_news_' + '3').css('visibility', 'hidden');
-        $('#slider_news_' + '4').css('visibility', 'hidden');
-        $('#slider_news_' + '5').css('visibility', 'hidden');
         $('#slider_news_' + String(_positionLeftItem + 1)).css('visibility', 'visible');
-        $('#slider_news_' + String(_positionLeftItem + 1)).offset({left:_positionLeftItem * $( window ).width() + $('#slider_news_' + String(_positionLeftItem + 1)).position().left});
-      };
+        };
       if (direction === 'left') {
         if (_positionLeftItem <= position.getMin) {
           return;
@@ -71,14 +70,7 @@ var multiItemSlider = (function () {
         }
 
         $('#slider_text_' + _positionLeftItem).css('background', 'rgb(186, 48, 48)');
-        $('#slider_news_' + '1').css('visibility', 'hidden');
-        $('#slider_news_' + '2').css('visibility', 'hidden');
-        $('#slider_news_' + '3').css('visibility', 'hidden');
-        $('#slider_news_' + '4').css('visibility', 'hidden');
-        $('#slider_news_' + '5').css('visibility', 'hidden');
         $('#slider_news_' + String(_positionLeftItem + 1)).css('visibility', 'visible');
-
-        $('#slider_news_' + String(_positionLeftItem + 1)).offset({left:_positionLeftItem * $( window ).width() + $('#slider_news_' + String(_positionLeftItem + 1)).position().left});
       };
       if (direction === 'no') {
 
@@ -162,8 +154,10 @@ $( window ).resize(function (){
 });
 
 $('.image_news_lenta').width('100%');
-$('.slider__item').height($('.image_news_lenta').height());
 
+$(document).ready(function() {
+    $('.slider__item').height($('.image_news_lenta').height());
+});
 /* ПОЯВЛЕНИЕ И ИСЧЕЗАНИЕ НОВОСТНОЙ ЛЕНТЫ */
 /*function fadeIn(el, speed) {
   var step = 1 / speed;

@@ -186,31 +186,23 @@ def rating():
 
     param = fill_dict(                     # 5
         title='Главная страница',
-        style=os.listdir(config["PATH"]['to_css'] + 'styleForMainPage/'),
-        path_for_style=config["PATH"]['to_css'] + 'styleForMainPage/',
-        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForMainPageMobile.css',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForRating/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForRating/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForRatingMobile.css',
         users=all_users)
 
     return render_template('rating.html', **param)  # 6
 
 
 '''
-    Страница авторизации на сайте.
+    Авторизации на сайте.
     1. Проверка была ли начата игра текущим пользователем
     2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
     3. Подключение к базе данных
-    4. Создание словаря для работы с переменными в html коде
-        'title'            - Заголовок страницы
-        'style'            - Названия файлов, в которых храняться стили для данной страницы
-        'path_for_style'   - Путь к папке со стилями
-        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
-    5. Создание формы для авторизации пользователя
-    6. Проверка, была ли отправлена форма.
-    7. Проверка правильности введённых пароля и email
-    8. Перемещаем пользователя в стартовое меню для выбора игры
-    9. Если пароль или email неверны, то пользователю буден показано сообщение 
-об ошибке и предложено ввести данные ещё раз.
-    10. Рендеринг
+    4. Если выполнен POST запрос
+    5. Проверяем правильно ли введены данные
+    6. Выводим сообщение, если непрвильно введены данные
+    7. Переход на главную страницу
 '''
 @application.route('/login', methods=['POST', 'GET'])
 def login():
@@ -219,22 +211,18 @@ def login():
 
     session = db_session.create_session()  # 3
 
-    param = fill_dict(                     # 4
-        title='Вход',
-        style=os.listdir(config["PATH"]['to_css'] + 'styleForLogin/'),
-        path_for_style=config["PATH"]['to_css'] + 'styleForLogin/',
-        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForLoginMobile.css')
-
-    form = LoginForm()                     # 5
-    if form.validate_on_submit():          # 6
-        user = session.query(User).filter(User.email == form.email.data).first()  # 7
-        if user and user.check_password(form.password.data):                      # 7
+    if request.method == 'POST':          # 4
+        user = session.query(User).filter(User.email == request.form['uname']).first()  # 5
+        if user and user.check_password(request.form['psw']):                           # 5
             login_user(user)
-            return redirect('/change_play')                                       # 8
-        return render_template('login.html',                                      # 9
-                               message="Неправильный логин или пароль",           # 9
-                               form=form, **param)                                # 9
-    return render_template('login.html', form=form, **param)                      # 10
+            return redirect('/')
+        return '''                                                
+                <script>
+                    alert('Неправильный логин или пароль');
+                    document.location.href = "/";
+                </script>
+                '''  # 6
+    return redirect('/')                                                          # 7
 
 
 '''
@@ -947,4 +935,4 @@ def one_new(id_):
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 '''
 
-#application.run()
+application.run()

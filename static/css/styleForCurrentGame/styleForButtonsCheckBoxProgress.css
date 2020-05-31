@@ -30,7 +30,7 @@
 
 ::-webkit-progress-bar {
     border-radius: 5px;
-    background: linear-gradient(to top, rgb(35, 35, 35), rgb(40, 40, 40));
+    background: linear-gradient(to top, rgb(35, 35, 35), rgb(40, 40, 40));}
 
 #progressbar {
     margin: auto;

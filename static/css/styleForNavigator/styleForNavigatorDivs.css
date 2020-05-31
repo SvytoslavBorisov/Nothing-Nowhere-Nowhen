@@ -11,7 +11,7 @@
     font-weight: bold;
     z-index: 3;
     overflow: hidden;
-    background: #FDB913;
+    background: #FFC920;
 }
 
 #title_div {
@@ -49,8 +49,9 @@
     height: 57px;
     max-height: 75px;
     padding-top: 15px;
-    box-sizing: content-box;
-    visibility: hidden;
+    background: white;
+    transform: skewX(-10deg);
+    margin-right: -20px;
 }
 
 #navigator_div5 {

@@ -55,11 +55,9 @@
                     </div>
                 </a>
             {% else %}
-                <a href="/login" class="navigator_p">
-                    <div class="navigator_div" id="navigator_div5">
-                        <p class="navigator_p" id="user_nickname_p">Войти</p>
-                    </div>
-                </a>
+                <div class="navigator_div" id="navigator_div5" onclick="document.getElementById('id01').style.display='block'">
+                    <p class="navigator_p" id="user_nickname_p" >Войти</p>
+                </div>
             {% endif %}
         </div>
     </div>
@@ -70,6 +68,33 @@
             {% block content %}
             {% endblock %}
         </div>
+    </div>
+
+    <div id="id01" class="modal">
+
+      <form class="modal-content animate" action="/login" method="post">
+
+        <div class="container100">
+          <div class="container100" id="container_cancel">
+              <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">X</button>
+          </div>
+
+          <label for="uname"><b>Почта</b></label>
+          <input type="text" placeholder="Введите почту" name="uname" id="uname" required>
+
+          <label for="psw"><b>Пароль</b></label>
+          <input type="password" placeholder="Введите пароль" name="psw" id="psw" required>
+
+          <div id="div_container">
+              <button type="submit">Войти</button>
+              <div id="div_container_1">
+                  <a href="/register" id="a_container">
+                      Зарегистрироваться
+                  </a>
+              </div>
+          </div>
+        </div>
+      </form>
     </div>
 
     <script>
