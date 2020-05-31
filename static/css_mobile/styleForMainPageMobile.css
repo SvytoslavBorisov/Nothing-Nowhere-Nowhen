@@ -182,8 +182,8 @@ th {
 .slider_news {
     position: absolute;
     text-align: center;
-    top: 11%;
-    left: 5%;
+    top: 220px;
+    left: 70px;
     background: rgb(0, 0, 0, 0.6);
     height: 200px;
     width: 380px;
@@ -228,4 +228,9 @@ th {
 
 .hr_news_lenta {
     width: 40%;
+}
+
+.slider__control {
+    width: 60px;
+    height: 100px;
 }

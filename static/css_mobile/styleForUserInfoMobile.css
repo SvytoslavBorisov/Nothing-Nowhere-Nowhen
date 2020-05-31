@@ -3,15 +3,18 @@
     margin: auto;
     margin-top: 192px;
     width: 100%;
-    border: 4px outset black;
-    background: rgb(16, 16, 16);
-    border-radius: 35px;
+    border: 0px;
+    background: white;
     height:100%;
+}
+
+#main, #content {
+    background: white;
 }
 
 #div_user_games_and_info {
     height: 100%;
-    background: rgb(16, 16, 16);
+    background: white;
     float: left;
     width: 100%;
 }
@@ -20,29 +23,35 @@
     width: 250px;
     height: 250px;
     border-radius: 200px;
-    margin-left: 25px;
+    margin-left: calc(50% - 125px);
     margin-top: 25px;
     border: 5px solid gray;
     float: left;
 }
 
 #user_avatar {
-    width: 30%;
+    width: 35%;
+    height: 100%;
+    float: left;
+    text-align: center;
 }
 
 #user_avatar_and_root {
    width: 100%;
-   background: rgb(16, 16, 16);
+   background: white;
    float: left;
    border-radius: 0px;
    margin-right: 0px;
    height: 50%;
+   border-bottom: 5px solid black;
+   margin-top: 20px;
+   padding-bottom: 20px;
 }
 
 #user_root {
    border-radius: 10px;
    margin-top: 10px;
-   border: 0px solid gray;
+   border: 0px;
    width: 65%;
    text-align: center;
    margin: auto;
@@ -53,54 +62,54 @@
 }
 
 #addQuestion {
-    margin: 0px;
+    margin: auto;
     margin-bottom: 10px;
     padding: 0px;
-    width: 80%;
+    width: 90%;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 50px;
     color: white;
-    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    background: linear-gradient(to top, #FDB913, #FFC920);
     border: none;
-    box-shadow: 0 3px 0 rgb(190, 0, 0);
     outline: none;
+    box-shadow: none;
     height: 75px;
     line-height: 75px;
 }
 
 #logout {
-    margin: 0px;
+    margin: auto;
     margin-bottom: 10px;
     padding: 0px;
-    width: 80%;
+    width: 90%;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 50px;
     color: white;
-    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    background: linear-gradient(to top, #FDB913, #FFC920);
     border: none;
-    box-shadow: 0 3px 0 rgb(190, 0, 0);
     outline: none;
     text-align: center;
     height: 75px;
+    box-shadow: none;
     line-height: 75px;
 }
 
 #admin {
-margin: 0px;
+    margin: auto;
     margin-bottom: 10px;
     padding: 0px;
-    width: 80%;
+    width: 90%;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 50px;
     color: white;
-    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    background: linear-gradient(to top, #FDB913, #FFC920);
     border: none;
-    box-shadow: 0 3px 0 rgb(190, 0, 0);
     outline: none;
     text-align: center;
+    box-shadow: none;
     height: 75px;
     line-height: 75px;
 }
@@ -114,34 +123,42 @@ margin: 0px;
     padding: 0px;
     padding-bottom: 5px;
     width: calc(100% - 6px);
-
-    color: white;
-    border-radius: 35px;
-    border: 4px solid gray;
+    color: rgb(16, 16, 16);
     float: left;
-    background: none;
+    border-radius: 0px;
+    border: 0px;
+    background: white;
 }
 
 #div_user_games {
     margin: 0px;
     margin-top: 10px;
-    margin-bottom: 20px;
-    width: calc(100% - 15px);
+    width: 100%;
     height: 500px;
+    background: rgb(16, 16, 16);
+    border-radius: 0px;
+    border: 0px;
+    overflow-y: scroll;
+}
+
+#table_games {
+    width: 95%;
+    margin: auto;
+    padding: 0px;
 }
 
 #p_games {
     margin-top: -10px;
     padding: 0px;
-    font-size: 50px;
+    font-size: 60px;
     text-align: center;
     padding-top: 15px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
 }
 
 #a_vk {
     text-decoration: none;
-    color: white;
+    color: black;
     font-size: 40px;
 }
 
@@ -180,14 +197,6 @@ margin: 0px;
    font-size: 18px;
 }
 
-td, tr {
-    border: 2px solid rgb(70, 70, 70);
-    cellspacing: 2px;
-    font-size: 30px;
-    border-collapse: collapse;
-}
-
-
 .sector {
   width: 50%;
   height: 50%;
@@ -202,7 +211,7 @@ td, tr {
   position: absolute;
   width: 50%;
   height: 50%;
-  background: rgb(60, 60, 60);
+  background: white;
   border-radius: 50%;
 }
 
@@ -211,7 +220,7 @@ td, tr {
   position: absolute;
   width: 50%;
   height: 50%;
-  background: rgb(60, 60, 60);
+  background: white;
   border-radius: 50%;
 }
 
@@ -254,10 +263,17 @@ td, tr {
 }
 
 td, tr {
-    border: 2px solid rgb(70, 70, 70);
+    border: 0px;
     cellspacing: 2px;
-    font-size: 40px;
+    font-size: 45px;
     border-collapse: collapse;
+    background: white;
+    color: black;
+    text-align:center;
+}
+
+th {
+    background: #FDB913;
 }
 
 #header_table_number, #header_table_category, #header_table_result, #header_table_date {
@@ -274,24 +290,24 @@ td, tr {
     background-repeat:no-repeat;
     width:6px;
     height:0px;
-    visibility: hidden;
+    visibility: visible;
 }
 
 #div_user_games::-webkit-scrollbar-track {
     background: #32312e;
     box-shadow:0px 0px 3px #000 inset;
-    visibility: hidden;
+    visibility: visible;
     border-radius: 15px;
 }
 
 #div_user_games::-webkit-scrollbar-thumb {
     -webkit-border-radius: 5px;
-    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    background: #FDB913;
     box-shadow:0px 1px 1px #fff inset;
     background-position:center;
     background-repeat:no-repeat;
     border-radius: 15px;
-    visibility: hidden;
+    visibility: visible;
     height: 80px;
 }
 
@@ -301,16 +317,20 @@ td, tr {
     width:10px;
     height:0px;
     border-radius: 15px;
-    visibility: hidden;
+    visibility: visible;
 }
 
 #div_user_games::-webkit-scrollbar{
     width: 30px;
     border-radius: 15px;
     padding: 100px;
-    visibility: hidden;
+    visibility: visible;
 }
 
 #user_info_p_name {
     padding: 0px;
+}
+
+#nickname {
+    color: #FDB913;
 }

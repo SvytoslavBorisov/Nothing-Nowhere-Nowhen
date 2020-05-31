@@ -935,4 +935,4 @@ def one_new(id_):
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 '''
 
-application.run()
+#application.run()

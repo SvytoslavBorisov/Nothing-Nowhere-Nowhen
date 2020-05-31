@@ -1,10 +1,8 @@
 #text_about_us {
     width: 70%;
     background: rgb(255, 255, 255);
-    border-radius: 25px;
     overflow: hidden;
     margin: auto;
-    border: 4px outset black;
     height: 100%;
 }
 

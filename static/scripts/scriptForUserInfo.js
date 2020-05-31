@@ -4,11 +4,11 @@
 function showDiagramm(procent_def, procent_win) {var dataset = [
   {
     value: procent_def,
-    color: 'white'
+    color: '#FDB913'
   },
   {
     value: procent_win,
-    color: 'rgb(255, 70, 0)'
+    color: 'rgb(250, 0, 0)'
   }
 ];
 
@@ -53,11 +53,11 @@ dataset.reduce(function (prev, curr) {
 function showDiagramm1(procent_win, procent_def) {var dataset = [
   {
     value: procent_def,
-    color: 'white'
+    color: '#FDB913'
   },
   {
     value: procent_win,
-    color: 'rgb(137, 200, 211)'
+    color: 'rgb(0, 250, 0)'
   }
 ];
 
@@ -106,7 +106,7 @@ $(document).ready(function() {
         $('#main_div_user_info').height( $('#div_user_games_and_info').height() + 40);
     }
     else {
-        $('#user_avatar_and_root').height( 600 );
+        $('#user_avatar_and_root').height( 320 );
     }
 });
 
