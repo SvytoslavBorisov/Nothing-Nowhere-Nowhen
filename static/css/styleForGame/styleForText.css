@@ -1,11 +1,12 @@
 #a_for_login {
     text-decoration: none;
-    color: red;
+    color: #FFC920;
 }
 
 #header_game {
     color: white;
     margin: 0px;
+    margin-top: 15px;
 }
 
 #header_comp, #header_type {
@@ -15,12 +16,15 @@
 #header_category {
     font-size: 40px;
     margin: 0px;
+    margin-top: 15px;
 }
 
 label {
     cursor: pointer;
     height: 36px;
     margin-left: 10px;
+    line-height: 36px;
+    font-size: 22px;
 }
 
 #header_start {

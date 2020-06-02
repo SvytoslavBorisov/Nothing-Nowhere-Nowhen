@@ -103,7 +103,7 @@ dataset.reduce(function (prev, curr) {
 /*  ВЫРАВНИВАНИЕ СТРАНИЦЫ ДЛЯ ТЕЛЕФОНА/КОМПА */
 $(document).ready(function() {
     if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
-        $('#main_div_user_info').height( $('#div_user_games_and_info').height() + 40);
+        $('#main_div_user_info').height( $('#div_user_games_and_info').height() + 10);
     }
     else {
         $('#user_avatar_and_root').height( 320 );

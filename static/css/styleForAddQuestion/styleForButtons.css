@@ -1,33 +1,20 @@
-#button_loginIN {
-    width: 25%;
+#button_registerIN {
+    width: 40%;
     padding-top: 7px;
     padding-bottom: 7px;
     font-size: 20px;
-    color: white;
-    background-color: red;
+    color: black;
+    background-color:  white;
     border: none;
+    box-shadow: 0 3px 0 rgb(0, 0, 0);
     outline: none;
 }
 
-#button_loginIN:active {
-    background-color: rgb(190, 0, 0);
+#button_registerIN:active {
+    background-color: rgb(190, 190, 0);
 }
 
-#login_button {
+#register_button {
     margin-top: 15px;
     text-align: center;
-}
-
-.login_input {
-    padding-left: 10px;
-    padding-top: 3px;
-    font-size: 20px;
-    width: 606px;
-    height: 30px;
-    border-radius: 1px;
-    outline: none;
-}
-
-#login_input_bottom {
-    border-radius: 0 0 10px 10px;
 }

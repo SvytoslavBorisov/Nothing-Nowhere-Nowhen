@@ -3,66 +3,105 @@
 {% block content %}
     <h1 class='header' id="header_add_question">Создать вопрос</h1>
 
-    <div id="login_div">
+    <div id="register_div">
         <form action="" method="post" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            <div class="login_label" id="login_label_top">{{ form.text.label }}</div>
-            <div class="login_area_div">{{ form.text(class="login_area", id="text") }}</div>
-            {% for error in form.text.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
+                {{ form.hidden_tag() }}
+                <div class="div_label_and_input">
+                    <div class="register_label" id="register_label_top">{{ form.text.label }}</div>
+                    <div class="register_input_div">{{ form.text(class="register_input") }}</div>
+                    {% for error in form.text.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-            <div class="login_label">{{ form.answer.label }}</div>
-            <div class="login_input_div">{{ form.answer(class="login_input") }}</div>
-            {% for error in form.answer.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-            {% endfor %}
-            <div class="login_label">{{ form.comment.label }}</div>
-            <div class="login_area_div">{{ form.comment(class="login_area") }}</div>
-            {% for error in form.comment.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-            {% endfor %}
 
-            <div class="label_add_photo">Добавить фото</div>
-            <div id="photo_div">
-                <input type="file" id="photo" name="file">
-                <label for="photo" class="input__file-button">Выберите файл</label>
-            </div>
+                <div class="div_label_and_input">
+                    <div class="register_label">{{ form.answer.label }}</div>
+                    <div class="register_input_div">{{ form.answer(class="register_input") }}</div>
+                    {% for error in form.answer.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+                <div class="div_label_and_input">
+                   <div class="register_label">{{ form.comment.label }}</div>
+                    <div class="register_input_div">{{ form.comment(class="register_input") }}</div>
+                    {% for error in form.comment.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+                <div class="div_label_and_input">
+                    <div class="register_label">{{ form.category.label }}</div>
+                    <div class="register_input_div">{{ form.category(class="register_input") }}</div>
+                    {% for error in form.category.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
 
-            <div class="login_label">{{ form.category.label }}</div>
-            <div class="login_input_div">{{ form.category(class="login_input")}}</div>
-            {% for error in form.category.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
+                <div class="div_label_and_input">
+                    <div class="register_label">Добавьте картинку</div>
+                    <input type="file" id="photo" name="file" class="register_input">
                 </div>
-            {% endfor %}
-            <div class="login_label">{{ form.wrong_answer1.label }}</div>
-            <div class="login_input_div">{{ form.wrong_answer1(class="login_input") }}</div>
-            {% for error in form.wrong_answer1.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
+
+                <div class="div_label_and_input">
+                    <div class="register_label" id="top_from_photo">{{ form.type.label }}</div>
+                    <div class="register_input_div">{{ form.type(class="register_input") }}</div>
+                    {% for error in form.type.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-            <div class="login_input_div">{{ form.wrong_answer2(class="login_input") }}</div>
-            {% for error in form.wrong_answer2.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
+
+                <div class="div_label_and_input">
+                    <div class="register_label">{{ form.complexity.label }}</div>
+                    <div class="register_input_div">{{ form.complexity(class="register_input") }}</div>
+                    {% for error in form.complexity.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-            <div class="login_input_div">{{ form.wrong_answer3(class="login_input", id="login_input_bottom") }}</div>
-            {% for error in form.wrong_answer3.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
+
+                <div class="div_label_and_input">
+                    <div class="register_label">{{ form.wrong_answer1.label }}</div>
+                    <div class="register_input_div">{{ form.wrong_answer1(class="register_input") }}</div>
+                    {% for error in form.wrong_answer1.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-            <div id="login_button">{{ form.submit(type="submit", class="btn btn-primary", id='button_loginIN') }}</div>
-            <div>{{ message }}</div>
-        </form>
+
+                <div class="div_label_and_input">
+                    <div class="register_input_div">{{ form.wrong_answer2(class="register_input") }}</div>
+                    {% for error in form.wrong_answer2.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <div class="div_label_and_input">
+                    <div class="register_input_div">{{ form.wrong_answer3(class="register_input") }}</div>
+                    {% for error in form.wrong_answer3.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <div id="register_button">{{ form.submit(type="submit", id="button_registerIN") }}</div>
+                {% if message != "" %}
+                    <div id="message" >{{ message }}</div>
+                {% endif %}
+            </form>
     </div>
 
 {% endblock %}

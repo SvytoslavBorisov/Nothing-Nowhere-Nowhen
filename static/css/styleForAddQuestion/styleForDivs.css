@@ -1,53 +1,30 @@
-#login_div {
+#register_div {
     font-size: 20px;
     color: rgb(200, 200, 200);
-    background-color: rgb(70, 70, 70);
+    background-color: #FDB913;
     margin: 0 auto;
-    width: 700px;
-    padding-top: 40px;
+    width: 60%;
+    padding-top: 20px;
+    border-radius: 15px;
     padding-bottom: 30px;
-    border-radius: 35px;
-    margin-bottom: 100px;
 }
 
-.login_input_div {
-    margin-left: 40px;
+.register_input_div {
+    width: 100%;
+    margin: auto;
 }
 
-#category {
-    width: 620px;
-}
-
-#register_div {
+#login_div {
     margin-top: 10px;
     text-align: center;
 }
 
-.login_area {
-    padding-left: 10px;
-    padding-top: 12px;
-    font-size: 20px;
-    width: 606px;
-    height: 100px;
-    border-radius: 1px;
-    resize: none;
-    overflow: hidden;
-    outline: none;
-}
-
-.login_area_div {
-    margin-left: 40px;
-    font-family: font-family: Arial, Helvetica, sans-serif;
-}
-
 #photo {
-    opacity: 0;
-    visibility: hidden;
-    position: absolute;
+    padding: 0px
 }
 
 #photo_div {
-    width: 619px;
+    width: 100%;
     text-align: center;
     padding-top: 7px;
     padding-bottom: 7px;
@@ -55,10 +32,16 @@
     color: white;
     background-color: red;
     border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
     outline: none;
     margin: 0 auto;
 }
 
 #photo_div:active {
     background-color: rgb(190, 0, 0);
+}
+
+.div_label_and_input {
+   width: 90%;
+   margin: auto;
 }

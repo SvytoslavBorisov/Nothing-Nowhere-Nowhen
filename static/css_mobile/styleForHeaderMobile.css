@@ -19,6 +19,7 @@
     height: 92px;
     float: none;
     width: 100%;
+    background: #FDB913;
 }
 
 .navigator_div {
@@ -47,7 +48,7 @@ p.navigator_p {
 }
 
 #navigator_div5 {
-    width: calc(100% - 66%);
+    width: 34%;
     transform: skewX(0deg);
     margin-right: 0px;
     background: #FDB913;
@@ -55,7 +56,7 @@ p.navigator_p {
 }
 
 #navigator_div4 {
-    width: calc(100% - 66%);
+    width: 34%;
     background: #FDB913;
     transform: skewX(0deg);
     margin-right: 0px;

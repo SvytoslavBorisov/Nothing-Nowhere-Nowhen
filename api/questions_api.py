@@ -1,6 +1,9 @@
 from flask import Blueprint, jsonify, request
 from data.questions import Question
+from data.categories import Category
 from data import db_session
+import os
+from secondary_functions import get_time
 
 
 blueprint = Blueprint('questions_api', __name__, template_folder='templates')
@@ -16,7 +19,7 @@ def get_one_question(question_id):
     return jsonify(
         {
             'question':
-                questions.to_dict(only=('id', 'text', 'category.name', 'who_add.name', 'answers', 'right_answer', 'type', 'images'))
+                questions.to_dict(only=('id', 'text', 'category.name', 'who_add.name', 'answers', 'right_answer', 'type', 'images', 'complexity'))
         }
     )
 
@@ -32,8 +35,15 @@ def get_questions():
     return jsonify(
         {
             'questions':
-                [item.to_dict(only=('id', 'text', 'category.name', 'who_add.name', 'answers', 'right_answer', 'type', 'images'))
-                 for item in questions]
+                [{'id': item.id,
+                  'text': item.text,
+                  'category': item.orm_with_category.name,
+                  'who_add': item.orm_with_users.nickname,
+                  'answers': item.answers,
+                  'right_answer': item.right_answer,
+                  'type': item.type,
+                  'images': item.images,
+                  'complexity': item.complexity} for item in questions]
         }
     )
 
@@ -41,6 +51,7 @@ def get_questions():
 '''API для создания вопроса'''
 @blueprint.route('/api/123456789/add_quest', methods=['POST'])
 def create_questions():
+
     if not request.json:
         return jsonify({'error': 'Empty request'})
     elif not all(key in request.json for key in
@@ -79,22 +90,43 @@ def put_questions(quest_id):
     quest = session.query(Question).get(quest_id)
     if not quest:
         return jsonify({'error': 'Not found'})
-
     try:
-        if request.json.get('text'):
-            quest.text = request.json['text']
-        if request.json.get('category'):
-            quest.category = request.json['category']
-        if request.json.get('answers'):
-            quest.answers = request.json['answers']
-        if request.json.get('right_answer'):
-            quest.right_answer = request.json['right_answer']
-        if request.json.get('who_add'):
-            quest.who_add = request.json['who_add']
-        if request.json.get('is_promoted'):
-            quest.is_promoted = request.json['is_promoted']
-
+        if request.form.get('text_' + str(quest_id)):
+            print(1)
+            quest.text = request.form['text_' + str(quest_id)].strip()
+        if request.form.get('comment_' + str(quest_id)):
+            print(2)
+            quest.comment = request.form['comment_' + str(quest_id)].strip()
+        if request.form.get('select_category_question_edit_redactor_' + str(quest_id)):
+            print(3)
+            quest.category = session.query(Category).filter(
+                Category.name == request.form['select_category_question_edit_redactor_' + str(quest_id)]).first().id
+        if request.form.get('answer_' + str(quest_id)) and \
+                request.form.get('wrong_answer1_' + str(quest_id)) \
+                and request.form.get('wrong_answer2_' + str(quest_id))\
+                and request.form.get('wrong_answer3_' + str(quest_id)):
+            print(4)
+            quest.answers = '!@#$%'.join([request.form['answer_' + str(quest_id)].strip(),
+                                          request.form['wrong_answer1_' + str(quest_id)].strip(),
+                                          request.form['wrong_answer2_' + str(quest_id)].strip(),
+                                          request.form['wrong_answer3_' + str(quest_id)].strip()])
+        if request.form.get('answer_' + str(quest_id)):
+            print(5)
+            quest.right_answer = request.form['answer_' + str(quest_id)].strip()
+        if request.form.get('select_type_question_edit_redactor_' + str(quest_id)):
+            print(6)
+            quest.type = request.form['select_type_question_edit_redactor_' + str(quest_id)]
+        if request.form.get('select_comp_question_edit_redactor_' + str(quest_id)):
+            print(7)
+            quest.complexity = request.form['select_comp_question_edit_redactor_' + str(quest_id)]
+        if request.files.get('image_' + str(quest_id)):
+            print(8)
+            os.remove(quest.images[1:])
+            quest.images = f'/static/img/questions/{quest.id}+{get_time()}.png'
+            with open(quest.images[1:], 'wb') as f1:  # 10
+                f1.write(request.files['image_' + str(quest_id)].read())
         session.commit()
-    except:
+    except Exception as e:
+        print(e)
         return jsonify({'error': 'error type'})
     return jsonify({'success': 'OK'})

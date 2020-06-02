@@ -8,7 +8,6 @@ from data import db_session
 from data.categories import Category
 from data.questions import Question
 from data.users import User
-from data.championship import Championship
 from data.games import Game
 from data.news import News
 
@@ -24,7 +23,7 @@ import configparser
 
 '''Cоздаём объекта парсера. Читаем конфигурационный файл'''
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read("config.ini", encoding='utf-8')
 
 '''Классы для работы с формами для работы с польхователем'''
 from forms.register import RegisterForm
@@ -399,6 +398,8 @@ def add_question():
     form = AddQuestionForm()                    # 6
     form.category.choices = [(category.name, category.name) for category in categories[1:]]  # 8
     form.category.default = categories[1].name                                               # 9
+    form.type.choices = [('С вариантами', 'С вариантами'), ('С вводом ответа', 'С вводом ответа'), ('И так и так', 'И так и так')]
+    form.complexity.choices = [('Новичок', 'Новичок'), ('Любитель', 'Любитель'), ('Профи', 'Профи')]
     if form.validate_on_submit():               # 7
         question = Question()                   # 10
         question.text = request.form['text']    # 11
@@ -412,6 +413,21 @@ def add_question():
         question.who_add = current_user.id                         # 15
         question.is_promoted = current_user.state == "admin"       # 16
         question.comment = request.form['comment']                 # 17
+
+        if request.form['type'] == 'И так и так':
+            question.type = 'all'
+        elif request.form['type'] == 'С вводом':
+            question.type = 'write'
+        else:
+            question.type = 'change'
+
+        if request.form['complexity'] == 'Новичок':
+            question.complexity = 1
+        elif request.form['complexity'] == 'Любитель':
+            question.complexity = 2
+        else:
+            question.complexity = 3
+
         session.add(question)                       # 19
         session.commit()                            # 19
 
@@ -541,6 +557,7 @@ def start_game(id_, comp_, type):  # 3
                 quests.append(question)    # 8
         else:
             for question in session.query(Question).filter(Question.who_add != current_user.id,  # 9
+                                                          (Question.type == type) | (Question.type == 'all'),
                                                            Question.complexity == int(comp_)):   # 9
                 quests.append(question)    # 10
     else:
@@ -888,7 +905,12 @@ def check_quests():
             form.wrong_answer3.default = temp[3]                                             # 12
             return render_template('check_quests.html', form=form, **param)    # 13
         else:
-            return redirect('/user_info/' + current_user.nickname)             # 14
+            return ''' 
+                <script>
+                    alert('Нет вопросов для модерации!');
+                    document.location.href = "/adminka";
+                </script>
+                '''        # 14
     else:
         return redirect('/login')      # 15
 
@@ -957,7 +979,7 @@ def send_message():
             title='Рассылка',
             style=os.listdir(config["PATH"]['to_css'] + 'styleForSendMessage/'),
             path_for_style=config["PATH"]['to_css'] + 'styleForSendMessage/',
-            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForOneNewMobile.css')
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForsendMessageMobile.css')
 
         session = db_session.create_session()
 
@@ -969,46 +991,21 @@ def send_message():
             user = config['INFO']['email']
             password = config['INFO']['password']
 
-            text = request.form['text_message']
+            text_message = request.form['text_message']
+            text = ''
             sender = user
             subject = 'Рассылка'
 
             for recipient in recipients:
-                text = request.form['text_message']
-                html = '''
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Викторина</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-</head>
-<body style="margin: 0; padding: 0;">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:0; padding:0;" bgcolor="white">
-        <tr>
-            <th height="75px" id="th2_title" bgcolor="black" width="60%" style="color:white; font-size: 30px;">Ничто? Нигде? Никогда?</th>
-        </tr>
-        <tr>
-            <td style="text-align: center;">
-                <h3>Здравствуй, Уважаемый ''' + recipient[0] + '''</h3>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: center;">
-                <p>''' + text + '''</p>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: center;">
-                <h5 style="margin: 0; padding:0; text-align: right; width: 100%;">Посетите наш сайт <a href="nothing-nowhere-nowhen.ru">nothing-nowhere-nowhen.ru</a></h5>
-                <h5 style="margin: 0; padding:0; text-align: right; width: 100%;">С уважением, Администрация сайта.</h5>
-            </td>
-        </tr>
-    </table>
-</body>
-</html>
-                   '''
 
-                text = ''
+                with open(config['INFO']['message'], 'r', encoding='utf-8') as f:
+                    html = f.read()
+
+                html = html.replace('/n', '')
+                html = html.replace('!@#$%name!@#$%', recipient[0])
+                html = html.replace('!@#$%text!@#$%', text_message)
+
+                print(html)
 
                 # filepath = "/var/log/maillog"
                 # basename = os.path.basename(filepath)
@@ -1042,11 +1039,63 @@ def send_message():
                 mail.login(user, password)
                 mail.sendmail(sender,  recipient[1], msg.as_string())
                 mail.quit()
-            return redirect('/')
+            return redirect('/adminka')
 
         return render_template('send_message.html', **param)
     else:
         return redirect('/login')
+
+
+'''
+    Админка.
+    1. Проверка зашёл ли админ
+    2. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилямии
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+    3. Рендеринг
+'''
+@application.route('/adminka/')
+def adminka():
+    if current_user.is_authenticated and current_user.state == 'admin':  # 1
+        param = fill_dict(  # 2
+            title='Админка',
+            style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminka/'),
+            path_for_style=config["PATH"]['to_css'] + 'styleForAdminka/',
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css')
+
+        return render_template('adminka.html', **param)   # 3
+    return redirect('/')
+
+
+
+@application.route('/admin_quests/')
+def admin_quests():
+    if current_user.is_authenticated and current_user.state == 'admin':  # 1
+
+        session = db_session.create_session()
+        categories = session.query(Category).all()
+        quests = session.query(Question).all()
+        param = fill_dict(  # 2
+            title='Редактировать вопросы',
+            style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminQuests/'),
+            path_for_style=config["PATH"]['to_css'] + 'styleForAdminQuests/',
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css',
+            categories=categories[1:],
+            quests=[{'id': x.id,
+                     'text': x.text,
+                     'category': x.orm_with_category.name,
+                     'images': x.images,
+                     'answer': x.right_answer,
+                     'wrong_answer1': x.answers.split('!@#$%')[1],
+                     'wrong_answer2': x.answers.split('!@#$%')[2],
+                     'wrong_answer3': x.answers.split('!@#$%')[3],
+                     'type': config['TYPE_QUESTION'][str(x.type)],
+                     'comp': config['COMP_QUESTION'][str(x.complexity)]} for x in quests])
+
+        return render_template('admin_quests.html', **param)   # 3
+    return redirect('/')
 
 
 ''' 
@@ -1120,4 +1169,4 @@ print(len([x for x in cinema if x.complexity == 3]))'''
 
 
 
-#application.run()
+application.run()

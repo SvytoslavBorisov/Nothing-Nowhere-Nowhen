@@ -9,6 +9,8 @@ class AddQuestionForm(FlaskForm):
     answer = StringField('Правильный ответ', validators=[DataRequired()], default='')
     comment = TextAreaField('Комментарии к ответу на вопрос')
     category = SelectField('Категория', validators=[Optional()], choices=[], default='')
+    type = SelectField('Тип', validators=[Optional()], choices=[], default='С вариантами')
+    complexity = SelectField('Сложность', validators=[Optional()], choices=[], default='Новичок')
     wrong_answer1 = StringField('Неправильные варианты ответа', validators=[DataRequired()])
     wrong_answer2 = StringField('', validators=[DataRequired()])
     wrong_answer3 = StringField('', validators=[DataRequired()])

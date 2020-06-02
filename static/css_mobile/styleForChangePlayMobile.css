@@ -5,19 +5,19 @@
     margin-top: 192px;
 }
 
-#categoriesName {
+.categoriesName {
     font-size: 50px;
 }
 #championshipsName {
     font-size: 50px;
 }
 
-#categories {
+.categories {
     width: 100%;
     height: 150px;
 }
 
-#championships {
+.championships {
     width: 100%;
     height: 150px;
 }

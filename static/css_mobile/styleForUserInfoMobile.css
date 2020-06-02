@@ -142,7 +142,7 @@
 }
 
 #table_games {
-    width: 95%;
+    width: 99%;
     margin: auto;
     padding: 0px;
 }
@@ -265,7 +265,7 @@
 td, tr {
     border: 0px;
     cellspacing: 2px;
-    font-size: 45px;
+    font-size: 42px;
     border-collapse: collapse;
     background: white;
     color: black;

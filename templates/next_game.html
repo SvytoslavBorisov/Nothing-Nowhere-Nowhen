@@ -23,9 +23,9 @@
                 <h2 id="progress">{{ win }}:{{ defeat }}</h2>
                 <h2 id="category">Категория: {{ question.orm_with_category.name }}</h2>
                 {% if result == 'Вы ответили правильно' %}
-                    <div id="result" style="color: green; border: 3px solid green;">{{ result }}</div>
+                    <div id="result_yes">{{ result }}</div>
                 {% else %}
-                    <div id="result" style="color: red; border: 3px solid red;">{{ result }}</div>
+                    <div id="result_no">{{ result }}</div>
                 {% endif %}
             </div>
             <div id="main_div_questions">

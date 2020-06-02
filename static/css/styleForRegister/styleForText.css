@@ -47,7 +47,7 @@ label {
     padding-left: 20px;
 }
 
-input[type=text], input[type=password] {
+#main_div_user_info input[type=text], #main_div_user_info input[type=password] {
     margin: 0px;
     padding-left: 0px;
     padding-top: 5px;

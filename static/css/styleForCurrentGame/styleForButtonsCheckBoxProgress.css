@@ -37,7 +37,7 @@
     margin-top: 20px;
     margin-bottom: 20px;
     width: calc(100% - 100px);
-    background: white;
+    background: none;
 }
 
 .checkbox {

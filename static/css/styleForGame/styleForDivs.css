@@ -1,7 +1,7 @@
 #main_div_game {
     width: 75%;
     background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
-    border-radius: 25px;
+    border-radius: 5px;
     overflow: hidden;
     margin: auto;
     border: 4px outset black;

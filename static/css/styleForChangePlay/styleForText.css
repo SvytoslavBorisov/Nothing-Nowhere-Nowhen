@@ -5,14 +5,14 @@
     text-align:center;
 }
 
-#categoriesName {
+.categoriesName {
     font-weight: bold;
     font-size: 24px;
     margin-left: 3%;
     margin-top: 2.5%;
 }
 
-#playCategory {
+.playCategory {
     text-decoration: none;
     color: black;
 }
