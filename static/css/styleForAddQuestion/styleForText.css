@@ -1,3 +1,10 @@
+#header_add_question {
+    margin-top: 80px;
+    color: white;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
 #a_for_login {
     text-decoration: none;
     color: red;

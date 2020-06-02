@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class='header' id="header_add_question">Создать вопрос</h1>
+    <h1 id="header_add_question">
+        Создать вопрос
+    </h1>
 
     <div id="register_div">
         <form action="" method="post" enctype="multipart/form-data">
@@ -46,7 +48,26 @@
 
                 <div class="div_label_and_input">
                     <div class="register_label">Добавьте картинку</div>
-                    <input type="file" id="photo" name="file" class="register_input">
+                    <input type="file" id="photo" name="file" class="register_input" accept="image/*">
+                    <img src="" alt="У этого вопроса не будет картинки" id="image_quest" style="max-width: 100%; color: black;">
+                    <script>
+                        $('#photo').change(function () {
+                            var input = $(this)[0];
+                            if (input.files && input.files[0]) {
+                                if (input.files[0].type.match('image.*')) {
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        $('#image_quest').attr('src', e.target.result);
+                                    }
+                                    reader.readAsDataURL(input.files[0]);
+                                } else {
+                                    console.log('ошибка, не изображение');
+                                }
+                            } else {
+                                console.log('хьюстон у нас проблема');
+                            }
+                        });
+                    </script>
                 </div>
 
                 <div class="div_label_and_input">
@@ -67,6 +88,7 @@
                             {{ error }}
                         </p>
                     {% endfor %}
+
                 </div>
 
                 <div class="div_label_and_input">
