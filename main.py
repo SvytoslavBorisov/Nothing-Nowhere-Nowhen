@@ -285,8 +285,10 @@ def register():
                 user.surname = request.form['surname']                                      # 9
                 user.nickname = request.form['nickname']                                    # 9
                 user.email = request.form['email']                                          # 9
-                user.set_password(request.form['password'])                                 # 9
-                user.rating, user.defeats, user.add_questions, user.all_games = 0, 0, 0, 0  # 9
+                user.set_password(request.form['password'])
+                user.state = 'user'                                                         # 9
+                user.rating, user.defeats, user.add_questions, user.all_games, user.wins = 0, 0, 0, 0, 0  # 9
+                user.link_vk = request.form['link_vk']
                 if request.form.get('remember'):                                            # 9
                     user.agree_newsletter = 1                                               # 9
                 else:                                                                       # 9
@@ -1098,6 +1100,34 @@ def admin_quests():
     return redirect('/')
 
 
+@application.route('/admin_users/')
+def admin_users():
+    if current_user.is_authenticated and current_user.state == 'admin':  # 1
+
+        session = db_session.create_session()
+
+        users = session.query(User).all()
+        param = fill_dict(  # 2
+            title='Редактировать вопросы',
+            style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminUsers/'),
+            path_for_style=config["PATH"]['to_css'] + 'styleForAdminUsers/',
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css',
+            users=[{'id': x.id,
+                    'nickname': x.nickname,
+                    'name': x.name,
+                    'surname': x.surname,
+                    'email': x.email,
+                    'rating': x.rating,
+                    'start_date': x.start_date,
+                    'state': config['ADMIN_STATE'][x.state],
+                    'all_games': x.all_games,
+                    'wins': x.wins,
+                    'defeats': x.defeats,
+                    'link_vk': x.link_vk,
+                    'avatar': x.avatar} for x in users])
+
+        return render_template('admin_users.html', **param)   # 3
+    return redirect('/')
 ''' 
     Запуск приложения. Сайт открывается на http://127.0.0.1:5000/ 
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
@@ -1169,4 +1199,4 @@ print(len([x for x in cinema if x.complexity == 3]))'''
 
 
 
-application.run()
+#application.run()

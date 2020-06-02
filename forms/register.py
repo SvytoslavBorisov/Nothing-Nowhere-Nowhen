@@ -13,4 +13,6 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
     password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
 
+    link_vk = StringField('Ссылка на ВК')
+
     submit = SubmitField('Зарегистрироваться')

@@ -43,7 +43,7 @@
             {% if current_user.is_authenticated %}
                 <a class="navbar-brand" href="/user_info/{{ current_user.nickname }}">
                     <div class="navigator_div" id="navigator_div4">
-                        <img src="/{{ current_user.avatar }}" alt="" width="40px" height="40px" id="user_avatar_navigator">
+                        <img src="{{ current_user.avatar }}" alt="" width="40px" height="40px" id="user_avatar_navigator">
                         {% if current_user.nickname[6] %}
                             <p class="navigator_p" id="user_nickname_p">{{ current_user.nickname[:6] + '...' }}</p>
                         {% else %}

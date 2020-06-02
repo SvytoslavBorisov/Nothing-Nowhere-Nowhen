@@ -4,7 +4,7 @@
     <div id="main_div_user_info">
         <div id="user_avatar_and_root">
             <div id="user_avatar">
-                <img src="/{{ user.avatar }}" alt="" id="user_avatar_img">
+                <img src="{{ user.avatar }}" alt="" id="user_avatar_img">
             </div>
             {% if current_user.id == user.id %}
                 <div id="user_root">
@@ -12,9 +12,11 @@
                         <a id="addQuestionLink" href="/add_question">
                             <div id="addQuestion">Создать вопрос</div>
                         </a>
-                        <a id="adminLink" href="/adminka">
-                            <div id="admin">Админка</div>
-                        </a>
+                        {% if current_user.state == 'admin' %}
+                            <a id="adminLink" href="/adminka">
+                                <div id="admin">Админка</div>
+                            </a>
+                        {% endif %}
                         <a id="logoutLink" href="/logout">
                             <div id="logout">Выйти</div>
                         </a>

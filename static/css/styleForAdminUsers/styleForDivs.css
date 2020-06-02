@@ -1,0 +1,148 @@
+body {
+    overflow: hidden;
+}
+
+#div_admin_users_show {
+    overflow-y: scroll;
+    height: 65vh;
+}
+
+.form_users_edit_redactor {
+    text-align: center;
+    margin: auto;
+    height: 100%;
+    min-height: 50px;
+}
+
+.form_users_edit_redactor input, .form_users_edit_redactor select{
+    width: 100%;
+    max-width: 90%;
+    min-width: 90%;
+    height: 50px;
+    font-size: 25px;
+    margin-top: 10px;
+    overflow-y: hidden;
+
+}
+
+.label_users_edit_redactor {
+    color: white;
+    font-size: 30px;
+}
+
+.div_users_edit {
+    color: black;
+    background: white;
+    height: 80px;
+    width: 100%;
+    overflow: hidden;
+    margin: 0px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#header_admin_users {
+    text-align: center;
+    color: white;
+    font-size: 45px;
+    margin-top: 80px;
+    margin-bottom: 10px;
+}
+
+.p_text_users_nick {
+    font-size: 25px;
+}
+
+.p_text_users_id {
+    font-size: 25px;
+}
+
+.p_text_users_email {
+    font-size: 25px;
+}
+
+#div_admin_users {
+    margin: auto;
+    text-align: center;
+}
+
+.h2_text_users_id {
+    color: black;
+    width: 10%;
+    float: left;
+    text-align: center;
+    margin: 0px;
+}
+
+.h2_text_users_nick {
+    color: black;
+    width: 55%;
+    float: left;
+    text-align: center;
+    margin: 0px;
+}
+
+.h2_text_users_email {
+    color: black;
+    width: 35%;
+    float: left;
+    text-align: center;
+    margin: 0px;
+}
+
+.div_users_edit_title {
+    width: 100%;
+    color: black;
+    height: 80px;
+    font-size: 40px;
+    line-height: 80px;
+    background: #FDB913;
+    overflow: hidden;
+}
+
+.p_text_users_id {
+    width: 10%;
+    float: left;
+    text-align: center;
+}
+
+.p_text_users_nick {
+    width: 55%;
+    float: left;
+    text-align: center;
+}
+
+.p_text_users_email {
+    width: 35%;
+    float: left;
+    text-align: center;
+}
+
+#div_input_search {
+    background: rgb(16, 16, 16);
+}
+
+.div_input_search input {
+    width: 100%;
+    height: 42px;
+    padding-left: 10px;
+    border: 2px solid #7BA7AB;
+    font-size: 25px;
+    outline: none;
+    background: #F9F0DA;
+    color: #9E9C9C;
+}
+
+.div_select_admin_users {
+   margin: 0px;
+   width: 100%;
+   float: left;
+   height: 35px;
+   margin-bottom: 10px;
+}
+
+.div_select_admin_users #select_state {
+   height: 35px;
+   font-size: 23px;
+   width: 100%;
+}

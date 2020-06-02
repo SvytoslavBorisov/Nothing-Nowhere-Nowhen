@@ -90,8 +90,6 @@
 
                 $('.div_question_edit').detach();
 
-                console.log(myjson['questions']);
-
                 $('.div_question_edit_redactor').hide();
 
                 myjson['questions'].forEach(function(item, i, arr) {
@@ -100,7 +98,7 @@
                      ((item['complexity'] == $('#select_comp').val()) | ($('#select_comp').val() == 0))) {
                     $(`<div class="div_question_edit" id='div_question_edit_` + String(item["id"]) + `' onclick="showRedactor(` + String(item["id"]) + `)">
                                 <p class="p_text_quest_id" id="p_text_quest_id_` + String(item["id"]) + `">` + item["id"] + `</p>
-                                <p class="p_text_quest_text" id="p_text_quest_text_` + String(item["id"]) + `">` + item["text"].slice(0, 37) + '...' + `</p>
+                                <p class="p_text_quest_text" id="p_text_quest_text_` + String(item["id"]) + `">` + item["text"].slice(0, 37) + `</p>
                                 <p class="p_text_quest_category" id="p_text_quest_category_` + String(item["id"]) + `">` + item["category"] + `</p>
                             </div>`).insertBefore($("#div_question_edit_redactor_" + String(item["id"])));
                   };
@@ -124,31 +122,44 @@
                 <div class='div_question_edit_redactor' id='div_question_edit_redactor_{{ quest["id"] }}' style="display: none;">
                     <form action="" method="post" id="form_{{ quest['id'] }}" enctype="multipart/form-data">
                         <div class="form_question_edit_redactor">
-                            <label for="text_{{ quest['id'] }}" class="label_question_edit_redactor">Текст вопроса</label>
+                            <div>
+                                <label for="text_{{ quest['id'] }}" class="label_question_edit_redactor">Текст вопроса</label>
+                            </div>
                             <textarea name="text_{{ quest['id'] }}" id="text_{{ quest['id'] }}">{{ quest['text'] }}
                             </textarea>
                         </div>
 
                         <div class="form_question_edit_redactor">
-                            <label for="comment_{{ quest['id'] }}" class="label_question_edit_redactor">Комментарий к вопросу</label>
+                            <div>
+                                <label for="comment_{{ quest['id'] }}" class="label_question_edit_redactor">Комментарий к вопросу</label>
+                            </div>
                             <textarea name="comment_{{ quest['id'] }}" id="comment_{{ quest['id'] }}">{{ quest['comment'] }}
                             </textarea>
                         </div>
 
                         <div class="form_question_edit_redactor">
-                            <label for="answer_{{ quest['id'] }}" class="label_question_edit_redactor">Правильный ответ</label>
+                            <div>
+                                <label for="answer_{{ quest['id'] }}" class="label_question_edit_redactor">Правильный ответ</label>
+                            </div>
+
                             <textarea name="answer_{{ quest['id'] }}" id="answer_{{ quest['id'] }}">{{ quest['answer'] }}
                             </textarea>
                         </div>
 
                         <div class="form_question_edit_redactor">
-                            <label for="wrong_answer1_{{ quest['id'] }}" class="label_question_edit_redactor">Неправильные ответы</label>
+                            <div>
+                                <label for="wrong_answer1_{{ quest['id'] }}" class="label_question_edit_redactor">Неправильные ответы</label>
+                            </div>
+
                             <textarea name="wrong_answer1_{{ quest['id'] }}" id="wrong_answer1_{{ quest['id'] }}">{{ quest['wrong_answer1'] }}
                             </textarea>
                         </div>
 
                         <div class="form_question_edit_redactor">
-                            <label for="wrong_answer2_{{ quest['id'] }}" class="label_question_edit_redactor"></label>
+                            <div>
+                                <label for="wrong_answer2_{{ quest['id'] }}" class="label_question_edit_redactor"></label>
+                            </div>
+
                             <textarea name="wrong_answer2_{{ quest['id'] }}" id="wrong_answer2_{{ quest['id'] }}" style="margin-top: 0px;">{{ quest['wrong_answer2'] }}
                             </textarea>
                         </div>
@@ -160,6 +171,10 @@
                         </div>
 
                         <div class="form_question_edit_redactor">
+                            <div>
+                                 <label for="wrong_answer2_{{ quest['id'] }}" class="label_question_edit_redactor"> Категория </label>
+                            </div>
+
                             <select name="select_category_question_edit_redactor_{{ quest['id'] }}" id="select_category_question_edit_redactor_{{ quest['id'] }}">
                                 {% for category in categories %}
                                     <option value="{{ category.name }}">
@@ -173,6 +188,10 @@
                         </script>
 
                         <div class="form_question_edit_redactor">
+                            <div>
+                                <label for="wrong_answer2_{{ quest['id'] }}" class="label_question_edit_redactor"> Тип </label>
+                            </div>
+
                             <select name="select_type_question_edit_redactor_{{ quest['id'] }}" id="select_type_question_edit_redactor_{{ quest['id'] }}">
                                 <option value="change">
                                     С вариантами
@@ -190,6 +209,10 @@
                         </script>
 
                         <div class="form_question_edit_redactor">
+                            <div>
+                                <label for="wrong_answer2_{{ quest['id'] }}" class="label_question_edit_redactor">Сложность</label>
+                            </div>
+
                             <select name="select_comp_question_edit_redactor_{{ quest['id'] }}" id="select_comp_question_edit_redactor_{{ quest['id'] }}">
                                 <option value="1">
                                     Новичок

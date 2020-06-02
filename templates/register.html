@@ -50,6 +50,16 @@
                 </div>
 
                 <div class="div_label_and_input">
+                    <div class="register_label">{{ form.link_vk.label }}</div>
+                    <div class="register_input_div">{{ form.link_vk(class="register_input") }}</div>
+                    {% for error in form.link_vk.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <div class="div_label_and_input">
                     <div class="register_label" id="top_from_photo">{{ form.password.label }}</div>
                     <div class="register_input_div">{{ form.password(class="register_input", type="password") }}</div>
                     {% for error in form.password.errors %}
