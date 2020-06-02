@@ -95,7 +95,7 @@ def put_questions(quest_id):
             print(1)
             quest.text = request.form['text_' + str(quest_id)].strip()
         if request.form.get('comment_' + str(quest_id)):
-            print(2)
+
             quest.comment = request.form['comment_' + str(quest_id)].strip()
         if request.form.get('select_category_question_edit_redactor_' + str(quest_id)):
             print(3)
