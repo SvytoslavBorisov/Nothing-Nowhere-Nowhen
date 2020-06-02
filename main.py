@@ -1087,6 +1087,7 @@ def admin_quests():
             categories=categories[1:],
             quests=[{'id': x.id,
                      'text': x.text,
+                     'comment': x.comment,
                      'category': x.orm_with_category.name,
                      'images': x.images,
                      'answer': x.right_answer,
@@ -1195,8 +1196,6 @@ print(cinema[0].orm_with_category.name)
 print(len([x for x in cinema if x.complexity == 1]))
 print(len([x for x in cinema if x.complexity == 2]))
 print(len([x for x in cinema if x.complexity == 3]))'''
-
-
 
 
 #application.run()
