@@ -39,7 +39,7 @@
                         document.location.href = "/news/" + id_;
                     };
                 </script>
-                {% for new in news[3:] %}
+                {% for new in news[-1:-1+5:-1] %}
                     <div class="news__item" onclick="ToNew({{ new[3] }})">
                         <img src="{{ new[1] }}" alt="" class="img_news">
                         <div class="div_text_news">
@@ -49,6 +49,7 @@
                                 <p class="p_read_next">Нажмите, чтобы читать дельше</p>
                             {% else %}
                                 <p class="p_news">{{ new[0][:30] }}</p>
+                                <p class="p_read_next">Нажмите, чтобы читать дельше</p>
                             {% endif %}
                         </div>
                     </div>
@@ -115,10 +116,8 @@
     </div>
 
     <script>
-    // Get the modal
     var modal = document.getElementById('id01');
 
-    // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";

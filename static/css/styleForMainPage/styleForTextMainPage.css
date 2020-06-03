@@ -37,6 +37,7 @@
     margin-left: 10px;
     height: 30px;
     font-size: 30px;
+    text-overflow: ellipsis;
 }
 
 .slider_news_caption {

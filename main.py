@@ -162,7 +162,7 @@ def main_page():
         style=os.listdir(config["PATH"]['to_css'] + 'styleForMainPage/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForMainPage/',
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForMainPageMobile.css',
-        news=[[new.text, new.image, new.caption, new.id] for new in session.query(News).all()],
+        news=[[new.text.split('!@#$%')[1], new.image, new.caption, new.id] for new in session.query(News).all()],
         users=all_users)
 
     return render_template('main_page.html', **param)  # 6
@@ -297,8 +297,8 @@ def register():
                 session.commit()                                                            # 9
                 if request.files.get('file'):                                            # 10
                     f = request.files['file']                                            # 10
-                    user.avatar = f'static/img/users_avatars/{user.id}.png'              # 10
-                    with open(user.avatar, 'wb') as f1:                                  # 10
+                    user.avatar = f'/static/img/users_avatars/{user.id}.png'              # 10
+                    with open(user.avatar[1:], 'wb') as f1:                                  # 10
                         f1.write(f.read())                                               # 10
                 else:                                                                    # 10
                     user.avatar = f'static/img/users_avatars/no_photo.png'               # 10
@@ -962,12 +962,17 @@ def one_new(id_):
 
     session = db_session.create_session()  # 2
 
+    new = session.query(News).filter(News.id == id_).first()
+
     param = fill_dict(                     # 3
         title='Новость',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForOneNew/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForOneNew/',
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForOneNewMobile.css',
-        new=session.query(News).filter(News.id == id_).first())
+        new={'caption': new.caption,
+             'text': new.text.split('!@#$%')[1],
+             'small_caption': new.text.split('!@#$%')[0],
+             'image': new.image})
 
     return render_template('one_new.html', **param)  # 4
 
@@ -1006,8 +1011,6 @@ def send_message():
                 html = html.replace('/n', '')
                 html = html.replace('!@#$%name!@#$%', recipient[0])
                 html = html.replace('!@#$%text!@#$%', text_message)
-
-                print(html)
 
                 # filepath = "/var/log/maillog"
                 # basename = os.path.basename(filepath)
@@ -1109,7 +1112,7 @@ def admin_users():
 
         users = session.query(User).all()
         param = fill_dict(  # 2
-            title='Редактировать вопросы',
+            title='Редактировать пользователей',
             style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminUsers/'),
             path_for_style=config["PATH"]['to_css'] + 'styleForAdminUsers/',
             style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css',
@@ -1129,6 +1132,39 @@ def admin_users():
 
         return render_template('admin_users.html', **param)   # 3
     return redirect('/')
+
+
+@application.route('/admin_add_news/', methods=['POST', 'GET'])
+def admin_add_news():
+    if current_user.is_authenticated and current_user.state == 'admin':  # 1
+
+        param = fill_dict(  # 2
+            title='Добавить новость',
+            style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminAddNews/'),
+            path_for_style=config["PATH"]['to_css'] + 'styleForAdminAddNews/',
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAdminNewMobile.css')
+
+        if request.method == 'POST':
+            new = News()
+            new.caption = request.form['main_input_header_admin_add_news']
+            new.text = request.form['input_header_admin_add_news'] + '!@#$%' + request.form['input_admin_add_news']
+
+            session.add(new)
+            session.commit()
+
+            if request.files.get('file'):
+                f = request.files['file']
+                new.image = f'/static/img/news/{new.id}.png'
+                with open(new.image[1:], 'wb') as f1:
+                    f1.write(f.read())
+            else:
+                new.image = ''
+            session.commit()
+
+        return render_template('admin_add_news.html', **param)
+    return redirect('/')
+
+
 ''' 
     Запуск приложения. Сайт открывается на http://127.0.0.1:5000/ 
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
@@ -1198,4 +1234,4 @@ print(len([x for x in cinema if x.complexity == 2]))
 print(len([x for x in cinema if x.complexity == 3]))'''
 
 
-#application.run()
+application.run()

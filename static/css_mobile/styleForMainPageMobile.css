@@ -65,12 +65,17 @@
 }
 
 .p_news_caption {
-    margin-top: 10px;
-    margin-bottom: 20px;
+    margin-top: 5px;
+    margin-bottom: 10px;
     margin-left: 10px;
-    height: 30px;
+    height: 40px;
     font-size: 35px;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.p_read_next {
+    font-size: 25px;
 }
 
 .div_text_news {

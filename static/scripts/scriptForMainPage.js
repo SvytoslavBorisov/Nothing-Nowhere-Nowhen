@@ -151,6 +151,10 @@ $('#slider_news_' + '1').css('visibility', 'visible');
 $( window ).resize(function (){
     $('.image_news_lenta').width('100%');
     $('.slider__item').height($('.image_news_lenta').height());
+    if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+        document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
+        document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
+    };
 });
 
 $('.image_news_lenta').width('100%');

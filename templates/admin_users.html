@@ -48,12 +48,23 @@
               body: new FormData(form)
             });
 
-            document.getElementById('p_text_users_nickname_' + String(id_)).innerHTML = $('#nick_' + String(id_)).val();
+            if (({{ current_user.id }} == id_) & ($('#select_type_users_edit_redactor_' + String(id_)).val() != 'admin')) {
+                alert('Вы лишили себя прав администратора!');
+                document.location.href = "/user_info/" + '{{ current_user.nickname }}';
+            };
+
+            document.getElementById('p_text_users_nick_' + String(id_)).innerHTML = $('#nick_' + String(id_)).val();
             document.getElementById('p_text_users_email_' + String(id_)).innerHTML = $('#email_' + String(id_)).val();
         };
 
         function deleteUser(id_) {
             var form = document.getElementById('form_' + String(id_));
+
+            if ({{ current_user.id }} == id_) {
+                alert('Нельзя удалить себя!!');
+                document.location.href = "/adminka";
+            }
+            else {
 
             let response = fetch('/api/123456789/delete_user/' + String(id_), {
               method: 'DELETE',
@@ -61,7 +72,7 @@
             });
 
             $('#div_users_edit_' + String(id_)).detach();
-            $('#div_users_edit_redactor_' + String(id_)).detach();
+            $('#div_users_edit_redactor_' + String(id_)).detach();}
         };
 
         function showRedactor(id_) {

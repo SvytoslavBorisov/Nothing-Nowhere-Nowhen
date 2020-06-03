@@ -20,7 +20,17 @@
 }
 
 #photo {
-    padding: 0px
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+.input__file-button {
+    width: 100%;
+    color: white;
+    margin: auto;
+    padding: 10px;
+    background: red;
 }
 
 #photo_div {

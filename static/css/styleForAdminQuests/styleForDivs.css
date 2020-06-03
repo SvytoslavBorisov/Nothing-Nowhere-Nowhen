@@ -1,10 +1,9 @@
 body {
-    overflow: hidden;
+    overflow: scroll;
 }
 
 #div_admin_quests_show {
-    overflow-y: scroll;
-    height: 65vh;
+    overflow-y: hidden;
 }
 
 .form_question_edit_redactor {
@@ -33,11 +32,12 @@ body {
 .div_question_edit {
     color: black;
     background: white;
-    height: 80px;
-    width: 100%;
-    overflow: hidden;
     margin: 0px;
     margin-top: 10px;
+    height: 60px;
+    line-height: 60px;
+    width: 100%;
+    overflow: hidden;
     cursor: pointer;
 }
 
@@ -51,14 +51,17 @@ body {
 
 .p_text_quest_text {
     font-size: 25px;
+    margin: 0px;
 }
 
 .p_text_quest_id {
     font-size: 25px;
+    margin: 0px;
 }
 
 .p_text_quest_category {
     font-size: 25px;
+    margin: 0px;
 }
 
 #div_admin_quests {
@@ -93,9 +96,9 @@ body {
 .div_question_edit_title {
     width: 100%;
     color: black;
-    height: 80px;
-    font-size: 40px;
-    line-height: 80px;
+    height: 50px;
+    font-size: 35px;
+    line-height: 50px;
     background: #FDB913;
     overflow: hidden;
 }
