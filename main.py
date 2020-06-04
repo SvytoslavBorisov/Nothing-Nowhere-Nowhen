@@ -270,6 +270,28 @@ def register():
     return redirect('/')
 
 
+
+@application.route('/edit_avatar/<int:id_>', methods=['POST'])
+def edit_avatar(id_):
+
+    if current_user.is_authenticated and current_user.id == id_:
+
+        session = db_session.create_session()  # 3
+
+        user = session.query(User).filter(User.id == current_user.id).first()
+
+        if user:
+            if user.avatar != '/static/img/users_avatars/no_photo.png':
+                os.remove(user.avatar[1:])
+            user.avatar = f'/static/img/users_avatars/{user.id}+{get_time()}.png'
+            with open(user.avatar[1:], 'wb') as f1:
+                f1.write(request.files['edit_avatar'].read())
+
+            session.commit()
+        return redirect('/user_info/' + current_user.nickname)
+    return redirect('/')
+
+
 '''
     Страница информации о пользователе.
     1. Проверка была ли начата игра текущим пользователем
@@ -996,7 +1018,7 @@ def send_message():
             text_message = request.form['text_message']
             text = ''
             sender = user
-            subject = 'Рассылка'
+            subject = 'Откройте письмо! У нас для вас новость!'
 
             for recipient in recipients:
 
@@ -1007,13 +1029,9 @@ def send_message():
                 html = html.replace('!@#$%name!@#$%', recipient[0])
                 html = html.replace('!@#$%text!@#$%', text_message)
 
-                # filepath = "/var/log/maillog"
-                # basename = os.path.basename(filepath)
-                # filesize = os.path.getsize(filepath)
-
                 msg = MIMEMultipart('alternative')
                 msg['Subject'] = subject
-                msg['From'] = 'Python script <' + sender + '>'
+                msg['From'] = 'NothingNowhereNowhen <' + sender + '>'
                 msg['To'] = recipient[1]
                 msg['Reply-To'] = sender
                 msg['Return-Path'] = sender
@@ -1022,18 +1040,12 @@ def send_message():
                 part_text = MIMEText(text, 'plain')
                 part_html = MIMEText(html, 'html')
 
-                # part_file = MIMEBase('application', 'octet-stream; name="{}"'.format(basename))
-                # part_file.set_payload(open(filepath, "rb").read())
-                # part_file.add_header('Content-Description', basename)
-                # part_file.add_header('Content-Disposition', 'attachment; filename="{}"; size={}'.format(basename, filesize))
-                # encoders.encode_base64(part_file)
                 if request.files.get('file_message'):
                     img = MIMEImage(request.files['file_message'].read())
                     msg.attach(img)
 
                 msg.attach(part_text)
                 msg.attach(part_html)
-                # msg.attach(part_file)
 
                 mail = smtplib.SMTP_SSL(server)
                 mail.login(user, password)
@@ -1179,4 +1191,4 @@ def admin_add_news():
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 '''
 
-#application.run()
+application.run()

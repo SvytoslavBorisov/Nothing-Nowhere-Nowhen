@@ -23,7 +23,7 @@ def get_one_user(user_id):
         }
     )
 
-'''API для роверки введенных данных'''
+'''API для проверки введенных данных'''
 @blueprint.route('/api/123456789/check_user',  methods=['POST'])
 def check_user():
     session = db_session.create_session()
@@ -126,38 +126,26 @@ def put_questions(user_id):
         return jsonify({'error': 'Not found'})
     try:
         if request.form.get('nick_' + str(user_id)):
-            print(1)
             user.nickname = request.form['nick_' + str(user_id)].strip()
         if request.form.get('name_' + str(user_id)):
-            print(2)
             user.name = request.form['name_' + str(user_id)].strip()
         if request.form.get('surname_' + str(user_id)):
-            print(3)
             user.surname = request.form['surname_' + str(user_id)].strip()
         if request.form.get('email_' + str(user_id)):
-            print(4)
             user.email = request.form['email_' + str(user_id)].strip()
         if request.form.get('link_vk_' + str(user_id)):
-            print(5)
             user.link_vk = request.form['link_vk_' + str(user_id)].strip()
-
         if request.form.get('rating_' + str(user_id)):
-            print(6)
             user.rating = request.form['rating_' + str(user_id)].strip()
         if request.form.get('all_games_' + str(user_id)):
-            print(7)
             user.all_games = request.form['all_games_' + str(user_id)].strip()
         if request.form.get('wins_' + str(user_id)):
-            print(8)
             user.wins = request.form['wins_' + str(user_id)].strip()
         if request.form.get('defeats_' + str(user_id)):
-            print(9)
             user.defeats = request.form['defeats_' + str(user_id)].strip()
         if request.form.get('select_type_users_edit_redactor_' + str(user_id)):
-            print(11)
             user.state = request.form['select_type_users_edit_redactor_' + str(user_id)]
         if request.files.get('image_' + str(user_id)):
-            print(12)
             if user.avatar != '/static/img/users_avatars/no_photo.png':
                 os.remove(user.avatar[1:])
             user.avatar = f'/static/img/users_avatars/{user.id}+{get_time()}.png'
@@ -165,6 +153,5 @@ def put_questions(user_id):
                 f1.write(request.files['image_' + str(user_id)].read())
         session.commit()
     except Exception as e:
-        print(e)
         return jsonify({'error': 'error type'})
     return jsonify({'success': 'OK'})

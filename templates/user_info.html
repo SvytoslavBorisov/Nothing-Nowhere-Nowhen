@@ -7,6 +7,18 @@
                 <img src="{{ user.avatar }}" alt="" id="user_avatar_img">
             </div>
             {% if current_user.id == user.id %}
+                <form method="post" action="/edit_avatar/{{ current_user.id }}" enctype="multipart/form-data" id="form_edit_avatar" style="display: none;">
+                    <input type="file" name="edit_avatar" id="edit_avatar_input" onchange="editUserAvatar()">
+                </form>
+                <script>
+                    $('#user_avatar_img').on('click', function () {
+                        $('#edit_avatar_input').trigger('click');
+                    });
+
+                    $('#edit_avatar_input').on('change', function () {
+                        $('#form_edit_avatar').trigger('submit');
+                    });
+                </script>
                 <div id="user_root">
                     <div id="allLinks">
                         <a id="addQuestionLink" href="/add_question">

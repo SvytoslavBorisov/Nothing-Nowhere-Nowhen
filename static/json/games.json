@@ -1,32 +1,6 @@
 {
     "current_games": {
-        "1": {
-            "questions": [
-                1175,
-                1126,
-                1054,
-                1178,
-                84,
-                90,
-                1148,
-                1177,
-                1032,
-                1114,
-                1053
-            ],
-            "wins": 1,
-            "category": 1,
-            "defeats": 1,
-            "current_question": 2,
-            "time": -2208988800,
-            "quest_or_next": "quest",
-            "last_result": false,
-            "type": "change",
-            "complexity": 1,
-            "last_answer": " ",
-            "delete": [],
-            "create_map": "yes"
-        },
+        "1": null,
         "2": null,
         "3": null,
         "4": null,
