@@ -123,13 +123,16 @@ def categories():
 
     session = db_session.create_session()         # 3
 
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
+
     param = fill_dict(                            # 4
         title='Категории',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForCategories/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForCategories/',
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForCategoriesMobile.css',
         categories=session.query(Category).all())
-    return render_template('categories.html', **param)  # 5
+    return render_template('categories.html', **param, formLogin=loginForm, formRegister=registerForm)  # 5
 
 
 '''
@@ -157,6 +160,9 @@ def main_page():
     all_users = session.query(User).all()                                                              # 4
     all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))  # 4
 
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
+
     param = fill_dict(                     # 5
         title='Главная страница',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForMainPage/'),
@@ -165,7 +171,7 @@ def main_page():
         news=[[new.text.split('!@#$%')[1], new.image, new.caption, new.id] for new in session.query(News).all()],
         users=all_users)
 
-    return render_template('main_page.html', **param)  # 6
+    return render_template('main_page.html', **param, formLogin=loginForm, formRegister=registerForm)  # 6
 
 
 '''
@@ -192,6 +198,9 @@ def rating():
     all_users = session.query(User).all()                                                              # 4
     all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))  # 4
 
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
+
     param = fill_dict(                     # 5
         title='Главная страница',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForRating/'),
@@ -199,7 +208,7 @@ def rating():
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForRatingMobile.css',
         users=all_users)
 
-    return render_template('rating.html', **param)  # 6
+    return render_template('rating.html', **param, formLogin=loginForm, formRegister=registerForm)  # 6
 
 
 '''
@@ -220,16 +229,11 @@ def login():
     session = db_session.create_session()  # 3
 
     if request.method == 'POST':          # 4
-        user = session.query(User).filter(User.email == request.form['uname']).first()  # 5
-        if user and user.check_password(request.form['psw']):                           # 5
+        user = session.query(User).filter(User.email == request.form['email']).first()  # 5
+
+        if user.check_password(request.form['psw']):
             login_user(user)
             return redirect('/')
-        return '''                                                
-                <script>
-                    alert('Неправильный логин или пароль');
-                    document.location.href = "/";
-                </script>
-                '''  # 6
     return redirect('/')                                                          # 7
 
 
@@ -255,59 +259,15 @@ def login():
 '''
 @application.route('/register', methods=['POST', 'GET'])
 def register():
-    if return_to_game():                   # 1
-        return redirect('/current_game')   # 2
 
-    session = db_session.create_session()  # 3
+    session = db_session.create_session()
 
-    param = fill_dict(                     # 4
-        title='Регистрация',
-        style=os.listdir(config["PATH"]['to_css'] + 'styleForRegister/'),
-        path_for_style=config["PATH"]['to_css'] + 'styleForRegister/',
-        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForRegisterMobile.css')
-
-    form = RegisterForm()                  # 5
-    if form.validate_on_submit():          # 6
-        user = session.query(User).filter(User.email == form.email.data).first()    # 7
-        if user:                                                                    # 7
-            return render_template('register.html',                                 # 7
-                                   message="Пользователь с такой почтой уже есть",  # 7
-                                   form=form, **param)                              # 7
-        else:
-            user = session.query(User).filter(User.nickname == form.nickname.data).first()  # 8
-            if user:                                                                        # 8
-                return render_template('register.html',                                     # 8
-                                       message="Пользователь с таким ником уже есть",       # 8
-                                       form=form, **param)                                  # 8
-            else:
-                user = User()                                                               # 9
-                user.name = request.form['name']                                            # 9
-                user.surname = request.form['surname']                                      # 9
-                user.nickname = request.form['nickname']                                    # 9
-                user.email = request.form['email']                                          # 9
-                user.set_password(request.form['password'])
-                user.state = 'user'                                                         # 9
-                user.rating, user.defeats, user.add_questions, user.all_games, user.wins = 0, 0, 0, 0, 0  # 9
-                user.link_vk = request.form['link_vk']
-                if request.form.get('remember'):                                            # 9
-                    user.agree_newsletter = 1                                               # 9
-                else:                                                                       # 9
-                    user.agree_newsletter = 0                                               # 9
-                session.add(user)                                                           # 9
-                session.commit()                                                            # 9
-                if request.files.get('file'):                                            # 10
-                    f = request.files['file']                                            # 10
-                    user.avatar = f'/static/img/users_avatars/{user.id}.png'              # 10
-                    with open(user.avatar[1:], 'wb') as f1:                                  # 10
-                        f1.write(f.read())                                               # 10
-                else:                                                                    # 10
-                    user.avatar = f'static/img/users_avatars/no_photo.png'               # 10
-                session.commit()                                                         # 10
-                login_user(user)                                                         # 9
-
-                return redirect('/categories')                                        # 11
-
-    return render_template('register.html', form=form, **param)                       # 12
+    if request.method == 'POST':
+        user = session.query(User).filter(User.email == request.form['email']).first()
+        if user.check_password(request.form['password']):
+            login_user(user)
+            redirect('/')
+    return redirect('/')
 
 
 '''
@@ -337,6 +297,9 @@ def user_info(user):
 
     user = session.query(User).filter(User.nickname == user).first()  # 5
 
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
+
     param = fill_dict(                      # 6
         title='Профиль',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForUserInfo/'),
@@ -347,7 +310,7 @@ def user_info(user):
         procent_win=user.get_procent_win(),
         procent_def=100 - user.get_procent_win())
 
-    return render_template('user_info.html', **param)  # 7
+    return render_template('user_info.html', **param, formLogin=loginForm, formRegister=registerForm)  # 7
 
 
 '''
@@ -387,64 +350,69 @@ def add_question():
     if return_to_game():                        # 1
         return redirect('/current_game')        # 2
 
-    session = db_session.create_session()       # 3
-    categories = session.query(Category).all()  # 4
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
 
-    param = fill_dict(                          # 5
-        title='Добавить вопрос',
-        style=os.listdir(config["PATH"]['to_css'] + 'styleForAddQuestion/'),
-        path_for_style=config["PATH"]['to_css'] + 'styleForAddQuestion/',
-        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAddQuestionMobile.css',
-        categories=categories)
+    if current_user.is_authenticated:
+        session = db_session.create_session()       # 3
+        categories = session.query(Category).all()  # 4
 
-    form = AddQuestionForm()                    # 6
-    form.category.choices = [(category.name, category.name) for category in categories[1:]]  # 8
-    form.category.default = categories[1].name                                               # 9
-    form.type.choices = [('С вариантами', 'С вариантами'), ('С вводом ответа', 'С вводом ответа'), ('И так и так', 'И так и так')]
-    form.complexity.choices = [('Новичок', 'Новичок'), ('Любитель', 'Любитель'), ('Профи', 'Профи')]
-    if form.validate_on_submit():               # 7
-        question = Question()                   # 10
-        question.text = request.form['text']    # 11
-        question.category = session.query(Category).filter(Category.name ==                      # 12
-                                                           request.form['category']).first().id  # 12
-        question.answers = "!@#$%".join([request.form['answer'],               # 13
-                                         request.form['wrong_answer1'],        # 13
-                                         request.form['wrong_answer2'],        # 13
-                                         request.form['wrong_answer3']])       # 13
-        question.right_answer = request.form['answer']             # 14
-        question.who_add = current_user.id                         # 15
-        question.is_promoted = current_user.state == "admin"       # 16
-        question.comment = request.form['comment']                 # 17
+        param = fill_dict(                          # 5
+            title='Добавить вопрос',
+            style=os.listdir(config["PATH"]['to_css'] + 'styleForAddQuestion/'),
+            path_for_style=config["PATH"]['to_css'] + 'styleForAddQuestion/',
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAddQuestionMobile.css',
+            categories=categories)
 
-        if request.form['type'] == 'И так и так':
-            question.type = 'all'
-        elif request.form['type'] == 'С вводом':
-            question.type = 'write'
-        else:
-            question.type = 'change'
+        form = AddQuestionForm()                    # 6
+        form.category.choices = [(category.name, category.name) for category in categories[1:]]  # 8
+        form.category.default = categories[1].name                                               # 9
+        form.type.choices = [('С вариантами', 'С вариантами'), ('С вводом ответа', 'С вводом ответа'), ('И так и так', 'И так и так')]
+        form.complexity.choices = [('Новичок', 'Новичок'), ('Любитель', 'Любитель'), ('Профи', 'Профи')]
+        if form.validate_on_submit():               # 7
+            question = Question()                   # 10
+            question.text = request.form['text']    # 11
+            question.category = session.query(Category).filter(Category.name ==                      # 12
+                                                               request.form['category']).first().id  # 12
+            question.answers = "!@#$%".join([request.form['answer'],               # 13
+                                             request.form['wrong_answer1'],        # 13
+                                             request.form['wrong_answer2'],        # 13
+                                             request.form['wrong_answer3']])       # 13
+            question.right_answer = request.form['answer']             # 14
+            question.who_add = current_user.id                         # 15
+            question.is_promoted = current_user.state == "admin"       # 16
+            question.comment = request.form['comment']                 # 17
 
-        if request.form['complexity'] == 'Новичок':
-            question.complexity = 1
-        elif request.form['complexity'] == 'Любитель':
-            question.complexity = 2
-        else:
-            question.complexity = 3
+            if request.form['type'] == 'И так и так':
+                question.type = 'all'
+            elif request.form['type'] == 'С вводом':
+                question.type = 'write'
+            else:
+                question.type = 'change'
 
-        session.add(question)                       # 19
-        session.commit()                            # 19
+            if request.form['complexity'] == 'Новичок':
+                question.complexity = 1
+            elif request.form['complexity'] == 'Любитель':
+                question.complexity = 2
+            else:
+                question.complexity = 3
 
-        if request.files.get('file'):                                                       # 20
-            f = request.files['file']                                                       # 20
-            question.images = config['PATH']['to_img'] + f'questions/{question.id}.png'     # 20
-            with open(question.images[1:], 'wb') as f1:                                     # 20
-                f1.write(f.read())                                                          # 20
-        else:                                                                               # 20
-            question.images = ' '                                                           # 20
-        session.commit()                                                                    # 20
+            session.add(question)                       # 19
+            session.commit()                            # 19
 
-        return redirect(f'/user_info/{current_user.nickname}')       # 21
+            if request.files.get('file'):                                                       # 20
+                f = request.files['file']                                                       # 20
+                question.images = config['PATH']['to_img'] + f'questions/{question.id}.png'     # 20
+                with open(question.images[1:], 'wb') as f1:                                     # 20
+                    f1.write(f.read())                                                          # 20
+            else:                                                                               # 20
+                question.images = ' '                                                           # 20
+            session.commit()                                                                    # 20
 
-    return render_template('add_question.html', form=form, **param)  # 22
+            return redirect(f'/user_info/{current_user.nickname}')       # 21
+
+        return render_template('add_question.html', form=form, **param, formLogin=loginForm, formRegister=registerForm)  # 22
+    return redirect('/')
 
 
 '''
@@ -463,13 +431,16 @@ def about_site():
     if return_to_game():                      # 1
         return redirect('/current_game')      # 2
 
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
+
     param = fill_dict(                        # 3
         title='О сайте',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForAboutSite/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForAboutSite/',
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAboutSiteMobile.css')
 
-    return render_template('about_site.html', **param)  # 4
+    return render_template('about_site.html', **param, formLogin=loginForm, formRegister=registerForm)  # 4
 
 
 '''
@@ -491,6 +462,9 @@ def game(id_):
     if return_to_game():                    # 1
         return redirect('/current_game')    # 2
 
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
+
     if request.method == 'POST':             # 4
         return redirect(f'/start_game/{str(id_)}+{str(request.form["complexity"])}+{str(request.form["type"])}')  # 5
 
@@ -503,7 +477,7 @@ def game(id_):
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForGameMobile.css',
         category=session.query(Category).filter(Category.id == id_).first())
 
-    return render_template('game.html', **param)  # 8
+    return render_template('game.html', **param, formLogin=loginForm, formRegister=registerForm)  # 8
 
 
 '''
@@ -546,6 +520,9 @@ def game(id_):
 def start_game(id_, comp_, type):  # 3
     if return_to_game():                   # 1
         return redirect('/current_game')   # 1
+
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
 
     quests = []                                # 4
     if current_user.is_authenticated:          # 5
@@ -688,6 +665,9 @@ def current_game():
         cur_quest_id = this_game_data['questions'][this_game_data['current_question']]       # 6
         this_question = session.query(Question).filter(Question.id == cur_quest_id).first()  # 7
 
+        registerForm = RegisterForm()
+        loginForm = LoginForm()
+
         if this_game_data['quest_or_next'] == 'quest':  # 8
 
             temp_shuffle_answers = [0, 1, 2, 3]  # 9
@@ -718,7 +698,7 @@ def current_game():
 
                 if request.form.get('option'):                          # 15
                     if request.form['option'].lower().strip().replace('ё', 'е') \
-                            in set([x.lower().strip() for x in param['question'].right_answer.split('!@#$%')]):  # 16
+                            in set([x.lower().strip().replace('ё', 'е') for x in param['question'].right_answer.split('!@#$%')]):  # 16
                         result = True
                     else:
                         result = False
@@ -742,7 +722,7 @@ def current_game():
                 save_json(data, config['PATH']['games'])                       # 22
                 return redirect('/current_game')       # 23
             elif request.method == 'GET':
-                return render_template('current_game.html', **param)  # 24
+                return render_template('current_game.html', **param, formLogin=loginForm, formRegister=registerForm)  # 24
         else:
             param = fill_dict(  # 25
                 title='Ответ',
@@ -761,7 +741,7 @@ def current_game():
                 last_answer=this_game_data['last_answer'])
 
             if request.method == 'GET':                                 # 26
-                return render_template('next_game.html', **param)       # 26
+                return render_template('next_game.html', **param, formLogin=loginForm, formRegister=registerForm)       # 26
             elif request.method == 'POST':                         # 27
                 this_game_data['quest_or_next'] = 'quest'          # 28
                 this_game_data['current_question'] += 1            # 29
@@ -815,6 +795,9 @@ def end_game(why):
     if return_to_game():                  # 1
         return redirect('/current_game')  # 1
 
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
+
     param = fill_dict(  # 2
         title='Конец игры',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForEndGame/'),
@@ -822,7 +805,7 @@ def end_game(why):
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForEndGame.css',
         why='Вы победили! Результат записан' if why == '200' else 'Вы проиграли! Результат записан')
 
-    return render_template('end_game.html', **param)  # 3
+    return render_template('end_game.html', **param, formLogin=loginForm, formRegister=registerForm)  # 3
 
 
 '''
@@ -858,6 +841,9 @@ def end_game(why):
 def check_quests():
     if return_to_game():                      # 1
         return redirect('/current_game')      # 1
+
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
 
     form = CheckQuestionForm()                                            # 2
     if current_user.is_authenticated and current_user.state == 'admin':   # 3
@@ -905,7 +891,7 @@ def check_quests():
             form.wrong_answer1.default = temp[1]                                             # 12
             form.wrong_answer2.default = temp[2]                                             # 12
             form.wrong_answer3.default = temp[3]                                             # 12
-            return render_template('check_quests.html', form=form, **param)    # 13
+            return render_template('check_quests.html', form=form, **param, formLogin=loginForm, formRegister=registerForm)    # 13
         else:
             return ''' 
                 <script>
@@ -933,13 +919,16 @@ def change_play():
     if return_to_game():                  # 1
         return redirect('/current_game')  # 1
 
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
+
     param = fill_dict(  # 2
         title='Выбор игры',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForChangePlay/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForChangePlay/',
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css')
 
-    return render_template('change_play.html', **param)   # 3
+    return render_template('change_play.html', **param, formLogin=loginForm, formRegister=registerForm)   # 3
 
 
 '''
@@ -962,6 +951,9 @@ def one_new(id_):
 
     session = db_session.create_session()  # 2
 
+    registerForm = RegisterForm()
+    loginForm = LoginForm()
+
     new = session.query(News).filter(News.id == id_).first()
 
     param = fill_dict(                     # 3
@@ -974,13 +966,16 @@ def one_new(id_):
              'small_caption': new.text.split('!@#$%')[0],
              'image': new.image})
 
-    return render_template('one_new.html', **param)  # 4
+    return render_template('one_new.html', **param, formLogin=loginForm, formRegister=registerForm)  # 4
 
 
 @application.route('/send_message', methods=['POST', 'GET'])
 def send_message():
 
     if current_user.is_authenticated and current_user.state == 'admin':
+
+        registerForm = RegisterForm()
+        loginForm = LoginForm()
 
         param = fill_dict(  # 3
             title='Рассылка',
@@ -1046,7 +1041,7 @@ def send_message():
                 mail.quit()
             return redirect('/adminka')
 
-        return render_template('send_message.html', **param)
+        return render_template('send_message.html', **param, formLogin=loginForm, formRegister=registerForm)
     else:
         return redirect('/login')
 
@@ -1064,13 +1059,16 @@ def send_message():
 @application.route('/adminka/')
 def adminka():
     if current_user.is_authenticated and current_user.state == 'admin':  # 1
+        registerForm = RegisterForm()
+        loginForm = LoginForm()
+
         param = fill_dict(  # 2
             title='Админка',
             style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminka/'),
             path_for_style=config["PATH"]['to_css'] + 'styleForAdminka/',
             style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css')
 
-        return render_template('adminka.html', **param)   # 3
+        return render_template('adminka.html', **param, formLogin=loginForm, formRegister=registerForm)   # 3
     return redirect('/')
 
 
@@ -1078,6 +1076,9 @@ def adminka():
 @application.route('/admin_quests/')
 def admin_quests():
     if current_user.is_authenticated and current_user.state == 'admin':  # 1
+
+        registerForm = RegisterForm()
+        loginForm = LoginForm()
 
         session = db_session.create_session()
         categories = session.query(Category).all()
@@ -1100,7 +1101,7 @@ def admin_quests():
                      'type': config['TYPE_QUESTION'][str(x.type)],
                      'comp': config['COMP_QUESTION'][str(x.complexity)]} for x in quests])
 
-        return render_template('admin_quests.html', **param)   # 3
+        return render_template('admin_quests.html', **param, formLogin=loginForm, formRegister=registerForm)   # 3
     return redirect('/')
 
 
@@ -1109,6 +1110,9 @@ def admin_users():
     if current_user.is_authenticated and current_user.state == 'admin':  # 1
 
         session = db_session.create_session()
+
+        registerForm = RegisterForm()
+        loginForm = LoginForm()
 
         users = session.query(User).all()
         param = fill_dict(  # 2
@@ -1130,13 +1134,18 @@ def admin_users():
                     'link_vk': x.link_vk,
                     'avatar': x.avatar} for x in users])
 
-        return render_template('admin_users.html', **param)   # 3
+        return render_template('admin_users.html', **param, formLogin=loginForm, formRegister=registerForm)   # 3
     return redirect('/')
 
 
 @application.route('/admin_add_news/', methods=['POST', 'GET'])
 def admin_add_news():
     if current_user.is_authenticated and current_user.state == 'admin':  # 1
+
+        session = db_session.create_session()
+
+        registerForm = RegisterForm()
+        loginForm = LoginForm()
 
         param = fill_dict(  # 2
             title='Добавить новость',
@@ -1161,7 +1170,7 @@ def admin_add_news():
                 new.image = ''
             session.commit()
 
-        return render_template('admin_add_news.html', **param)
+        return render_template('admin_add_news.html', **param, formLogin=loginForm, formRegister=registerForm)
     return redirect('/')
 
 
@@ -1170,68 +1179,4 @@ def admin_add_news():
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 '''
 
-session = db_session.create_session()
-
-'''cinema = session.query(Question).filter(Question.category == 2).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 3).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 4).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 5).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 6).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 7).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 8).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 9).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 10).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 11).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 12).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))
-cinema = session.query(Question).filter(Question.category == 13).all()
-print(cinema[0].orm_with_category.name)
-print(len([x for x in cinema if x.complexity == 1]))
-print(len([x for x in cinema if x.complexity == 2]))
-print(len([x for x in cinema if x.complexity == 3]))'''
-
-
-application.run()
+#application.run()

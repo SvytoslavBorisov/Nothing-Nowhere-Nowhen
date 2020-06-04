@@ -30,7 +30,7 @@
 }
 
 .player_name {
-    font-size: 22px;
+    font-size: 25px;
     color: white;
 }
 
@@ -70,7 +70,7 @@
     color: white;
  }
 
- #progress {
+#progress {
     font-size: 37px;
     text-align: center;
     margin-top: 60px;
@@ -81,7 +81,7 @@
 #category {
     font-size: 27px;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 70px;
     text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
     color: white;
 }

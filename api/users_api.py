@@ -23,6 +23,17 @@ def get_one_user(user_id):
         }
     )
 
+'''API для роверки введенных данных'''
+@blueprint.route('/api/123456789/check_user',  methods=['POST'])
+def check_user():
+    session = db_session.create_session()
+    user = session.query(User).filter(request.form['email'] == User.email).first()
+    if not user:
+        return jsonify({'errors': 'Неверный email или пароль'})
+    if not user.check_password(request.form['psw']):
+        return jsonify({'errors': 'Неверный email или пароль'})
+    return jsonify({})
+
 
 '''API для получения всех user'''
 @blueprint.route('/api/123456789/users',  methods=['GET'])
@@ -45,29 +56,49 @@ def get_users():
 '''API для создания user'''
 @blueprint.route('/api/123456789/add_user', methods=['POST'])
 def create_user():
-    if not request.json:
+
+    if not request.form:
         return jsonify({'error': 'Empty request'})
-    elif not all(key in request.json for key in
-                 ['id', 'surname', 'name', 'nickname', 'email', 'password']):
-        return jsonify({'error': 'Bad request'})
+    elif not all(key in request.form for key in
+                 ['surname', 'name', 'nickname', 'email', 'password', 'password_again']):
+        if request.form.get('surname'):
+            return jsonify({'errors': 'Вы не ввели фамилию'})
+        if request.form.get('name'):
+            return jsonify({'errors': 'Вы не ввели имя'})
+        if request.form.get('nickname'):
+            return jsonify({'errors': 'Вы не ввели никнейм'})
+        if request.form.get('email'):
+            return jsonify({'errors': 'Вы не ввели почту'})
+        if request.form.get('password'):
+            return jsonify({'errors': 'Вы не ввели пароль'})
+        if request.form.get('password_again'):
+            return jsonify({'errors': 'Вы не ввели пароль ещё раз'})
+
     session = db_session.create_session()
     try:
+        user = session.query(User).filter(User.email == request.form['email']).first()  # 7
+        if user:
+            return jsonify({'errors': 'Email уже используется'})
+        user = session.query(User).filter(User.nickname == request.form['nickname']).first()  # 7
+        if user:
+            return jsonify({'errors': 'Никнейм уже используется'})
         user = User(
-        id=request.json['id'],
-        surname=request.json['surname'],
-        name=request.json['name'],
-        nickname=request.json['nickname'],
-        email=request.json['email'],
-        password=generate_password_hash(request.json['password']),
-        rating=0,
-        avatar='',
-        link_vk='',
-        wins=0,
-        defeats=0,
-        add_questions=0,
-        all_games=0)
+            surname=request.form['surname'],
+            name=request.form['name'],
+            nickname=request.form['nickname'],
+            email=request.form['email'],
+            password=generate_password_hash(request.form['password']),
+            rating=0,
+            avatar=request.form['photo'] if request.form.get('photo') else '/static/img/users_avatars/no_photo.png',
+            link_vk=request.form['link_vk'] if request.form.get('link_vk') else '',
+            agree_newsletter=request.form['remember'] == 'on',
+            wins=0,
+            defeats=0,
+            state='user',
+            add_questions=0,
+            all_games=0)
     except Exception:
-        return jsonify({'success': 'id занят'})
+        return jsonify({'errors': 'Неизвестная ошибка'})
     session.add(user)
     session.commit()
     return jsonify({'success': 'OK'})
