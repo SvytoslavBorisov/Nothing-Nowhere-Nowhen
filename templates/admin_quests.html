@@ -106,7 +106,7 @@
 
         <div id="div_admin_quests_show">
             {% for quest in quests %}
-                <div class="div_question_edit" id='div_question_edit_{{ quest["id"] }}' onclick="showRedactor({{ quest['id'] }})">
+                <div class="div_question_edit" id='div_question_edit_{{ quest["id"] }}'>
                     <p class="p_text_quest_id" id="p_text_quest_id_{{ quest['id'] }}">{{ quest['id'] }}</p>
                     {% if quest['text'][37] %}
                         <p class="p_text_quest_text" id="p_text_quest_text_{{ quest['id'] }}">{{ quest['text'][:37] }}...</p>
@@ -115,8 +115,33 @@
                     {% endif %}
                     <p class="p_text_quest_category" id="p_text_quest_category_{{ quest['id'] }}">{{ quest['category'] }}</p>
                 </div>
-                <div class='div_question_edit_redactor' id='div_question_edit_redactor_{{ quest["id"] }}' style="display: none;">
-                    <form action="" method="post" id="form_{{ quest['id'] }}" enctype="multipart/form-data">
+
+                <script>
+                    $('#div_question_edit_{{ quest["id"] }}').on('click', function () {
+                        document.getElementById('div_question_edit_redactor_{{ quest["id"] }}').style.display='block';
+                        document.body.style.overflowY = 'hidden';
+                        document.body.style.marginRight = '15px';
+                    });
+
+                </script>
+
+                <div id="div_question_edit_redactor_{{ quest['id'] }}" class="modal div_question_edit_redactor" style="overflow-y: scroll; overflow-x: hidden; height: 100vh; display: none;">
+
+                    <form class="modal-content animate" action="/login" method="post" id="form_{{ quest['id'] }}" style="height: auto;" enctype="multipart/form-data">
+                        <div class='div_quests_edit_redactor' id='div_quests_edit_redactor_{{ quest["id"] }}'>
+
+                           <div class="container_cancel">
+                                <button type="button" class="cancelbtn" id="cancelbtn_{{ quest['id'] }}">X</button>
+                           </div>
+
+                            <script>
+                                $('#cancelbtn_{{ quest['id'] }}').on('click', function () {
+                                    document.getElementById('div_question_edit_redactor_{{ quest["id"] }}').style.display='none';
+                                    document.body.style.overflowY = 'scroll';
+                                    document.body.style.marginRight = '0px';
+                                });
+                            </script>
+
                         <div class="form_question_edit_redactor">
                             <div>
                                 <label for="text_{{ quest['id'] }}" class="label_question_edit_redactor">Текст вопроса</label>
@@ -276,15 +301,14 @@
                                 }
                             });
                         </script>
+                        </div>
+                        <button type='button' onclick="putQuest({{ quest['id'] }})">Сохранить изменения</button>
+                        <button type='button' onclick="deleteQuest({{ quest['id'] }})">Удалить</button>
                     </form>
-                    <button onclick="putQuest({{ quest['id'] }})">Сохранить изменения</button>
-                    <button onclick="deleteQuest({{ quest['id'] }})">Удалить</button>
+
                 </div>
             {% endfor %}
 
         </div>
     </div>
-    <script>
-        editQuest();
-    </script>
 {% endblock %}

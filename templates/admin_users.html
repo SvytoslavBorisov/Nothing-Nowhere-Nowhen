@@ -34,7 +34,6 @@
         </div>
 
         <script>
-        var client = new XMLHttpRequest();
 
         function editAllGames(id_) {
             $('#all_games_' + String(id_)).val( Number($('#wins_' + String(id_)).val()) + Number($('#defeats_' + String(id_)).val()) );
@@ -77,10 +76,14 @@
 
         function showRedactor(id_) {
             if ($('#div_users_edit_redactor_' + String(id_)).is(":visible")) {
+                alert($('#div_users_edit_redactor_' + String(id_)).width());
                 $('#div_users_edit_redactor_' + String(id_)).hide();
+                alert($('#div_users_edit_redactor_' + String(id_)).width());
             }
             else {
+                alert($('#div_users_edit_redactor_' + String(id_)).width());
                 $('#div_users_edit_redactor_' + String(id_)).show();
+                alert($('#div_users_edit_redactor_' + String(id_)).width());
             }
         }
 
@@ -114,7 +117,7 @@
 
         <div id="div_admin_users_show">
             {% for user in users %}
-                <div class="div_users_edit" id='div_users_edit_{{ user["id"] }}' onclick="showRedactor({{ user['id'] }})">
+                <div class="div_users_edit" id='div_users_edit_{{ user["id"] }}'>
                     <p class="p_text_users_id" id="p_text_users_id_{{ user['id'] }}">{{ user['id'] }}</p>
                     {% if user['nickname'][37] %}
                         <p class="p_text_users_nick" id="p_text_users_nick_{{ user['id'] }}">{{ user['nickname'][:37] }}...</p>
@@ -123,146 +126,173 @@
                     {% endif %}
                     <p class="p_text_users_email" id="p_text_users_email_{{ user['id'] }}">{{ user['email'] }}</p>
                 </div>
-                <div class='div_users_edit_redactor' id='div_users_edit_redactor_{{ user["id"] }}' style="display: none;">
-                    <form action="" method="post" id="form_{{ user['id'] }}" enctype="multipart/form-data">
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="nick_{{ user['id'] }}" class="label_users_edit_redactor">Никнейм</label>
-                            </div>
-                            <input type='text' name="nick_{{ user['id'] }}" id="nick_{{ user['id'] }}" value="{{ user['nickname'] }}">
-                        </div>
 
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="name_{{ user['id'] }}" class="label_users_edit_redactor">Имя</label>
-                            </div>
-                            <input type='text' name="name_{{ user['id'] }}" id="name_{{ user['id'] }}" value="{{ user['name'] }}">
-                        </div>
+                <script>
+                    $('#div_users_edit_{{ user["id"] }}').on('click', function () {
+                        document.getElementById('main_div_form_edit_user_{{ user["id"] }}').style.display='block';
+                        document.body.style.overflow = 'hidden';
+                        document.body.style.marginRight = '15px';
+                    });
 
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="surname_{{ user['id'] }}" class="label_users_edit_redactor">Фамилия</label>
-                            </div>
-                            <input type='text' name="surname_{{ user['id'] }}" id="surname_{{ user['id'] }}" value="{{ user['surname'] }}">
-                        </div>
+                </script>
 
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="email_{{ user['id'] }}" class="label_users_edit_redactor">Email</label>
-                            </div>
-                            <input type='email' name="email_{{ user['id'] }}" id="email_{{ user['id'] }}" value="{{ user['email'] }}">
-                        </div>
+                <div id="main_div_form_edit_user_{{ user['id'] }}" class="modal" style="overflow-y: scroll; height: 100vh; display: none;">
 
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="select_type_users_edit_redactor_{{ user['id'] }}" class="label_users_edit_redactor">Статус</label>
-                            </div>
-                            <select name="select_type_users_edit_redactor_{{ user['id'] }}" id="select_type_users_edit_redactor_{{ user['id'] }}">
-                                <option value="admin">
-                                    Админ
-                                </option>
-                                <option value="user">
-                                    Пользователь
-                                </option>
-                            </select>
-                        </div>
-                        <script>
-                            $('#select_type_users_edit_redactor_{{ user['id'] }} option:contains("{{ user['state'] }}")').prop('selected', true);
-                        </script>
+                    <form class="modal-content animate" action="/login" method="post" id="form_{{ user['id'] }}" style="height: auto;" enctype="multipart/form-data">
+                        <div class='div_users_edit_redactor' id='div_users_edit_redactor_{{ user["id"] }}'>
 
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="rating_{{ user['id'] }}" class="label_users_edit_redactor">Рейтинг</label>
-                            </div>
-                            <input type='number' name="rating_{{ user['id'] }}" id="rating_{{ user['id'] }}" value='{{ user["rating"] }}'>
-                        </div>
+                           <div class="container_cancel">
+                                <button type="button" class="cancelbtn" id="cancelbtn_{{ user['id'] }}">X</button>
+                           </div>
 
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="all_games_{{ user['id'] }}" class="label_users_edit_redactor">Всего игр</label>
-                            </div>
-                            <input type='number' name="all_games_{{ user['id'] }}" id="all_games_{{ user['id'] }}" value='{{ user["all_games"] }}' readonly>
-                        </div>
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="wins_{{ user['id'] }}" class="label_users_edit_redactor">Побед</label>
-                            </div>
-                            <input type='number' name="wins_{{ user['id'] }}" id="wins_{{ user['id'] }}" value='{{ user["wins"] }}' oninput="editAllGames({{user['id']  }})">
-                        </div>
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="defeats_{{ user['id'] }}" class="label_users_edit_redactor">Поражений</label>
-                            </div>
-                            <input type='number' name="defeats_{{ user['id'] }}" id="defeats_{{ user['id'] }}" value='{{ user["defeats"] }}' oninput="editAllGames({{user['id']  }})">
-                        </div>
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="start_date_{{ user['id'] }}" class="label_users_edit_redactor">Дата регистрации</label>
-                            </div>
-                            <input type="date" id="start_date_{{ user['id'] }}" name="start_date_{{ user['id'] }}" value="{{ user['start_date'] }}" readonly>
-                        </div>
+                            <script>
+                                $('#cancelbtn_{{ user['id'] }}').on('click', function () {
+                                    document.getElementById('main_div_form_edit_user_{{ user["id"] }}').style.display='none';
+                                    document.body.style.overflow = 'scroll';
+                                    document.body.style.marginRight = '0px';
+                                });
+                            </script>
 
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label for="link_vk_{{ user['id'] }}" class="label_users_edit_redactor">Ссылка на ВК</label>
+                           <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="nick_{{ user['id'] }}" class="label_users_edit_redactor">Никнейм</label>
+                                </div>
+                                <input type='text' name="nick_{{ user['id'] }}" id="nick_{{ user['id'] }}" value="{{ user['nickname'] }}">
                             </div>
-                            <input type='text' id="link_vk_{{ user['id'] }}" name="link_vk_{{ user['id'] }}" value="{{ user['link_vk'] }}">
-                        </div>
 
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label class="label_users_edit_redactor" for="remember_{{ user['id'] }}">Согласие на рассылку новостей</label>
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="name_{{ user['id'] }}" class="label_users_edit_redactor">Имя</label>
+                                </div>
+                                <input type='text' name="name_{{ user['id'] }}" id="name_{{ user['id'] }}" value="{{ user['name'] }}">
                             </div>
-                            <input type="checkbox" class='form_users_edit_redactor_checkbox' checked="checked" name="remember_{{ user['id'] }}" id="remember_{{ user['id'] }}">
-                        </div>
-                        <script>
-                            if ({{ user['agree_newsletter'] }} == 1) {
-                                $("#remember_{{ user['id'] }}").prop('checked', true);
-                            }
-                            else {
-                                $("#remember_{{ user['id'] }}").prop('checked', false);
-                            }
-                        </script>
 
-                        <div class="form_users_edit_redactor">
-                            <div>
-                                <label class="label_users_edit_redactor" for="image_{{ user['id']}}" id="label_image_{{ user['id']}}">Аватар</label>
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="surname_{{ user['id'] }}" class="label_users_edit_redactor">Фамилия</label>
+                                </div>
+                                <input type='text' name="surname_{{ user['id'] }}" id="surname_{{ user['id'] }}" value="{{ user['surname'] }}">
                             </div>
-                            <input type="file" class='form_users_edit_redactor_avatar' name='image_{{ user["id"]}}' id="image_{{ user['id']}}" accept="image/*">
 
-                            <div>
-                                <img src="{{ user['avatar'] }}" alt="У этого пользователя нет фото" id="image_users_{{ user['id'] }}" style="width: 250px; height: 250px; cursor: pointer;">
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="email_{{ user['id'] }}" class="label_users_edit_redactor">Email</label>
+                                </div>
+                                <input type='email' name="email_{{ user['id'] }}" id="email_{{ user['id'] }}" value="{{ user['email'] }}">
+                            </div>
+
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="select_type_users_edit_redactor_{{ user['id'] }}" class="label_users_edit_redactor">Статус</label>
+                                </div>
+                                <select name="select_type_users_edit_redactor_{{ user['id'] }}" id="select_type_users_edit_redactor_{{ user['id'] }}">
+                                    <option value="admin">
+                                        Админ
+                                    </option>
+                                    <option value="user">
+                                        Пользователь
+                                    </option>
+                                </select>
+                            </div>
+                            <script>
+                                $('#select_type_users_edit_redactor_{{ user['id'] }} option:contains("{{ user['state'] }}")').prop('selected', true);
+                            </script>
+
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="rating_{{ user['id'] }}" class="label_users_edit_redactor">Рейтинг</label>
+                                </div>
+                                <input type='number' name="rating_{{ user['id'] }}" id="rating_{{ user['id'] }}" value='{{ user["rating"] }}'>
+                            </div>
+
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="all_games_{{ user['id'] }}" class="label_users_edit_redactor">Всего игр</label>
+                                </div>
+                                <input type='number' name="all_games_{{ user['id'] }}" id="all_games_{{ user['id'] }}" value='{{ user["all_games"] }}' readonly>
+                            </div>
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="wins_{{ user['id'] }}" class="label_users_edit_redactor">Побед</label>
+                                </div>
+                                <input type='number' name="wins_{{ user['id'] }}" id="wins_{{ user['id'] }}" value='{{ user["wins"] }}' oninput="editAllGames({{user['id']  }})">
+                            </div>
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="defeats_{{ user['id'] }}" class="label_users_edit_redactor">Поражений</label>
+                                </div>
+                                <input type='number' name="defeats_{{ user['id'] }}" id="defeats_{{ user['id'] }}" value='{{ user["defeats"] }}' oninput="editAllGames({{user['id']  }})">
+                            </div>
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="start_date_{{ user['id'] }}" class="label_users_edit_redactor">Дата регистрации</label>
+                                </div>
+                                <input type="date" id="start_date_{{ user['id'] }}" name="start_date_{{ user['id'] }}" value="{{ user['start_date'] }}" readonly>
+                            </div>
+
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label for="link_vk_{{ user['id'] }}" class="label_users_edit_redactor">Ссылка на ВК</label>
+                                </div>
+                                <input type='text' id="link_vk_{{ user['id'] }}" name="link_vk_{{ user['id'] }}" value="{{ user['link_vk'] }}">
+                            </div>
+
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label class="label_users_edit_redactor" for="remember_{{ user['id'] }}">Согласие на рассылку новостей</label>
+                                </div>
+                                <input type="checkbox" class='form_users_edit_redactor_checkbox' checked="checked" name="remember_{{ user['id'] }}" id="remember_{{ user['id'] }}">
+                            </div>
+                            <script>
+                                if ({{ user['agree_newsletter'] }} == 1) {
+                                    $("#remember_{{ user['id'] }}").prop('checked', true);
+                                }
+                                else {
+                                    $("#remember_{{ user['id'] }}").prop('checked', false);
+                                }
+                            </script>
+
+                            <div class="form_users_edit_redactor">
+                                <div>
+                                    <label class="label_users_edit_redactor" for="image_{{ user['id']}}" id="label_image_{{ user['id']}}">Аватар</label>
+                                </div>
+                                <input type="file" class='form_users_edit_redactor_avatar' name='image_{{ user["id"]}}' id="image_{{ user['id']}}" accept="image/*">
+
+                                <div>
+                                    <img src="{{ user['avatar'] }}" alt="У этого пользователя нет фото" id="image_users_{{ user['id'] }}" style="width: 250px; height: 250px; cursor: pointer;">
+                                </div>
+
+                                <script>
+                                    $('#image_users_{{ user["id"] }}').on('click', function () {
+                                        $('#label_image_{{ user["id"]}}').trigger('click');
+
+                                    });
+                                </script>
                             </div>
 
                             <script>
-                                $('#image_users_{{ user["id"] }}').on('click', function () {
-                                    $('#label_image_{{ user["id"]}}').trigger('click');
-
+                                $('#image_{{ user['id']}}').change(function () {
+                                    var input = $(this)[0];
+                                    if (input.files && input.files[0]) {
+                                        if (input.files[0].type.match('image.*')) {
+                                            var reader = new FileReader();
+                                            reader.onload = function (e) {
+                                                $('#image_users_{{ user['id'] }}').attr('src', e.target.result);
+                                            }
+                                            reader.readAsDataURL(input.files[0]);
+                                        } else {
+                                            console.log('ошибка, не изображение');
+                                        }
+                                    } else {
+                                        console.log('хьюстон у нас проблема');
+                                    }
                                 });
                             </script>
+                            <button type='button' onclick="putUser({{ user['id'] }})">Сохранить изменения</button>
+                            <button type='button' onclick="deleteUser({{ user['id'] }})">Удалить</button>
                         </div>
-
-                        <script>
-                            $('#image_{{ user['id']}}').change(function () {
-                                var input = $(this)[0];
-                                if (input.files && input.files[0]) {
-                                    if (input.files[0].type.match('image.*')) {
-                                        var reader = new FileReader();
-                                        reader.onload = function (e) {
-                                            $('#image_users_{{ user['id'] }}').attr('src', e.target.result);
-                                        }
-                                        reader.readAsDataURL(input.files[0]);
-                                    } else {
-                                        console.log('ошибка, не изображение');
-                                    }
-                                } else {
-                                    console.log('хьюстон у нас проблема');
-                                }
-                            });
-                        </script>
                     </form>
-                    <button onclick="putUser({{ user['id'] }})">Сохранить изменения</button>
-                    <button onclick="deleteUser({{ user['id'] }})">Удалить</button>
+
                 </div>
             {% endfor %}
 

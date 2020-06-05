@@ -1,185 +1,32 @@
-body {
-    overflow-y: scroll;
-}
-
-#div_admin_users_show {
-    overflow: hidden;
-}
-
-.form_users_edit_redactor {
-    text-align: center;
-    margin: auto;
-    height: 100%;
-    min-height: 50px;
-}
-
-.form_users_edit_redactor_checkbox {
-    height: 50px;
-    width: 50px;
-}
-
-.form_users_edit_redactor_avatar {
-    opacity: 0;
-    visibility: hidden;
-    position: absolute;
-}
-
-.div_label_form_users_edit_redactor_image {
-    width: 100%;
-    text-align: center;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    font-size: 20px;
-    color: black;
-    background-color: red;
-    border: none;
-    box-shadow: 0 3px 0 rgb(190, 0, 0);
-    outline: none;
-    margin: 0 auto;
-}
-
-.form_users_edit_redactor input[type=text],
- .form_users_edit_redactor select,
-  .form_users_edit_redactor input[type=password],
-  .form_users_edit_redactor input[type=email],
-  .form_users_edit_redactor input[type=date],
-  .form_users_edit_redactor input[type=number]{
-    max-width: 90%;
-    min-width: 90%;
-    height: 50px;
-    font-size: 25px;
-    margin-top: 10px;
-    overflow-y: hidden;
-}
-
-.label_users_edit_redactor {
-    color: white;
-    font-size: 30px;
-}
-
-.div_users_edit {
-    color: black;
-    background: white;
-    height: 80px;
-    width: 100%;
-    overflow: hidden;
-    margin: 0px;
-    margin-top: 10px;
-    cursor: pointer;
-}
-
-#header_admin_users {
-    text-align: center;
-    color: black;
-    font-size: 45px;
-    margin-top: 80px;
-    margin-bottom: 10px;
-}
-
-.p_text_users_nick {
-    font-size: 25px;
-}
-
-.p_text_users_id {
-    font-size: 25px;
-}
-
-.p_text_users_email {
-    font-size: 25px;
-}
-
-#div_admin_users {
-    margin: auto;
-    text-align: center;
-}
-
-.h2_text_users_id {
-    color: black;
-    width: 10%;
-    float: left;
-    text-align: center;
-    margin: 0px;
-}
-
-.h2_text_users_nick {
-    color: black;
-    width: 55%;
-    float: left;
-    text-align: center;
-    margin: 0px;
-}
-
-.h2_text_users_email {
-    color: black;
-    width: 35%;
-    float: left;
-    text-align: center;
-    margin: 0px;
-}
-
-.div_users_edit_title {
-    width: 100%;
-    color: black;
-    height: 80px;
-    font-size: 40px;
-    line-height: 80px;
-    background: #FDB913;
-    overflow: hidden;
-}
-
-.p_text_users_id {
-    width: 10%;
-    float: left;
-    text-align: center;
-}
-
-.p_text_users_nick {
-    width: 55%;
-    float: left;
-    text-align: center;
-}
-
-.p_text_users_email {
-    width: 35%;
-    float: left;
-    text-align: center;
-}
-
-#div_input_search {
-    background: rgb(16, 16, 16);
-}
-
-.div_input_search input {
-    width: 100%;
-    height: 42px;
-    padding-left: 10px;
-    border: 2px solid #7BA7AB;
-    font-size: 25px;
-    outline: none;
-    background: #F9F0DA;
-    color: #9E9C9C;
-}
-
-.div_select_admin_users {
-   margin: 0px;
-   width: 100%;
-   float: left;
-   height: 35px;
-   margin-bottom: 10px;
-}
-
-.div_select_admin_users #select_state {
-   height: 35px;
-   font-size: 23px;
-   width: 100%;
-}
-
-
 .label_users_edit_redactor {
    color: black;
+   font-weight: bold;
 }
 
-input[type=text], input[type=password], input[type=email] {
+.div_select_admin_users  {
+    height: 60px;
+    margin: 0px;
+}
+
+#select_state {
+    margin: 0px;
+}
+
+.div_input_search {
+    height: 60px;
+}
+
+.p_text_users_id, .p_text_users_nick, .p_text_users_email {
+    font-size: 30px;
+    height
+}
+
+#div_admin_users_search_nick, #div_admin_users_search_email {
+     height: 60px;
+     font-size: 30px;
+}
+
+input[type=text], input[type=password], input[type=email], input[type=checkbox] {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -204,7 +51,7 @@ button {
     width: 100%;
     z-index: 5;
     margin-bottom: 10px;
-    font-size: 20px;
+    font-size: 30px;
 }
 
 button:hover {
@@ -273,7 +120,7 @@ span.psw {
     background-color: #fefefe;
     margin: 1% auto 1% auto;
     border: 1px solid #888;
-    width: 50%;
+    width: 95%;
     z-index: 5;
     border-radius: 10px;
 }
@@ -359,6 +206,14 @@ span.psw {
     }
 }
 
+.div_select_admin_users #select_state {
+     height: 60px;
+     background: white;
+     font-size: 30px;
+     margin-bottom: 100px;
+     overflow: hidden;
+}
+
 .modal::-webkit-scrollbar-button {
     background-image:url('');
     background-repeat:no-repeat;
@@ -386,4 +241,14 @@ span.psw {
 .modal::-webkit-scrollbar{
     width: 15px;
     padding: 100px;
+}
+
+#header_admin_users {
+    font-size: 50px;
+    color: white;
+    margin-top: 200px;
+}
+
+.div_users_edit {
+    height: auto;
 }
