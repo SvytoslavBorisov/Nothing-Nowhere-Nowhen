@@ -1,9 +1,10 @@
 body {
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #div_admin_quests_show {
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 .form_question_edit_redactor {
@@ -11,7 +12,15 @@ body {
     margin: auto;
     height: 100%;
     min-height: 50px;
+    width: 100%;
 }
+
+.form_questions_edit_redactor_image {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
 
 .form_question_edit_redactor textarea, .form_question_edit_redactor select{
     width: 90%;
@@ -21,7 +30,23 @@ body {
     font-size: 25px;
     margin-top: 10px;
     overflow-y: hidden;
+}
 
+.form_question_edit_redactor input {
+    width: 90%;
+    max-width: 90%;
+    min-width: 90%;
+    height: 50px;
+    font-size: 25px;
+    margin-top: 10px;
+    overflow-y: hidden;
+    color: white;
+}
+
+.image_quest_form {
+    color: white;
+    margin: 10px;
+    font-size: 20px;
 }
 
 .label_question_edit_redactor {

@@ -1,10 +1,9 @@
 body {
-    overflow: hidden;
+    overflow-y: scroll;
 }
 
 #div_admin_users_show {
-    overflow-y: scroll;
-    height: 65vh;
+    overflow: hidden;
 }
 
 .form_users_edit_redactor {
@@ -14,15 +13,43 @@ body {
     min-height: 50px;
 }
 
-.form_users_edit_redactor input, .form_users_edit_redactor select{
+.form_users_edit_redactor_checkbox {
+    height: 50px;
+    width: 50px;
+}
+
+.form_users_edit_redactor_avatar {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+.div_label_form_users_edit_redactor_image {
     width: 100%;
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    margin: 0 auto;
+}
+
+.form_users_edit_redactor input[type=text],
+ .form_users_edit_redactor select,
+  .form_users_edit_redactor input[type=password],
+  .form_users_edit_redactor input[type=email],
+  .form_users_edit_redactor input[type=date],
+  .form_users_edit_redactor input[type=number]{
     max-width: 90%;
     min-width: 90%;
     height: 50px;
     font-size: 25px;
     margin-top: 10px;
     overflow-y: hidden;
-
 }
 
 .label_users_edit_redactor {

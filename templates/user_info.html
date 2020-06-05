@@ -21,8 +21,10 @@
                 </script>
                 <div id="user_root">
                     <div id="allLinks">
-                        <a id="addQuestionLink" href="/add_question">
-                            <div id="addQuestion">Создать вопрос</div>
+                        <a id="addQuestionLink">
+                            <div id="addQuestion" onclick="document.getElementById('main_div_form_add_quest').style.display='block';
+                                                                        document.body.style.overflow = 'hidden';
+                                                                        document.body.style.marginRight = '15px';" style="cursor: pointer;">Предложить вопрос</div>
                         </a>
                         {% if current_user.state == 'admin' %}
                             <a id="adminLink" href="/adminka">
@@ -110,5 +112,178 @@
             });
         </script>
     {% endif %}
+
+    <script>
+        function addQuest() {
+            var form = document.getElementById('form_add_quest');
+
+            fetch('/check_edit_or_show_quest/1', {
+              method: 'POST',
+              body: new FormData(form)
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((myjson) => {
+                if (typeof myjson['errors'] !== "undefined") {
+                    alert(myjson['errors']);
+                }
+                else {
+                    document.location.href = '/user_info/{{ current_user.nickname }}';
+                }
+                });
+        };
+    </script>
+
+    <div id="main_div_form_add_quest" class="modal" style="overflow-y: scroll; height: 100vh;">
+
+        <form class="modal-content animate" method="post" enctype="multipart/form-data" action="/add_question" id="form_add_quest" style="height: auto;">
+            <div class="div_form_login">
+                {{ formAddQuest.hidden_tag() }}
+
+                <div class="container_cancel">
+                <button type="button" onclick="document.getElementById('main_div_form_add_quest').style.display='none';
+                                                                        document.body.style.overflow = 'scroll';
+                                                document.body.style.marginRight = '0px';" class="cancelbtn">X</button>
+                </div>
+
+                <div class="div_label_and_input">
+                    <div class="register_label" id="register_label_top">{{ formAddQuest.text.label }}</div>
+                    <div class="register_input_div" >{{ formAddQuest.text(class="register_input", style="max-width: 100%; min-width: 100%;") }}</div>
+                    {% for error in formAddQuest.text.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <div class="div_label_and_input">
+                    <div class="register_label">{{ formAddQuest.answer.label }}</div>
+                    <div class="register_input_div">{{ formAddQuest.answer(class="register_input") }}</div>
+                    {% for error in formAddQuest.answer.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+                <div class="div_label_and_input">
+                   <div class="register_label">{{ formAddQuest.comment.label }}</div>
+                    <div class="register_input_div">{{ formAddQuest.comment(class="register_input", style="max-width: 100%; min-width: 100%;") }}</div>
+                    {% for error in formAddQuest.comment.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+                <div class="div_label_and_input">
+                    <div class="register_label">{{ formAddQuest.category.label }}</div>
+                    <div class="register_input_div">{{ formAddQuest.category(class="register_input") }}</div>
+                    {% for error in formAddQuest.category.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <input type="hidden" value="{{ current_user.id }}" name="who_add">
+                <input type="hidden" value="{{ current_user.state }}" name="state_who_add">
+
+                <div class="div_label_and_input">
+                    <label class="register_label" for="photo" style="cursor: pointer;">Добавьте картинку</label>
+                    <input type="file" id="photo" name="file" class="register_input" accept="image/*" style="display: none;">
+                    <div style="width: 100%; margin: auto; text-align: center;">
+                        <img src="" alt="У этого вопроса не будет картинки" id="image_quest" style="max-width: 200px; color: black; margin: auto;">
+                    </div>
+
+                    <div id="delete_image_quest" style="width: 25%; background: red; display: none; margin: auto; font-size: 20px; height: 40px; cursor: pointer; line-height: 40px; text-align:center;">
+                        Удалить фото
+                    </div>
+
+                    <script>
+                        $("#delete_image_quest").on('click', function () {
+                            $('#photo').val();
+                            $('#image_quest').attr('src', '');
+                            document.getElementById('delete_image_quest').style.display='none';
+                        });
+
+                        $('#image_quest').on('click', function () {
+                            $('#photo').trigger('click');
+                        });
+                    </script>
+
+                    <script>
+                        $('#photo').change(function () {
+                            var input = $(this)[0];
+                            if (input.files && input.files[0]) {
+                                if (input.files[0].type.match('image.*')) {
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        $('#image_quest').attr('src', e.target.result);
+                                    }
+                                    reader.readAsDataURL(input.files[0]);
+                                } else {
+                                    console.log('ошибка, не изображение');
+                                }
+                            } else {
+                                console.log('у нас проблема');
+                            }
+                        });
+                    </script>
+                </div>
+
+                <div class="div_label_and_input">
+                    <div class="register_label" id="top_from_photo">{{ formAddQuest.type.label }}</div>
+                    <div class="register_input_div">{{ formAddQuest.type(class="register_input") }}</div>
+                    {% for error in formAddQuest.type.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <div class="div_label_and_input">
+                    <div class="register_label">{{ formAddQuest.complexity.label }}</div>
+                    <div class="register_input_div">{{ formAddQuest.complexity(class="register_input") }}</div>
+                    {% for error in formAddQuest.complexity.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+
+                </div>
+
+                <div class="div_label_and_input">
+                    <div class="register_label">{{ formAddQuest.wrong_answer1.label }}</div>
+                    <div class="register_input_div">{{ formAddQuest.wrong_answer1(class="register_input") }}</div>
+                    {% for error in formAddQuest.wrong_answer1.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <div class="div_label_and_input">
+                    <div class="register_input_div">{{ formAddQuest.wrong_answer2(class="register_input") }}</div>
+                    {% for error in formAddQuest.wrong_answer2.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <div class="div_label_and_input">
+                    <div class="register_input_div">{{ formAddQuest.wrong_answer3(class="register_input") }}</div>
+                    {% for error in formAddQuest.wrong_answer3.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <button type="button" onclick="addQuest()">Отправить на модерацию</button>
+            </div>
+        </form>
+    </div>
+
 
 {% endblock %}

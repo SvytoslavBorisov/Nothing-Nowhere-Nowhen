@@ -11,3 +11,34 @@ html {
     height: 100vh;
     font-family: Arial, sans-serif;
 }
+
+body::-webkit-scrollbar-button {
+    background-image:url('');
+    background-repeat:no-repeat;
+    width:6px;
+    height:0px;
+}
+
+body::-webkit-scrollbar-track {
+    background: white;
+}
+
+body::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 5px;
+    background: #FFC920;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+body::-webkit-resizer{
+    background-image:url('');
+    background-repeat:no-repeat;
+    width:7px;
+    height:0px;
+    border-radius: 15px;
+}
+
+body::-webkit-scrollbar{
+    width: 15px;
+    padding: 100px;
+}

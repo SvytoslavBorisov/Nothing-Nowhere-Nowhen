@@ -154,7 +154,7 @@ p.navigator_p {
     font-size: 60px;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password],select {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -328,4 +328,23 @@ span.psw {
     .cancelbtn {
        width: 100%;
     }
+}
+
+.div_label_and_input label, .register_label {
+    font-size: 35px;
+}
+
+input[type=file] {
+    font-size: 30px;
+}
+
+#check_box_remember {
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    float: left;
+}
+
+#label_remember {
+    float: left;
 }

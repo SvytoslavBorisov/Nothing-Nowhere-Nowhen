@@ -16,12 +16,6 @@
     <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 980px)" href="{{ style_mobile }}">
     <title>{{ title }} | Играть в интеллектуальную бесплатную онлайн игру-викторину Ничто? Нигде? Никогда?</title>
     <meta name="Description" content="Играть в бесплатную онлайн-викторину Ничто? Нигде? Кокогда?"/>
-    <script type="text/javascript">
-        document.ondragstart = noselect;
-        document.onselectstart = noselect;
-        document.oncontextmenu = noselect;
-        function noselect() {return false;}
-    </script>
 </head>
 <body>
     <div id="top_menuDiv">
@@ -52,7 +46,8 @@
                 </a>
             {% else %}
                 <div class="navigator_div" id="navigator_div5" onclick="document.getElementById('main_div_form_login').style.display='block';
-                                                                        document.body.style.overflow = 'hidden'">
+                                                                        document.body.style.overflow = 'hidden';
+                                                                        document.body.style.marginRight = '15px';">
                     <p class="navigator_p" id="user_nickname_p" >Войти</p>
                 </div>
             {% endif %}
@@ -76,8 +71,9 @@
             {{ formLogin.csrf_token }}
 
             <div class="container_cancel">
-                <button type="button" onclick="document.getElementById('main_div_form_login').style.display='none'
-                                                                        document.body.style.overflow = 'scroll'" class="cancelbtn">X</button>
+                <button type="button" onclick="document.getElementById('main_div_form_login').style.display='none';
+                                                                        document.body.style.overflow = 'scroll';
+                                                document.body.style.marginRight = '0px';" class="cancelbtn">X</button>
             </div>
 
             <div>
@@ -110,7 +106,8 @@
 
             <div class="container_cancel">
               <button type="button" onclick="document.getElementById('main_div_form_register').style.display='none';
-                                                                        document.body.style.overflow = 'scroll'" class="cancelbtn">X</button>
+                                                                        document.body.style.overflow = 'scroll';
+                                                document.body.style.marginRight = '0px';" class="cancelbtn">X</button>
           </div>
 
             {{ formRegister.hidden_tag() }}
@@ -209,9 +206,11 @@
             </div>
 
             <div class="div_label_and_input">
-                <label id='label_remember'>
-                    <input type="checkbox" checked="checked" name="remember" id='check_box_remember'> Согласие на рассылку новостей
-                </label>
+                <input type="checkbox" checked="checked" name="remember" id='check_box_remember'>
+                <div>
+                    <label id='label_remember'>Согласие на рассылку новостей</label>
+                </div>
+
             </div>
 
           <div id="div_container2">
@@ -230,7 +229,7 @@
         function checkUser() {
             var form = document.getElementById('form_check_user');
 
-            fetch('/api/123456789/check_user', {
+            fetch('/api/check_user', {
               method: 'POST',
               body: new FormData(form)
             })
@@ -252,7 +251,7 @@
         function addUser() {
             var form = document.getElementById('form_add_user');
 
-            fetch('/api/123456789/add_user', {
+            fetch('/check_edit_or_show_users/1', {
               method: 'POST',
               body: new FormData(form)
             })

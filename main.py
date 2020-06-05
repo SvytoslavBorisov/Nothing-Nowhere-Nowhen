@@ -2,6 +2,7 @@
 from flask import Flask, render_template, redirect, request, make_response, jsonify
 from flask_restful import Api
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+import requests
 
 '''Классы для работы с таблицами Базы Данных(папка data)'''
 from data import db_session
@@ -43,6 +44,9 @@ from email.mime.image import MIMEImage
 from email import encoders
 from platform import python_version
 
+"""Загрузка переменных среды из файла"""
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=config['PATH']['SECRET_DATA'])
 
 '''Запуск приложения FLASK'''
 application = Flask(__name__)
@@ -318,9 +322,17 @@ def user_info(user):
     session = db_session.create_session()   # 3
 
     user = session.query(User).filter(User.nickname == user).first()  # 5
+    categories = session.query(Category).all()  # 4
 
     registerForm = RegisterForm()
     loginForm = LoginForm()
+
+    addQuestForm = AddQuestionForm()
+
+    addQuestForm.category.choices = [(category.name, category.name) for category in categories[1:]]  # 8
+    addQuestForm.category.default = categories[1].name  # 9
+    addQuestForm.type.choices = [('all', 'С вариантами'), ('write','С вводом ответа'), ('all', 'И так и так')]
+    addQuestForm.complexity.choices = [('1', 'Новичок'), ('2', 'Любитель'), ('3',  'Профи')]
 
     param = fill_dict(                      # 6
         title='Профиль',
@@ -332,137 +344,7 @@ def user_info(user):
         procent_win=user.get_procent_win(),
         procent_def=100 - user.get_procent_win())
 
-    return render_template('user_info.html', **param, formLogin=loginForm, formRegister=registerForm)  # 7
-
-
-'''
-    Страница доавления вопроса.
-    1. Проверка была ли начата игра текущим пользователем
-    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
-    3. Подключение к базе данных
-    4. Получение всех категорий
-    5. Создание словаря для работы с переменными в html коде
-        'title'            - Заголовок страницы
-        'style'            - Названия файлов, в которых храняться стили для данной страницы
-        'path_for_style'   - Путь к папке со стилями
-        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
-        'categories'       - Все элементы Category из БД
-    6. Создание формы для добавления пользователя
-    7. Проверка, была ли отправлена форма.
-    8. Добавление в SelectField категорий
-    9. Установка начальной категорией под номером 1
-    10. Создание нового объекта Question 
-    11. Устанавливаем текст вопроса
-    12. Устанавливаем категорию вопроса
-    13. Устанавливаем варианты ответа
-    14. Устанавливаем правильный вариант ответа
-    15. Устанавливаем id человека, который добавил вопрос
-    16. Устанавливаем статус вопроса, если его добавил админ - то он готов к использованию, если обычный пользователь, 
-то вопрос отправиться на модерацию админом
-    17. Устанавливаем комментарий к вопросу
-    18. Устанавливаем картинку к вопросу
-    19. Добавляем вопрос в БД, коммит
-    20. Добавление картинки к вопросу, если она есть
-    21. Возвращаемся в профиль пользователя
-    22. Рендеринг
-'''
-@application.route('/add_question', methods=['POST', 'GET'])
-@login_required
-def add_question():
-    if return_to_game():                        # 1
-        return redirect('/current_game')        # 2
-
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
-
-    if current_user.is_authenticated:
-        session = db_session.create_session()       # 3
-        categories = session.query(Category).all()  # 4
-
-        param = fill_dict(                          # 5
-            title='Добавить вопрос',
-            style=os.listdir(config["PATH"]['to_css'] + 'styleForAddQuestion/'),
-            path_for_style=config["PATH"]['to_css'] + 'styleForAddQuestion/',
-            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAddQuestionMobile.css',
-            categories=categories)
-
-        form = AddQuestionForm()                    # 6
-        form.category.choices = [(category.name, category.name) for category in categories[1:]]  # 8
-        form.category.default = categories[1].name                                               # 9
-        form.type.choices = [('С вариантами', 'С вариантами'), ('С вводом ответа', 'С вводом ответа'), ('И так и так', 'И так и так')]
-        form.complexity.choices = [('Новичок', 'Новичок'), ('Любитель', 'Любитель'), ('Профи', 'Профи')]
-        if form.validate_on_submit():               # 7
-            question = Question()                   # 10
-            question.text = request.form['text']    # 11
-            question.category = session.query(Category).filter(Category.name ==                      # 12
-                                                               request.form['category']).first().id  # 12
-            question.answers = "!@#$%".join([request.form['answer'],               # 13
-                                             request.form['wrong_answer1'],        # 13
-                                             request.form['wrong_answer2'],        # 13
-                                             request.form['wrong_answer3']])       # 13
-            question.right_answer = request.form['answer']             # 14
-            question.who_add = current_user.id                         # 15
-            question.is_promoted = current_user.state == "admin"       # 16
-            question.comment = request.form['comment']                 # 17
-
-            if request.form['type'] == 'И так и так':
-                question.type = 'all'
-            elif request.form['type'] == 'С вводом':
-                question.type = 'write'
-            else:
-                question.type = 'change'
-
-            if request.form['complexity'] == 'Новичок':
-                question.complexity = 1
-            elif request.form['complexity'] == 'Любитель':
-                question.complexity = 2
-            else:
-                question.complexity = 3
-
-            session.add(question)                       # 19
-            session.commit()                            # 19
-
-            if request.files.get('file'):                                                       # 20
-                f = request.files['file']                                                       # 20
-                question.images = config['PATH']['to_img'] + f'questions/{question.id}.png'     # 20
-                with open(question.images[1:], 'wb') as f1:                                     # 20
-                    f1.write(f.read())                                                          # 20
-            else:                                                                               # 20
-                question.images = ' '                                                           # 20
-            session.commit()                                                                    # 20
-
-            return redirect(f'/user_info/{current_user.nickname}')       # 21
-
-        return render_template('add_question.html', form=form, **param, formLogin=loginForm, formRegister=registerForm)  # 22
-    return redirect('/')
-
-
-'''
-    Страница информации о сайте.
-    1. Проверка была ли начата игра текущим пользователем
-    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
-    3. Создание словаря для работы с переменными в html коде
-        'title'            - Заголовок страницы
-        'style'            - Названия файлов, в которых храняться стили для данной страницы
-        'path_for_style'   - Путь к папке со стилями
-        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
-    4. Рендеринг
-'''
-@application.route('/about_site', methods=['POST', 'GET'])
-def about_site():
-    if return_to_game():                      # 1
-        return redirect('/current_game')      # 2
-
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
-
-    param = fill_dict(                        # 3
-        title='О сайте',
-        style=os.listdir(config["PATH"]['to_css'] + 'styleForAboutSite/'),
-        path_for_style=config["PATH"]['to_css'] + 'styleForAboutSite/',
-        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAboutSiteMobile.css')
-
-    return render_template('about_site.html', **param, formLogin=loginForm, formRegister=registerForm)  # 4
+    return render_template('user_info.html', **param, formLogin=loginForm, formRegister=registerForm, formAddQuest=addQuestForm)  # 7
 
 
 '''
@@ -565,7 +447,7 @@ def start_game(id_, comp_, type):  # 3
         return ''' 
                 <script>
                     alert('Для того, чтобы поиграть в викторину, нужно зарегистрироваться.');
-                    document.location.href = "/";
+                    document.location.href = "/categories";
                 </script>
                 '''          # 11
 
@@ -1012,8 +894,8 @@ def send_message():
 
             server = 'smtp.mail.ru'
 
-            user = config['INFO']['email']
-            password = config['INFO']['password']
+            user = os.getenv("EMAIL")
+            password = os.getenv("PASSWORD")
 
             text_message = request.form['text_message']
             text = ''
@@ -1084,7 +966,6 @@ def adminka():
     return redirect('/')
 
 
-
 @application.route('/admin_quests/')
 def admin_quests():
     if current_user.is_authenticated and current_user.state == 'admin':  # 1
@@ -1099,7 +980,7 @@ def admin_quests():
             title='Редактировать вопросы',
             style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminQuests/'),
             path_for_style=config["PATH"]['to_css'] + 'styleForAdminQuests/',
-            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css',
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAdminNewsUsersMobile.css',
             categories=categories[1:],
             quests=[{'id': x.id,
                      'text': x.text,
@@ -1131,7 +1012,7 @@ def admin_users():
             title='Редактировать пользователей',
             style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminUsers/'),
             path_for_style=config["PATH"]['to_css'] + 'styleForAdminUsers/',
-            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css',
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAdminNewsUsersMobile.css',
             users=[{'id': x.id,
                     'nickname': x.nickname,
                     'name': x.name,
@@ -1144,7 +1025,8 @@ def admin_users():
                     'wins': x.wins,
                     'defeats': x.defeats,
                     'link_vk': x.link_vk,
-                    'avatar': x.avatar} for x in users])
+                    'avatar': x.avatar,
+                    'agree_newsletter': x.agree_newsletter} for x in users])
 
         return render_template('admin_users.html', **param, formLogin=loginForm, formRegister=registerForm)   # 3
     return redirect('/')
@@ -1186,9 +1068,35 @@ def admin_add_news():
     return redirect('/')
 
 
+@application.route('/check_edit_or_show_quest/<id_>', methods=['POST', 'PUT', 'GET', 'DELETE'])
+@login_required
+def check_edit_or_show_quest(id_):
+    if current_user.state == 'admin':
+        if request.method == 'PUT':
+            return requests.put(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/quests/' + id_, data=request.form, files=request.files).json()
+        elif request.method == 'DELETE':
+            return requests.delete(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/quests/' + id_).json()
+        elif request.method == 'GET':
+            return requests.get(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/questions').json()
+    if request.method == 'POST':
+         return requests.post(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/add_quest', data=request.form, files=request.files).json()
+
+
+@application.route('/check_edit_or_show_users/<id_>', methods=['POST', 'PUT', 'GET', 'DELETE'])
+def check_edit_or_show_users(id_):
+    if current_user.is_authenticated and current_user.state == 'admin':
+        if request.method == 'PUT':
+            return requests.put(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/put_user/' + id_, data=request.form, files=request.files).json()
+        elif request.method == 'DELETE':
+            return requests.delete(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/delete_user/' + id_).json()
+        elif request.method == 'GET':
+            return requests.get(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/users').json()
+    if request.method == 'POST':
+        return requests.post(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/add_user', data=request.form, files=request.files).json()
+
 ''' 
     Запуск приложения. Сайт открывается на http://127.0.0.1:5000/ 
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 '''
 
-application.run()
+#application.run()

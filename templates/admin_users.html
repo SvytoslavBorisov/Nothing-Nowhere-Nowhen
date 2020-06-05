@@ -43,7 +43,7 @@
         function putUser(id_) {
             var form = document.getElementById('form_' + String(id_));
 
-            let response = fetch('/api/123456789/put_user/' + String(id_), {
+            let response = fetch('/check_edit_or_show_users/' + String(id_), {
               method: 'PUT',
               body: new FormData(form)
             });
@@ -66,7 +66,7 @@
             }
             else {
 
-            let response = fetch('/api/123456789/delete_user/' + String(id_), {
+            let response = fetch('/check_edit_or_show_users/' + String(id_), {
               method: 'DELETE',
               body: new FormData(form)
             });
@@ -85,7 +85,7 @@
         }
 
         function editUser() {
-            fetch('/api/123456789/users')
+            fetch('check_edit_or_show_users/1')
             .then((response) => {
                 return response.json();
             })
@@ -129,21 +129,21 @@
                             <div>
                                 <label for="nick_{{ user['id'] }}" class="label_users_edit_redactor">Никнейм</label>
                             </div>
-                            <input name="nick_{{ user['id'] }}" id="nick_{{ user['id'] }}" value="{{ user['nickname'] }}">
+                            <input type='text' name="nick_{{ user['id'] }}" id="nick_{{ user['id'] }}" value="{{ user['nickname'] }}">
                         </div>
 
                         <div class="form_users_edit_redactor">
                             <div>
                                 <label for="name_{{ user['id'] }}" class="label_users_edit_redactor">Имя</label>
                             </div>
-                            <input name="name_{{ user['id'] }}" id="name_{{ user['id'] }}" value="{{ user['name'] }}">
+                            <input type='text' name="name_{{ user['id'] }}" id="name_{{ user['id'] }}" value="{{ user['name'] }}">
                         </div>
 
                         <div class="form_users_edit_redactor">
                             <div>
                                 <label for="surname_{{ user['id'] }}" class="label_users_edit_redactor">Фамилия</label>
                             </div>
-                            <input name="surname_{{ user['id'] }}" id="surname_{{ user['id'] }}" value="{{ user['surname'] }}">
+                            <input type='text' name="surname_{{ user['id'] }}" id="surname_{{ user['id'] }}" value="{{ user['surname'] }}">
                         </div>
 
                         <div class="form_users_edit_redactor">
@@ -206,11 +206,42 @@
                             <div>
                                 <label for="link_vk_{{ user['id'] }}" class="label_users_edit_redactor">Ссылка на ВК</label>
                             </div>
-                            <input id="link_vk_{{ user['id'] }}" name="link_vk_{{ user['id'] }}" value="{{ user['link_vk'] }}">
+                            <input type='text' id="link_vk_{{ user['id'] }}" name="link_vk_{{ user['id'] }}" value="{{ user['link_vk'] }}">
                         </div>
 
-                        <input type="file" name='image_{{ user["id"]}}' id="image_{{ user['id']}}" accept="image/*">
-                        <img src="{{ user['avatar'] }}" alt="У этого пользователя нет фото" id="image_users_{{ user['id'] }}">
+                        <div class="form_users_edit_redactor">
+                            <div>
+                                <label class="label_users_edit_redactor" for="remember_{{ user['id'] }}">Согласие на рассылку новостей</label>
+                            </div>
+                            <input type="checkbox" class='form_users_edit_redactor_checkbox' checked="checked" name="remember_{{ user['id'] }}" id="remember_{{ user['id'] }}">
+                        </div>
+                        <script>
+                            if ({{ user['agree_newsletter'] }} == 1) {
+                                $("#remember_{{ user['id'] }}").prop('checked', true);
+                            }
+                            else {
+                                $("#remember_{{ user['id'] }}").prop('checked', false);
+                            }
+                        </script>
+
+                        <div class="form_users_edit_redactor">
+                            <div>
+                                <label class="label_users_edit_redactor" for="image_{{ user['id']}}" id="label_image_{{ user['id']}}">Аватар</label>
+                            </div>
+                            <input type="file" class='form_users_edit_redactor_avatar' name='image_{{ user["id"]}}' id="image_{{ user['id']}}" accept="image/*">
+
+                            <div>
+                                <img src="{{ user['avatar'] }}" alt="У этого пользователя нет фото" id="image_users_{{ user['id'] }}" style="width: 250px; height: 250px; cursor: pointer;">
+                            </div>
+
+                            <script>
+                                $('#image_users_{{ user["id"] }}').on('click', function () {
+                                    $('#label_image_{{ user["id"]}}').trigger('click');
+
+                                });
+                            </script>
+                        </div>
+
                         <script>
                             $('#image_{{ user['id']}}').change(function () {
                                 var input = $(this)[0];
@@ -230,7 +261,7 @@
                             });
                         </script>
                     </form>
-                    <button onclick="putUser({{ user['id'] }})">Редактировать</button>
+                    <button onclick="putUser({{ user['id'] }})">Сохранить изменения</button>
                     <button onclick="deleteUser({{ user['id'] }})">Удалить</button>
                 </div>
             {% endfor %}

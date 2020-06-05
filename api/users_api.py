@@ -4,12 +4,21 @@ from data import db_session
 from werkzeug.security import generate_password_hash
 from secondary_functions import get_time
 import os
+import configparser
+
+'''Cоздаём объекта парсера. Читаем конфигурационный файл'''
+config = configparser.ConfigParser()
+config.read("config.ini", encoding='utf-8')
+
+"""Загрузка переменных среды из файла"""
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=config['PATH']['SECRET_DATA'])
 
 
 blueprint = Blueprint('users_api', __name__, template_folder='templates')
 
 '''API для получения одного user'''
-@blueprint.route('/api/123456789/user/<int:user_id>',  methods=['GET'])
+@blueprint.route(f'/api/{ os.getenv("TOKEN") }/user/<int:user_id>',  methods=['GET'])
 def get_one_user(user_id):
     session = db_session.create_session()
     user = session.query(User).get(user_id)
@@ -24,7 +33,7 @@ def get_one_user(user_id):
     )
 
 '''API для проверки введенных данных'''
-@blueprint.route('/api/123456789/check_user',  methods=['POST'])
+@blueprint.route(f'/api/check_user',  methods=['POST'])
 def check_user():
     session = db_session.create_session()
     user = session.query(User).filter(request.form['email'] == User.email).first()
@@ -36,7 +45,7 @@ def check_user():
 
 
 '''API для получения всех user'''
-@blueprint.route('/api/123456789/users',  methods=['GET'])
+@blueprint.route(f'/api/{ os.getenv("TOKEN") }/users',  methods=['GET'])
 def get_users():
     session = db_session.create_session()
     users = session.query(User).all()
@@ -47,32 +56,15 @@ def get_users():
         {
             'users':
                 [item.to_dict(only=('id', 'surname', 'name', 'nickname', 'email', 'password', 'rating', 'start_date', 'avatar',
-                                   'link_vk', 'wins', 'defeats', 'add_questions', 'all_games', 'state'))
+                                   'link_vk', 'wins', 'defeats', 'add_questions', 'all_games', 'state', 'agree_newsletter'))
                  for item in users]
         }
     )
 
 
 '''API для создания user'''
-@blueprint.route('/api/123456789/add_user', methods=['POST'])
+@blueprint.route(f'/api/{ os.getenv("TOKEN") }/add_user', methods=['POST'])
 def create_user():
-
-    if not request.form:
-        return jsonify({'error': 'Empty request'})
-    elif not all(key in request.form for key in
-                 ['surname', 'name', 'nickname', 'email', 'password', 'password_again']):
-        if request.form.get('surname'):
-            return jsonify({'errors': 'Вы не ввели фамилию'})
-        if request.form.get('name'):
-            return jsonify({'errors': 'Вы не ввели имя'})
-        if request.form.get('nickname'):
-            return jsonify({'errors': 'Вы не ввели никнейм'})
-        if request.form.get('email'):
-            return jsonify({'errors': 'Вы не ввели почту'})
-        if request.form.get('password'):
-            return jsonify({'errors': 'Вы не ввели пароль'})
-        if request.form.get('password_again'):
-            return jsonify({'errors': 'Вы не ввели пароль ещё раз'})
 
     session = db_session.create_session()
     try:
@@ -89,7 +81,6 @@ def create_user():
             email=request.form['email'],
             password=generate_password_hash(request.form['password']),
             rating=0,
-            avatar=request.form['photo'] if request.form.get('photo') else '/static/img/users_avatars/no_photo.png',
             link_vk=request.form['link_vk'] if request.form.get('link_vk') else '',
             agree_newsletter=request.form['remember'] == 'on',
             wins=0,
@@ -97,6 +88,18 @@ def create_user():
             state='user',
             add_questions=0,
             all_games=0)
+
+        session.add(user)
+        session.commit()
+
+        file = request.files['photo'].read()
+        if str(file) != "b''":
+            file = request.files['photo'].read()
+            user.avatar = f'/static/img/users_avatars/{user.id}+{get_time()}.png'
+            with open(user.avatar[1:], 'wb') as f1:  # 10
+                f1.write(file)
+        else:
+            user.avatar = '/static/img/users_avatars/ no_photo.png'
     except Exception:
         return jsonify({'errors': 'Неизвестная ошибка'})
     session.add(user)
@@ -105,7 +108,7 @@ def create_user():
 
 
 '''API для удаления user'''
-@blueprint.route('/api/123456789/delete_user/<int:user_id>', methods=['DELETE'])
+@blueprint.route(f'/api/{ os.getenv("TOKEN") }/delete_user/<int:user_id>', methods=['DELETE'])
 def delete_questions(user_id):
     session = db_session.create_session()
     user = session.query(User).get(user_id)
@@ -117,7 +120,7 @@ def delete_questions(user_id):
 
 
 '''API для редактирования user'''
-@blueprint.route('/api/123456789/put_user/<int:user_id>', methods=['PUT'])
+@blueprint.route(f'/api/{ os.getenv("TOKEN") }/put_user/<int:user_id>', methods=['PUT'])
 def put_questions(user_id):
 
     session = db_session.create_session()
@@ -145,13 +148,20 @@ def put_questions(user_id):
             user.defeats = request.form['defeats_' + str(user_id)].strip()
         if request.form.get('select_type_users_edit_redactor_' + str(user_id)):
             user.state = request.form['select_type_users_edit_redactor_' + str(user_id)]
+        if request.form.get('remember_' + str(user_id)):
+            user.agree_newsletter = 1
+        else:
+            user.agree_newsletter = 0
         if request.files.get('image_' + str(user_id)):
-            if user.avatar != '/static/img/users_avatars/no_photo.png':
-                os.remove(user.avatar[1:])
-            user.avatar = f'/static/img/users_avatars/{user.id}+{get_time()}.png'
-            with open(user.avatar[1:], 'wb') as f1:  # 10
-                f1.write(request.files['image_' + str(user_id)].read())
+            file = request.files['image_' + str(user_id)].read()
+            if str(file) != "b''":
+                if user.avatar != '/static/img/users_avatars/no_photo.png':
+                    os.remove(user.avatar[1:])
+                user.avatar = f'/static/img/users_avatars/{user.id}+{get_time()}.png'
+                with open(user.avatar[1:], 'wb') as f1:  # 10
+                    f1.write(file)
         session.commit()
     except Exception as e:
+        print(e)
         return jsonify({'error': 'error type'})
     return jsonify({'success': 'OK'})

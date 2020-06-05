@@ -1,0 +1,22 @@
+#div_admin_users_search_nick, #div_admin_users_search_email {
+    font-size: 35px;
+    height: 60px;
+}
+
+.div_select_admin_users #select_state {
+    font-size: 35px;
+    height: 60px;
+    margin: 0px;
+}
+
+.div_users_edit_title {
+    margin-top: 10px;
+}
+
+.div_select_admin_users {
+    height: 50px;
+}
+
+#header_admin_users {
+    margin-top: 20px;
+}

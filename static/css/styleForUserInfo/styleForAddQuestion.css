@@ -1,4 +1,9 @@
-input[type=text], input[type=password], input[type=email] {
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=checkbox],
+select,
+textarea {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -6,7 +11,31 @@ input[type=text], input[type=password], input[type=email] {
     border: 1px solid #ccc;
     box-sizing: border-box;
     z-index: 5;
-    font-size: 20px;
+    font-size: 23px;
+}
+
+select{
+    width: 100%;
+    padding: 5px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    z-index: 5;
+    font-size: 23px;
+}
+
+.register_label {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+#wrong_answer1, #wrong_answer2, #wrong_answer3 {
+    margin: 0px;
+}
+
+#wrong_answer1 {
+    margin-top:5px;
 }
 
 b {
