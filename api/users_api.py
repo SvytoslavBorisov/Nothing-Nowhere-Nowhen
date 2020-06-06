@@ -82,7 +82,7 @@ def create_user():
             password=generate_password_hash(request.form['password']),
             rating=0,
             link_vk=request.form['link_vk'] if request.form.get('link_vk') else '',
-            agree_newsletter=request.form['remember'] == 'on',
+            agree_newsletter=1 if request.form.get('remember') else 0,
             wins=0,
             defeats=0,
             state='user',
@@ -102,7 +102,6 @@ def create_user():
             user.avatar = '/static/img/users_avatars/ no_photo.png'
     except Exception:
         return jsonify({'errors': 'Неизвестная ошибка'})
-    session.add(user)
     session.commit()
     return jsonify({'success': 'OK'})
 

@@ -1,6 +1,6 @@
 #main_div_send_message {
     background: white;
-    width: 50%;
+    width: 70%;
     margin: 80px auto;
     text-align: center;
 }
@@ -52,6 +52,7 @@
     color: black;
     background: rgb(230, 230, 230);
     width: calc(100% - 20px);
+    max-width: calc(100% - 20px);
     height: 300px;
 }
 

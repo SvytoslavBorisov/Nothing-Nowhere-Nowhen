@@ -7,6 +7,7 @@
         document.oncontextmenu = noselect;
         function noselect() {return false;}
     </script>
+    <link href="https://allfont.ru/allfont.css?fonts=lcdmono-light" rel="stylesheet" type="text/css" />
     <div id="game_div">
             <div id="main_div_info">
                 <h1 id="h1_quest">Вопрос №{{ current_number_quest + 1 }}</h1>
@@ -26,10 +27,10 @@
                         <p class="player_name">{{ user.nickname[:11] }}</p>
                     {% endif %}
                 </div>
-                <h2 id="progress">{{ win }}:{{ defeat }}</h2>
+                <h2 id="progress_h2">{{ win }}:{{ defeat }}</h2>
                 <h2 id="category">Категория: {{ question.orm_with_category.name }}</h2>
                 <div id="div_progressbar">
-                    <progress id="progressbar" value="{{ 60 - current_time }}" max="60">20</progress>
+                    <p id="time_progressbar">0:{{ 60 - current_time }}</p>
                 </div>
                 <script>
                     var time = {{ 60 - current_time }};
@@ -39,7 +40,12 @@
                         if (time < 0) {
                             document.location.href = '/current_game';
                         } else {
-                            document.getElementById('progressbar').value = time;
+                            if (time < 10) {
+                                document.getElementById('time_progressbar').innerText = '0:0' + String(time);
+                            }
+                            else {
+                                document.getElementById('time_progressbar').innerText = '0:' + String(time);
+                            }
                         };
                     };
 
@@ -161,21 +167,24 @@
             <script>
                 if (!( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)))) {
                     $('#main_div_questions').prepend(`<div id="div_progressbar">
-                    <progress id="progressbar1" value="{{ 60 - current_time }}" max="60">20</progress>
-                </div>`);
-                var time1 = {{ 60 - current_time }};
+                    <p id="time_progressbar1">0:{{ 60 - current_time }}</p></div>`);
+                    var time1 = {{ 60 - current_time }};
 
-                function minusSec() {
-                    time1--;
-                    if (time1 < 0) {
-                        document.location.href = '{{ path }}';
-                    } else {
-                        document.getElementById('progressbar1').value = time1;
+                    function minusSec() {
+                        time1--;
+                        if (time1 < 0) {
+                            document.location.href = '{{ path }}';
+                        } else {
+                            if (time1 < 10) {
+                                    document.getElementById('time_progressbar1').innerText = '0:0' + String(time1);
+                                }
+                                else {
+                                    document.getElementById('time_progressbar1').innerText = '0:' + String(time1);
+                                }
+                        };
                     };
-                };
 
-
-                setInterval(minusSec, 1000);
+                    setInterval(minusSec, 1000);
 
                 };
                 </script>

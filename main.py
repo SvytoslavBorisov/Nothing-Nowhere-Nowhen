@@ -331,7 +331,7 @@ def user_info(user):
 
     addQuestForm.category.choices = [(category.name, category.name) for category in categories[1:]]  # 8
     addQuestForm.category.default = categories[1].name  # 9
-    addQuestForm.type.choices = [('all', 'С вариантами'), ('write','С вводом ответа'), ('all', 'И так и так')]
+    addQuestForm.type.choices = [('change', 'С вариантами'), ('write','С вводом ответа'), ('all', 'И так и так')]
     addQuestForm.complexity.choices = [('1', 'Новичок'), ('2', 'Любитель'), ('3',  'Профи')]
 
     param = fill_dict(                      # 6
@@ -659,8 +659,9 @@ def current_game():
                     user.all_games += 1                                                                # 33
                     user.wins += param['defeat'] != 6                                                  # 34
                     user.defeats += param['win'] != 6                                                  # 34
-                    user.rating += 20 * int(this_game_data['complexity']) if param['defeat'] != 6 \
-                        else param['win'] * int(this_game_data['complexity'])                          # 35
+                    add_rating = 20 * int(this_game_data['complexity']) if param['defeat'] != 6 \
+                        else param['win'] * int(this_game_data['complexity'])
+                    user.rating +=  add_rating                                                         # 35
 
                     game_res = Game()                                                                  # 36
                     game_res.category = int(this_game_data['category'])                                # 37
@@ -675,9 +676,9 @@ def current_game():
 
                     save_json(data, 'static/json/games.json')                      # 39
                 if param['defeat'] != 6:                  # 40
-                    return redirect('/end_game/200')      # 40
+                    return redirect('/end_game/200+' + add_rating)      # 40
                 else:                                     # 40
-                    return redirect('/end_game/201')      # 40
+                    return redirect('/end_game/201+' + add_rating)      # 40
     else:
         return redirect('/login')    # 41
 
@@ -694,8 +695,8 @@ def current_game():
         'why'              - Результат игры
     3. Рендеринг
 '''
-@application.route('/end_game/<why>')
-def end_game(why):
+@application.route('/end_game/<why>+<int:add_rating>')
+def end_game(why, add_rating):
     if return_to_game():                  # 1
         return redirect('/current_game')  # 1
 
@@ -707,6 +708,7 @@ def end_game(why):
         style=os.listdir(config["PATH"]['to_css'] + 'styleForEndGame/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForEndGame/',
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForEndGame.css',
+        add_rating=add_rating,
         why='Вы победили! Результат записан' if why == '200' else 'Вы проиграли! Результат записан')
 
     return render_template('end_game.html', **param, formLogin=loginForm, formRegister=registerForm)  # 3

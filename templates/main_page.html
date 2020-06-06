@@ -9,7 +9,7 @@
                         {% for new in news[:3] %}
                             <div class="slider__item">
                                 <div id='slider__item_text'>
-                                    <img src="{{ new[1] }}" alt="" class="image_news_lenta">
+                                    <img src="{{ new[1] }}" alt="" class="image_news_lenta" style="width: 100%; min-height: 300px;">
                                 </div>
                             </div>
                         {% endfor %}
@@ -46,13 +46,16 @@
                             <p class="p_news_caption">{{ new[2] }}</p>
                             {% if new[0][30] %}
                                 <p class="p_news">{{ new[0][:30] }}...</p>
-                                <p class="p_read_next">Нажмите, чтобы читать дельше</p>
+                                <p class="p_read_next">Нажмите, чтобы читать дальше</p>
                             {% else %}
                                 <p class="p_news">{{ new[0][:30] }}</p>
-                                <p class="p_read_next">Нажмите, чтобы читать дельше</p>
+                                <p class="p_read_next">Нажмите, чтобы читать дальше</p>
                             {% endif %}
                         </div>
                     </div>
+                    {% if current_user.state == 'admin' %}
+                        <button type="button" style="background: rgb(230, 0, 0);">Удалить</button>
+                    {% endif %}
                 {% endfor %}
             </div>
             <div id="div_rating">

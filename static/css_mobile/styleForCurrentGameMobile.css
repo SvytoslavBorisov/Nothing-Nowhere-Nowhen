@@ -115,7 +115,7 @@ body {
 }
 
 
-#progress {
+#progress_h2 {
     font-size: 60px;
     text-align: center;
     margin-top: 60px;
@@ -204,6 +204,7 @@ body {
     text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
     padding-bottom: 5px;
 }
+
 #progressbar {
     margin: auto;
     width: calc(100% - 100px);
@@ -301,3 +302,11 @@ body {
     color: white;
     font-size: 35px;
  }
+
+ #time_progressbar1 {
+    font-family: 'LCDMono Light', arial;
+    font-size: 65px;
+    color: #FFC920;
+    margin: 10px;
+    font-weight: bold;
+}

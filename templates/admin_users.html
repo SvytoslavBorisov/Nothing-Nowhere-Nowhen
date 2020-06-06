@@ -74,21 +74,14 @@
             $('#div_users_edit_redactor_' + String(id_)).detach();}
         };
 
-        function showRedactor(id_) {
-            if ($('#div_users_edit_redactor_' + String(id_)).is(":visible")) {
-                alert($('#div_users_edit_redactor_' + String(id_)).width());
-                $('#div_users_edit_redactor_' + String(id_)).hide();
-                alert($('#div_users_edit_redactor_' + String(id_)).width());
-            }
-            else {
-                alert($('#div_users_edit_redactor_' + String(id_)).width());
-                $('#div_users_edit_redactor_' + String(id_)).show();
-                alert($('#div_users_edit_redactor_' + String(id_)).width());
-            }
-        }
+         function clickToUser(id_) {
+            document.getElementById('main_div_form_edit_user_' + id_).style.display='block';
+            document.body.style.overflow = 'hidden';
+            document.body.style.marginRight = '15px';
+        };
 
         function editUser() {
-            fetch('check_edit_or_show_users/1')
+            fetch('/check_edit_or_show_users/1')
             .then((response) => {
                 return response.json();
             })
@@ -96,17 +89,15 @@
 
                 $('.div_users_edit').detach();
 
-                $('.div_users_edit_redactor').hide();
-
                 myjson['users'].forEach(function(item, i, arr) {
                   if (( item['nickname'].indexOf($('#div_admin_users_search_nick').val()) != -1 ) &
                      ( item['email'].indexOf($('#div_admin_users_search_email').val()) != -1 )    &
                      ((item['state'] == $('#select_state').val()) | ($('#select_state').val() == 0))) {
-                    $(`<div class="div_users_edit" id='div_users_edit_` + String(item["id"]) + `' onclick="showRedactor(` + String(item["id"]) + `)">
+                    $(`<div class="div_users_edit" id='div_users_edit_` + String(item["id"]) + `' onclick="clickToUser('` + String(item["id"])  + `')">
                         <p class="p_text_users_id" id="p_text_users_id_` + String(item["id"]) + `">` + item["id"] + `</p>
                         <p class="p_text_users_nick" id="p_text_users_nickname_` + String(item["id"]) + `">` + item["nickname"].slice(0, 37) + `</p>
                         <p class="p_text_users_email" id="p_text_users_email_` + String(item["id"]) + `">` + item["email"] + `</p>
-                       </div>`).insertBefore($("#div_users_edit_redactor_" + String(item["id"])));
+                       </div>`).insertBefore($("#main_div_form_edit_user_" + String(item["id"])));
                   };
 
                 });
@@ -127,18 +118,10 @@
                     <p class="p_text_users_email" id="p_text_users_email_{{ user['id'] }}">{{ user['email'] }}</p>
                 </div>
 
-                <script>
-                    $('#div_users_edit_{{ user["id"] }}').on('click', function () {
-                        document.getElementById('main_div_form_edit_user_{{ user["id"] }}').style.display='block';
-                        document.body.style.overflow = 'hidden';
-                        document.body.style.marginRight = '15px';
-                    });
-
-                </script>
-
                 <div id="main_div_form_edit_user_{{ user['id'] }}" class="modal" style="overflow-y: scroll; height: 100vh; display: none;">
 
                     <form class="modal-content animate" action="/login" method="post" id="form_{{ user['id'] }}" style="height: auto;" enctype="multipart/form-data">
+
                         <div class='div_users_edit_redactor' id='div_users_edit_redactor_{{ user["id"] }}'>
 
                            <div class="container_cancel">
@@ -291,6 +274,17 @@
                             <button type='button' onclick="putUser({{ user['id'] }})">Сохранить изменения</button>
                             <button type='button' onclick="deleteUser({{ user['id'] }})">Удалить</button>
                         </div>
+
+                        <script>
+                            $('#div_users_edit_{{ user["id"] }}').on('click', function () {
+                                document.getElementById('main_div_form_edit_user_{{ user["id"] }}').style.display='block';
+                                document.body.style.overflow = 'hidden';
+                                document.body.style.marginRight = '15px';
+                            });
+
+                        </script>
+
+
                     </form>
 
                 </div>

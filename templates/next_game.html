@@ -20,7 +20,7 @@
                         <p class="player_name">{{ user.nickname[:11] }}</p>
                     {% endif %}
                 </div>
-                <h2 id="progress">{{ win }}:{{ defeat }}</h2>
+                <h2 id="progress_h2">{{ win }}:{{ defeat }}</h2>
                 <h2 id="category">Категория: {{ question.orm_with_category.name }}</h2>
                 {% if result == 'Вы ответили правильно' %}
                     <div id="result_yes">{{ result }}</div>
@@ -53,7 +53,7 @@
                         <p id="answer">Вы не дали ответ</p>
                     {% endif %}
                 </div>
-                {% if question.comment != " " %}
+                {% if question.comment != "" %}
                     <h3 id="h3_comment">Комментарий</h3>
                     <div id="comment">
                         {{ question.comment }}

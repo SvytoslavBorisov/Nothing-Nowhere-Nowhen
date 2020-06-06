@@ -77,6 +77,12 @@
             }
         }
 
+        function clickToQuest(id_) {
+            document.getElementById('div_question_edit_redactor_' + id_).style.display='block';
+            document.body.style.overflowY = 'hidden';
+            document.body.style.marginRight = '15px';
+        };
+
         function editQuest() {
             fetch('/check_edit_or_show_quest/1')
             .then((response) => {
@@ -86,13 +92,11 @@
 
                 $('.div_question_edit').detach();
 
-                $('.div_question_edit_redactor').hide();
-
                 myjson['questions'].forEach(function(item, i, arr) {
                   if (((item['category'] == $('#select_category').val()) | ($('#select_category').val() == 1)) &
                      (item['text'].indexOf($('#div_admin_quests_search').val()) != -1 ) &
                      ((item['complexity'] == $('#select_comp').val()) | ($('#select_comp').val() == 0))) {
-                    $(`<div class="div_question_edit" id='div_question_edit_` + String(item["id"]) + `' onclick="showRedactor(` + String(item["id"]) + `)">
+                    $(`<div class="div_question_edit" id='div_question_edit_` + String(item["id"]) + `' onclick="clickToQuest('` + String(item["id"])  + `')">
                                 <p class="p_text_quest_id" id="p_text_quest_id_` + String(item["id"]) + `">` + item["id"] + `</p>
                                 <p class="p_text_quest_text" id="p_text_quest_text_` + String(item["id"]) + `">` + item["text"].slice(0, 37) + `</p>
                                 <p class="p_text_quest_category" id="p_text_quest_category_` + String(item["id"]) + `">` + item["category"] + `</p>

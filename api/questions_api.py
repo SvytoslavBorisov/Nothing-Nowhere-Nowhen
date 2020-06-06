@@ -65,7 +65,7 @@ def create_questions():
 
     try:
         print(request.form)
-        quest = session.query(Question).filter(Question.text == request.form['text']).first()  # 7
+        quest = session.query(Question).filter(Question.text == request.form['text'], Question.answers == request.form['answer'],).first()  # 7
         if quest:
             return jsonify({'errors': 'Такой вопрос уже есть в базе'})
 

@@ -20,24 +20,51 @@
     margin: auto;
 }
 
-::-webkit-progress-value {
-    background: background: -webkit-linear-gradient(#4c4, #8f8 50%, #4c4);
-                background: -moz-linear-gradient(#4c4, #8f8 50%, #4c4);
-                background: -o-linear-gradient(#4c4, #8f8 50%, #4c4);
-                background: linear-gradient(#4c4, #8f8 50%, #4c4);
-    border-radius: 5px;
-}
-
-::-webkit-progress-bar {
-    border-radius: 5px;
-    background: linear-gradient(to top, rgb(35, 35, 35), rgb(40, 40, 40));}
-
 #progressbar {
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
     width: calc(100% - 100px);
     background: none;
+}
+
+::-webkit-progress-value { // - изменение стилей индикатора
+    background: background: -webkit-linear-gradient(#4c4, #8f8 50%, #4c4); // - для chrome
+                background: -moz-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: -o-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: linear-gradient(#4c4, #8f8 50%, #4c4);
+    border-radius: 5px;
+}
+
+::-webkit-progress-bar { // - изменение стилей фона
+    border-radius: 5px;
+    background: linear-gradient(to top, rgb(35, 35, 35), rgb(40, 40, 40));
+}
+
+::-o-progress-value { // - изменение стилей индикатора
+    background: background: -webkit-linear-gradient(#4c4, #8f8 50%, #4c4); // - для chrome
+                background: -moz-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: -o-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: linear-gradient(#4c4, #8f8 50%, #4c4);
+    border-radius: 5px;
+}
+
+::-o-progress-bar { // - изменение стилей фона
+    border-radius: 5px;
+    background: linear-gradient(to top, rgb(35, 35, 35), rgb(40, 40, 40));
+}
+
+::-moz-progress-value { // - изменение стилей индикатора
+    background: background: -webkit-linear-gradient(#4c4, #8f8 50%, #4c4); // - для chrome
+                background: -moz-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: -o-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: linear-gradient(#4c4, #8f8 50%, #4c4);
+    border-radius: 5px;
+}
+
+::-moz-progress-bar { // - изменение стилей фона
+    border-radius: 5px;
+    background: linear-gradient(to top, rgb(35, 35, 35), rgb(40, 40, 40));
 }
 
 .checkbox {

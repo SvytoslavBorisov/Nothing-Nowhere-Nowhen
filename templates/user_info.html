@@ -129,7 +129,10 @@
                     alert(myjson['errors']);
                 }
                 else {
-                    document.location.href = '/user_info/{{ current_user.nickname }}';
+                    $('#reset_form_add_quest').trigger('click');
+                    $('#image_quest').attr('src', '');
+                    alert('Ваш вопрос отправлен на модерацию!');
+                    /*document.location.href = '/user_info/{{ current_user.nickname }}';*/
                 }
                 });
         };
@@ -281,6 +284,7 @@
                 </div>
 
                 <button type="button" onclick="addQuest()">Отправить на модерацию</button>
+                <button type="reset" style="display: none;" id="reset_form_add_quest"></button>
             </div>
         </form>
     </div>
