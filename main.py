@@ -661,7 +661,7 @@ def current_game():
                     user.defeats += param['win'] != 6                                                  # 34
                     add_rating = 20 * int(this_game_data['complexity']) if param['defeat'] != 6 \
                         else param['win'] * int(this_game_data['complexity'])
-                    user.rating +=  add_rating                                                         # 35
+                    user.rating += add_rating                                                         # 35
 
                     game_res = Game()                                                                  # 36
                     game_res.category = int(this_game_data['category'])                                # 37
@@ -676,9 +676,9 @@ def current_game():
 
                     save_json(data, 'static/json/games.json')                      # 39
                 if param['defeat'] != 6:                  # 40
-                    return redirect('/end_game/200+' + add_rating)      # 40
+                    return redirect('/end_game/200+' + str(add_rating))      # 40
                 else:                                     # 40
-                    return redirect('/end_game/201+' + add_rating)      # 40
+                    return redirect('/end_game/201+' + str(add_rating))      # 40
     else:
         return redirect('/login')    # 41
 
