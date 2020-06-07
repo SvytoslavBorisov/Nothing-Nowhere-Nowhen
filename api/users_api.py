@@ -92,15 +92,17 @@ def create_user():
         session.add(user)
         session.commit()
 
-        file = request.files['photo'].read()
+        file = request.files['file'].read()
         if str(file) != "b''":
-            file = request.files['photo'].read()
+            file = request.files['file'].read()
             user.avatar = f'/static/img/users_avatars/{user.id}+{get_time()}.png'
             with open(user.avatar[1:], 'wb') as f1:  # 10
                 f1.write(file)
         else:
-            user.avatar = '/static/img/users_avatars/ no_photo.png'
-    except Exception:
+            print(1)
+            user.avatar = '/static/img/users_avatars/no_photo.png'
+    except Exception as e:
+        print(e)
         return jsonify({'errors': 'Неизвестная ошибка'})
     session.commit()
     return jsonify({'success': 'OK'})
@@ -112,7 +114,7 @@ def delete_questions(user_id):
     session = db_session.create_session()
     user = session.query(User).get(user_id)
     if not user:
-        return jsonify({'error': 'Not found'})
+        return jsonify({'errors': 'Not found'})
     session.delete(user)
     session.commit()
     return jsonify({'success': 'OK'})
@@ -123,7 +125,18 @@ def delete_questions(user_id):
 def put_questions(user_id):
 
     session = db_session.create_session()
+
+    if request.form.get('email_' + str(user_id)):
+        user = session.query(User).filter(User.email == request.form['email_' + str(user_id)], User.id != user_id).first()
+        if user:
+            return jsonify({'errors': 'Email уже используется'})
+    if request.form.get('nick_' + str(user_id)):
+        user = session.query(User).filter(User.nickname == request.form['nick_' + str(user_id)], User.id != user_id).first()
+        if user:
+            return jsonify({'errors': 'Никнейм уже используется'})
+
     user = session.query(User).get(user_id)
+
     if not user:
         return jsonify({'error': 'Not found'})
     try:
@@ -137,6 +150,8 @@ def put_questions(user_id):
             user.email = request.form['email_' + str(user_id)].strip()
         if request.form.get('link_vk_' + str(user_id)):
             user.link_vk = request.form['link_vk_' + str(user_id)].strip()
+        else:
+            user.link_vk = ''
         if request.form.get('rating_' + str(user_id)):
             user.rating = request.form['rating_' + str(user_id)].strip()
         if request.form.get('all_games_' + str(user_id)):

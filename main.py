@@ -196,6 +196,7 @@ def main_page():
     registerForm = RegisterForm()          # 5
     loginForm = LoginForm()                # 5
 
+    print([new.id for new in session.query(News).all()])
     param = fill_dict(                     # 6
         title='Главная страница',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForMainPage/'),
@@ -311,7 +312,7 @@ def edit_avatar(id_):
                 f1.write(request.files['edit_avatar'].read())
 
             session.commit()
-        return redirect('/user_info/' + current_user.nickname)                              # 8
+        return redirect('/user_info/' + str(current_user.id))                           # 8
     return redirect('/')
 
 
@@ -335,38 +336,40 @@ def edit_avatar(id_):
         'procent_def'      - Процент поражений
     9. Рендеринг
 '''
-@application.route('/user_info/<string:user>')  # 4
-def user_info(user):
+@application.route('/user_info/<int:id_>')  # 4
+def user_info(id_):
     if return_to_game():                    # 1
         return redirect('/current_game')    # 2
 
     session = db_session.create_session()   # 3
 
-    user = session.query(User).filter(User.nickname == user).first()  # 5
-    categories = session.query(Category).all()                        # 5
+    user = session.query(User).filter(User.id == id_).first()  # 5
 
-    registerForm = RegisterForm()                # 6
-    loginForm = LoginForm()                      # 6
+    if user:
+        categories = session.query(Category).all()                        # 5
 
-    addQuestForm = AddQuestionForm()             # 6
+        registerForm = RegisterForm()                # 6
+        loginForm = LoginForm()                      # 6
 
-    addQuestForm.category.choices = [(category.id, category.name) for category in categories[1:]]  # 7
-    addQuestForm.category.default = categories[1].name                                               # 7
-    addQuestForm.type.choices = [('change', 'С вариантами'), ('write','С вводом ответа'), ('all', 'И так и так')]
-    addQuestForm.complexity.choices = [('1', 'Новичок'), ('2', 'Любитель'), ('3',  'Профи')]
+        addQuestForm = AddQuestionForm()             # 6
 
-    param = fill_dict(                           # 8
-        title='Профиль',
-        style=os.listdir(config["PATH"]['to_css'] + 'styleForUserInfo/'),
-        path_for_style=config["PATH"]['to_css'] + 'styleForUserInfo/',
-        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForUserInfoMobile.css',
-        user=user,
-        games=user.games,
-        procent_win=user.get_procent_win(),
-        procent_def=100 - user.get_procent_win())
+        addQuestForm.category.choices = [(category.id, category.name) for category in categories[1:]]  # 7
+        addQuestForm.category.default = categories[1].name                                               # 7
+        addQuestForm.type.choices = [('change', 'С вариантами'), ('write','С вводом ответа'), ('all', 'И так и так')]
+        addQuestForm.complexity.choices = [('1', 'Новичок'), ('2', 'Любитель'), ('3',  'Профи')]
 
-    return render_template('user_info.html', **param, formLogin=loginForm, formRegister=registerForm, formAddQuest=addQuestForm)  # 9
+        param = fill_dict(                           # 8
+            title='Профиль',
+            style=os.listdir(config["PATH"]['to_css'] + 'styleForUserInfo/'),
+            path_for_style=config["PATH"]['to_css'] + 'styleForUserInfo/',
+            style_mobile=config["PATH"]['to_css_mobile'] + 'styleForUserInfoMobile.css',
+            user=user,
+            games=user.games,
+            procent_win=user.get_procent_win(),
+            procent_def=100 - user.get_procent_win())
 
+        return render_template('user_info.html', **param, formLogin=loginForm, formRegister=registerForm, formAddQuest=addQuestForm)  # 9
+    return redirect('/')
 
 '''
     Страница информации о сайте.
@@ -677,8 +680,8 @@ def current_game():
                     user.all_games += 1                                                                # 33
                     user.wins += param['defeat'] != 6                                                  # 34
                     user.defeats += param['win'] != 6                                                  # 34
-                    add_rating = 20 * int(this_game_data['complexity']) + 40 if param['defeat'] != 6 \
-                        else param['win'] * int(this_game_data['complexity'])
+                    add_rating = 20 * int(this_game_data['complexity']) * 10 + 40 if param['defeat'] != 6 \
+                        else param['win'] * int(this_game_data['complexity']) * 10
                     user.rating += add_rating                                                         # 35
 
                     game_res = Game()                                                                  # 36
@@ -771,13 +774,14 @@ def check_quests():
 
         session = db_session.create_session()       # 4
 
+        categories = session.query(Category).all()
+
         if request.method == 'POST':    # 5
             if request.form.get('submit'):                                                      # 6
                 question = session.query(Question).filter(Question.is_promoted == 0).first()    # 7
 
                 question.text = request.form['text']                                            # 8
-                question.category = session.query(Category).filter(Category.name ==
-                                                                   request.form['category']).first().id  # 8
+                question.category = session.query(Category).filter(Category.id == request.form['category']).first().id # 8
                 question.answers = "!@#$%".join(
                     [request.form['answer'], request.form['wrong_answer1'], request.form['wrong_answer2'],
                      request.form['wrong_answer3']])            # 8
@@ -805,10 +809,14 @@ def check_quests():
         if param['quest']:                                                                   # 12
             temp = param['quest'].answers.split('!@#$%')                                     # 12
             form.text.default = param['quest'].text                                          # 12
-            form.answer.default = temp[0]                                                    # 12
+            form.category.choices = [(category.id, category.name) for category in categories[1:]]
+            form.category.default = param['quest'].orm_with_category.name
+            form.type.choices = [('change', 'С вариантами'), ('write', 'С вводом ответа'), ('all', 'И так и так')]
+            form.comp.choices = [('1', 'Новичок'), ('2', 'Любитель'), ('3', 'Профи')]
+            form.answer.default = param['quest'].right_answer                                # 12
             form.comment.default = param['quest'].comment                                    # 12
-            form.category.choices = [(x.name, x.name) for x in param['categories'][1:]]      # 12
-            form.category.default = param['quest'].orm_with_category.name                    # 12
+            form.type.default = config['TYPE_QUESTION'][str(param['quest'].type)]
+            form.comp.default = config['COMP_QUESTION'][str(param['quest'].complexity)]
             form.wrong_answer1.default = temp[1]                                             # 12
             form.wrong_answer2.default = temp[2]                                             # 12
             form.wrong_answer3.default = temp[3]                                             # 12
@@ -821,7 +829,7 @@ def check_quests():
                 </script>
                 '''        # 14
     else:
-        return redirect('/login')      # 15
+        return redirect('/')      # 15
 
 
 '''
@@ -941,13 +949,16 @@ def send_message():
                 msg.attach(part_text)              # 14
                 msg.attach(part_html)              # 14
 
-                mail.sendmail(sender,  recipient[1], msg.as_string())  # 15
+                try:
+                    mail.sendmail(sender,  recipient[1], msg.as_string())  # 15
+                except Exception as e:
+                    print(e)
             mail.quit()                                                # 16
             return redirect('/adminka')         # 17
 
         return render_template('send_message.html', **param)  # 18
     else:
-        return redirect('/login')
+        return redirect('/')
 
 
 '''
@@ -1133,7 +1144,6 @@ def check_edit_or_show_quest(id_):
     Вызов этих страниц происходит в коде html (js)
 '''
 @application.route('/check_edit_or_show_users/<id_>', methods=['POST', 'PUT', 'GET', 'DELETE'])
-@login_required
 def check_edit_or_show_users(id_):
     if current_user.is_authenticated and current_user.state == 'admin':
         if request.method == 'PUT':
@@ -1163,4 +1173,4 @@ def check_edit_news(id_):
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 '''
 
-#application.run()
+application.run()

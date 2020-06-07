@@ -6,7 +6,7 @@
             <div id="div_lenta_news">
                 <div class="slider">
                     <div class="slider__wrapper">
-                        {% for new in news[:3] %}
+                        {% for new in news[:2] %}
                             <div class="slider__item">
                                 <div id='slider__item_text'>
                                     <img src="{{ new[1] }}" alt="" class="image_news_lenta" style="width: 100%; min-height: 300px;">
@@ -17,7 +17,7 @@
                     <a class="slider__control slider__control_left" href="#" role="button"></a>
                     <a class="slider__control slider__control_right slider__control_show" href="#" role="button"></a>
                 </div>
-                {% for new in news[:3] %}
+                {% for new in news[:2] %}
                     <div class="slider_news" id="slider_news_{{ loop.index }}">
                         <h1 class="slider_news_caption">{{ new[2] }}</h1>
                         <hr class="hr_slider_news">
@@ -39,7 +39,7 @@
                         document.location.href = "/news/" + id_;
                     };
                 </script>
-                {% for new in news[-1:-1+5:-1] %}
+                {% for new in news[-1:1:-1] %}
                     <div class="news__item" id='news__item_{{ new[3] }}' onclick="ToNew({{ new[3] }})">
                         <img src="{{ new[1] }}" alt="" class="img_news">
                         <div class="div_text_news">
@@ -83,9 +83,9 @@
                         <th>Процент побед</th>
                         <th>Рейтинг</th>
                     </tr>
-                    {% for user in users[:10] %}
+                    {% for user in users[:5] %}
 
-                    <tr class="user_div" onclick="toUser('{{ user.nickname }}')">
+                    <tr class="user_div" onclick="toUser('{{ user.id }}')">
                         <td class="first_td_left">{{ loop.index }}</td>
                         <td>{{ user.nickname }}</td>
                         <td>{{ user.get_procent_win() }}%</td>

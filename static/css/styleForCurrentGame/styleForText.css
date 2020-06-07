@@ -1,3 +1,8 @@
+@font-face {
+    font-family: lcdmono;
+    src: url(/static/fonts/TIME/lcdmono-ultra.ttf);
+   }
+
 #h1_quest {
     color: #FFF;
     margin: 0px;
@@ -88,7 +93,7 @@
 }
 
 #time_progressbar {
-    font-family: 'LCDMono Light', arial;
+    font-family: lcdmono, arial;
     font-size: 45px;
     color: #FCC150;
     font-weight: bold;

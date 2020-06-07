@@ -34,7 +34,7 @@
                 <p class="navigator_p">Рейтинг</p>
             </div>
             {% if current_user.is_authenticated %}
-                <a class="navbar-brand" href="/user_info/{{ current_user.nickname }}">
+                <a class="navbar-brand" href="/user_info/{{ current_user.id }}">
                     <div class="navigator_div" id="navigator_div4">
                         <img src="{{ current_user.avatar }}" alt="" width="40px" height="40px" id="user_avatar_navigator">
                         {% if current_user.nickname[6] %}
@@ -53,7 +53,7 @@
             {% endif %}
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+    <script src="/static/scripts/jquery.js"></script>
     <script src="/static/scripts/scriptForBase.js"></script>
     <div id="main">
         <div id="content">
@@ -281,20 +281,5 @@
             };};
     </script>
 
-    <!-- Yandex.Metrika counter -->
-            <script type="text/javascript" >
-               (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-               m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-               (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-               ym(62510245, "init", {
-                    clickmap:true,
-                    trackLinks:true,
-                    accurateTrackBounce:true,
-                    webvisor:true
-               });
-            </script>
-        <noscript><div><img src="https://mc.yandex.ru/watch/62510245" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
 </body>
 </html>

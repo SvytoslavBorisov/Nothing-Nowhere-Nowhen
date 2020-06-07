@@ -132,7 +132,7 @@
                     $('#reset_form_add_quest').trigger('click');
                     $('#image_quest').attr('src', '');
                     alert('Ваш вопрос отправлен на модерацию!');
-                    /*document.location.href = '/user_info/{{ current_user.nickname }}';*/
+                    /*document.location.href = '/user_info/{{ current_user.id }}';*/
                 }
                 });
         };
@@ -192,7 +192,7 @@
                 <input type="hidden" value="{{ current_user.state }}" name="state_who_add">
 
                 <div class="div_label_and_input">
-                    <label class="register_label" for="photo" style="cursor: pointer;">Добавьте картинку</label>
+                    <label class="register_label" for="photo" style="cursor: pointer;">Добавьте картинку (4:5)</label>
                     <input type="file" id="photo" name="file" class="register_input" accept="image/*" style="display: none;">
                     <div style="width: 100%; margin: auto; text-align: center;">
                         <img src="" alt="У этого вопроса не будет картинки" id="image_quest" style="max-width: 200px; color: black; margin: auto;">

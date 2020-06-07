@@ -13,9 +13,9 @@
                 <th>Процент побед</th>
                 <th>Рейтинг</th>
             </tr>
-            {% for user in users[:10] %}
+            {% for user in users[:50] %}
 
-            <tr class="user_div" onclick="toUser('{{ user.nickname }}')">
+            <tr class="user_div" onclick="toUser('{{ user.id }}')">
                 <td class="first_td_left">{{ loop.index }}</td>
                 <td>{{ user.nickname }}</td>
                 <td>{{ user.get_procent_win() }}%</td>

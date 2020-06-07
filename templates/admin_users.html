@@ -42,36 +42,29 @@
         function putUser(id_) {
             var form = document.getElementById('form_' + String(id_));
 
-            let response = fetch('/check_edit_or_show_users/' + String(id_), {
+            fetch('/check_edit_or_show_users/' + String(id_), {
               method: 'PUT',
               body: new FormData(form)
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((myjson) => {
+                if (typeof myjson['errors'] !== "undefined") {
+                    alert(myjson['errors']);
+                }
+                else {
+                    $('#post_form_register').trigger('click');
+                }
             });
 
             if (({{ current_user.id }} == id_) & ($('#select_type_users_edit_redactor_' + String(id_)).val() != 'admin')) {
                 alert('Вы лишили себя прав администратора!');
-                document.location.href = "/user_info/" + '{{ current_user.nickname }}';
+                document.location.href = "/user_info/" + '{{ current_user.id }}';
             };
 
             document.getElementById('p_text_users_nick_' + String(id_)).innerHTML = $('#nick_' + String(id_)).val();
             document.getElementById('p_text_users_email_' + String(id_)).innerHTML = $('#email_' + String(id_)).val();
-        };
-
-        function deleteUser(id_) {
-            var form = document.getElementById('form_' + String(id_));
-
-            if ({{ current_user.id }} == id_) {
-                alert('Нельзя удалить себя!!');
-                document.location.href = "/adminka";
-            }
-            else {
-
-            let response = fetch('/check_edit_or_show_users/' + String(id_), {
-              method: 'DELETE',
-              body: new FormData(form)
-            });
-
-            $('#div_users_edit_' + String(id_)).detach();
-            $('#div_users_edit_redactor_' + String(id_)).detach();}
         };
 
          function clickToUser(id_) {
@@ -272,7 +265,6 @@
                                 });
                             </script>
                             <button type='button' onclick="putUser({{ user['id'] }})">Сохранить изменения</button>
-                            <button type='button' onclick="deleteUser({{ user['id'] }})">Удалить</button>
                         </div>
 
                         <script>
