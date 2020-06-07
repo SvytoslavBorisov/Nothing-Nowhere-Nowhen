@@ -54,16 +54,16 @@
 }
 
 #main_div_news .input_admin_add_news {
-    max-width: 90%;
+    max-width: 100%;
+    width: 100%;
     box-sizing: inherit;
     background: white;
     margin: auto;
     padding: 12px 0px;
     border: 0px;
-    font-size: 15px;
+    font-size: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
-    margin-left: 10%;
-    margin-right: 10%;
     text-indent: 35px;
 }
+

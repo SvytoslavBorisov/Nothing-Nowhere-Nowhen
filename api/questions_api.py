@@ -60,11 +60,8 @@ def get_questions():
 '''API для создания вопроса'''
 @blueprint.route(f'/api/{ os.getenv("TOKEN") }/add_quest', methods=['POST'])
 def create_questions():
-
     session = db_session.create_session()
-
     try:
-        print(request.form)
         quest = session.query(Question).filter(Question.text == request.form['text'], Question.answers == request.form['answer'],).first()  # 7
         if quest:
             return jsonify({'errors': 'Такой вопрос уже есть в базе'})
@@ -78,7 +75,7 @@ def create_questions():
                      request.form['wrong_answer2'],
                      request.form['wrong_answer3']]),
             who_add=request.form['who_add'],
-            category=session.query(Category).filter(Category.name == request.form['category']).first().id,
+            category=request.form['category'],
             type=request.form['type'],
             complexity=request.form['complexity'],
             is_promoted=1 if request.form['state_who_add'] == 'admin' else 0)
@@ -124,38 +121,30 @@ def delete_questions(quest_id):
 @blueprint.route(f'/api/{ os.getenv("TOKEN") }/quests/<int:quest_id>', methods=['PUT'])
 def put_questions(quest_id):
     session = db_session.create_session()
-    print(1)
     quest = session.query(Question).get(quest_id)
     if not quest:
         return jsonify({'error': 'Not found'})
     try:
         if request.form.get('text_' + str(quest_id)):
-            print(1)
             quest.text = request.form['text_' + str(quest_id)].strip()
         if request.form.get('comment_' + str(quest_id)):
-
             quest.comment = request.form['comment_' + str(quest_id)].strip()
         if request.form.get('select_category_question_edit_redactor_' + str(quest_id)):
-            print(3)
             quest.category = session.query(Category).filter(
                 Category.name == request.form['select_category_question_edit_redactor_' + str(quest_id)]).first().id
         if request.form.get('answer_' + str(quest_id)) and \
                 request.form.get('wrong_answer1_' + str(quest_id)) \
                 and request.form.get('wrong_answer2_' + str(quest_id))\
                 and request.form.get('wrong_answer3_' + str(quest_id)):
-            print(4)
             quest.answers = '!@#$%'.join([request.form['answer_' + str(quest_id)].strip().split('!@#$%')[0],
                                           request.form['wrong_answer1_' + str(quest_id)].strip(),
                                           request.form['wrong_answer2_' + str(quest_id)].strip(),
                                           request.form['wrong_answer3_' + str(quest_id)].strip()])
         if request.form.get('answer_' + str(quest_id)):
-            print(5)
             quest.right_answer = request.form['answer_' + str(quest_id)].strip()
         if request.form.get('select_type_question_edit_redactor_' + str(quest_id)):
-            print(6)
             quest.type = request.form['select_type_question_edit_redactor_' + str(quest_id)]
         if request.form.get('select_comp_question_edit_redactor_' + str(quest_id)):
-            print(7)
             quest.complexity = request.form['select_comp_question_edit_redactor_' + str(quest_id)]
         if request.files.get('image_' + str(quest_id)):
             file = request.files['image_' + str(quest_id)].read()
@@ -168,7 +157,6 @@ def put_questions(quest_id):
             elif request.form.get('hidden_image_' + str(quest_id)):
                 if request.form['hidden_image_' + str(quest_id)] == 'no_image':
                     quest.images = ' '
-
         session.commit()
     except Exception as e:
         print(e)

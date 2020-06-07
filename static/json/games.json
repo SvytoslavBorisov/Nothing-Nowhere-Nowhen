@@ -5,32 +5,6 @@
         "3": null,
         "4": null,
         "5": null,
-        "6": {
-            "questions": [
-                1222,
-                1257,
-                1256,
-                1261,
-                1254,
-                1252,
-                65,
-                1255,
-                1253,
-                1259,
-                1260
-            ],
-            "wins": 5,
-            "category": 4,
-            "defeats": 1,
-            "current_question": 6,
-            "time": -2208988800,
-            "quest_or_next": "quest",
-            "last_result": false,
-            "type": "change",
-            "complexity": 3,
-            "last_answer": " ",
-            "delete": [],
-            "create_map": "yes"
-        }
+        "6": null
     }
 }

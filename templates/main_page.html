@@ -40,7 +40,7 @@
                     };
                 </script>
                 {% for new in news[-1:-1+5:-1] %}
-                    <div class="news__item" onclick="ToNew({{ new[3] }})">
+                    <div class="news__item" id='news__item_{{ new[3] }}' onclick="ToNew({{ new[3] }})">
                         <img src="{{ new[1] }}" alt="" class="img_news">
                         <div class="div_text_news">
                             <p class="p_news_caption">{{ new[2] }}</p>
@@ -54,7 +54,18 @@
                         </div>
                     </div>
                     {% if current_user.state == 'admin' %}
-                        <button type="button" style="background: rgb(230, 0, 0);">Удалить</button>
+                        <button type="button" onclick="deleteNew({{ new[3] }})" id='news__item__delete_button{{ new[3] }}' style="background: rgb(230, 0, 0);">Удалить</button>
+                        <script>
+                            function deleteNew(id_) {
+
+                                let response = fetch('/check_edit_news/' + String(id_), {
+                                  method: 'DELETE'
+                                });
+
+                                $('#news__item_' + String(id_)).detach();
+                                $('#news__item__delete_button' + String(id_)).detach();
+                            };
+                        </script>
                     {% endif %}
                 {% endfor %}
             </div>

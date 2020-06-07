@@ -62,7 +62,8 @@
         </div>
     </div>
 
-    <div id="main_div_form_login" class="modal" style="overflow-y: scroll; height: 100vh;">
+    {% if not current_user.is_authenticated %}
+        <div id="main_div_form_login" class="modal" style="overflow-y: scroll; height: 100vh;">
 
       <form class="modal-content animate" action="/login" method="post" id="form_check_user" style="height: auto;">
 
@@ -123,7 +124,7 @@
             </div>
             <div class="div_label_and_input">
                 <div class="register_label">{{ formRegister.surname.label }}</div>
-                <div class="register_input_div">{{ formRegister.surname(class="register_input") }}</div>
+                <div class="register_input_div">{{ formRegister.surname(class="register_input", maxlength="50") }}</div>
                 {% for error in formRegister.surname.errors %}
                     <p class="alert alert-danger" role="alert">
                         {{ error }}
@@ -132,7 +133,7 @@
             </div>
             <div class="div_label_and_input">
                <div class="register_label">{{ formRegister.name.label }}</div>
-                <div class="register_input_div">{{ formRegister.name(class="register_input") }}</div>
+                <div class="register_input_div">{{ formRegister.name(class="register_input", maxlength="50") }}</div>
                 {% for error in formRegister.name.errors %}
                     <p class="alert alert-danger" role="alert">
                         {{ error }}
@@ -141,7 +142,7 @@
             </div>
             <div class="div_label_and_input">
                 <div class="register_label">{{ formRegister.nickname.label }}</div>
-                <div class="register_input_div">{{ formRegister.nickname(class="register_input") }}</div>
+                <div class="register_input_div">{{ formRegister.nickname(class="register_input", maxlength="50") }}</div>
                 {% for error in formRegister.nickname.errors %}
                     <p class="alert alert-danger" role="alert">
                         {{ error }}
@@ -207,7 +208,7 @@
 
             <div class="div_label_and_input">
                 <input type="checkbox" checked="checked" name="remember" id='check_box_remember'>
-                <div>
+                <div id="div_label_for_remembers">
                     <label id='label_remember'>Согласие на рассылку новостей</label>
                 </div>
 
@@ -219,7 +220,7 @@
           </div>
 
         </div>
-          <button id="post_form_register" style="display: none;">skf[jgn[oer</button>
+          <button id="post_form_register" style="display: none;"></button>
       </form>
 
     </div>
@@ -270,6 +271,9 @@
 
         };
 
+    </script>
+    {% endif %}
+    <script>
         window.onresize = function () {
             if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
                 document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';

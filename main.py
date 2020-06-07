@@ -1,6 +1,5 @@
 '''Библиотека FLASK'''
 from flask import Flask, render_template, redirect, request, make_response, jsonify
-from flask_restful import Api
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 import requests
 
@@ -16,7 +15,7 @@ from data.news import News
 from random import choice, shuffle
 
 '''Классы для работы с файлами json, временем, словарями'''
-from secondary_functions import open_json, save_json, get_time, format_date, fill_dict
+from secondary_functions import open_json, save_json, get_time, fill_dict
 
 '''Библиотека для работы с ОС'''
 import os
@@ -33,15 +32,12 @@ from forms.add_question import AddQuestionForm
 from forms.check_quests import CheckQuestionForm
 
 '''Классы для работы с собственным API(папка api)'''
-from api import questions_api, users_api
+from api import questions_api, users_api, news_api
 
 '''Библиотеки для реализации отправки писем'''
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email.mime.image import MIMEImage
-from email import encoders
 from platform import python_version
 
 """Загрузка переменных среды из файла"""
@@ -59,6 +55,7 @@ application.config.update(
 '''Регистрация API в приложении'''
 application.register_blueprint(questions_api.blueprint)
 application.register_blueprint(users_api.blueprint)
+application.register_blueprint(news_api.blueprint)
 
 '''Соединение с Базой Данных'''
 db_session.global_init("db/baseDate.sqlite")
@@ -108,17 +105,47 @@ def not_found(error):
 
 
 '''
+    Страница выбора игры.
+    1. Проверка была ли начата игра текущим пользователем, 
+если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
+    2. Cоздание форм регистрации и авторизации
+    3. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилямии
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+    4. Рендеринг
+'''
+@application.route('/change_play/')
+def change_play():
+    if return_to_game():                  # 1
+        return redirect('/current_game')  # 1
+
+    registerForm = RegisterForm()         # 2
+    loginForm = LoginForm()               # 2
+
+    param = fill_dict(  # 3
+        title='Выбор игры',
+        style=os.listdir(config["PATH"]['to_css'] + 'styleForChangePlay/'),
+        path_for_style=config["PATH"]['to_css'] + 'styleForChangePlay/',
+        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css')
+
+    return render_template('change_play.html', **param, formLogin=loginForm, formRegister=registerForm)   # 4
+
+
+'''
     Страница для выбора категории для следующей игры.
     1. Проверка была ли начата игра текущим пользователем
     2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
     3. Подключение к базе данных
-    4. Создание словаря для работы с переменными в html коде
+    4. Создание форм для регистрации и авторизации пользователя
+    5. Создание словаря для работы с переменными в html коде
         'title'            - Заголовок страницы
         'style'            - Названия файлов, в которых храняться стили для данной страницы
         'path_for_style'   - Путь к папке со стилями
         'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
         'categories'       - Все элементы Category из БД
-    5. Рендеринг
+    6. Рендеринг
 '''
 @application.route('/categories')
 def categories():
@@ -127,15 +154,16 @@ def categories():
 
     session = db_session.create_session()         # 3
 
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
+    registerForm = RegisterForm()                 # 4
+    loginForm = LoginForm()                       # 4
 
-    param = fill_dict(                            # 4
+    param = fill_dict(                            # 5
         title='Категории',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForCategories/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForCategories/',
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForCategoriesMobile.css',
         categories=session.query(Category).all())
+
     return render_template('categories.html', **param, formLogin=loginForm, formRegister=registerForm)  # 5
 
 
@@ -145,14 +173,15 @@ def categories():
     2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
     3. Подключение к базе данных
     4. Получение всех пользователей сайта. Сортировка по рейтингу
-    5. Создание словаря для работы с переменными в html коде
+    5. Создание форм для регистрации и авторизации пользователя
+    6. Создание словаря для работы с переменными в html коде
         'title'            - Заголовок страницы
         'style'            - Названия файлов, в которых храняться стили для данной страницы
         'path_for_style'   - Путь к папке со стилями
         'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
-        'news'             - Все элементы News из БД [ Текст новости, картинка, заголовок, id]
+        'news'             - Все элементы News из БД [ Второй заголовок новости, текст новости, картинка, заголовок, id]
         'users'            - Все пользователи, отсортированные по рейтингу
-    6. Рендеринг
+    7. Рендеринг
 '''
 @application.route('/')
 def main_page():
@@ -164,10 +193,10 @@ def main_page():
     all_users = session.query(User).all()                                                              # 4
     all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))  # 4
 
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
+    registerForm = RegisterForm()          # 5
+    loginForm = LoginForm()                # 5
 
-    param = fill_dict(                     # 5
+    param = fill_dict(                     # 6
         title='Главная страница',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForMainPage/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForMainPage/',
@@ -175,7 +204,7 @@ def main_page():
         news=[[new.text.split('!@#$%')[1], new.image, new.caption, new.id] for new in session.query(News).all()],
         users=all_users)
 
-    return render_template('main_page.html', **param, formLogin=loginForm, formRegister=registerForm)  # 6
+    return render_template('main_page.html', **param, formLogin=loginForm, formRegister=registerForm)  # 7
 
 
 '''
@@ -184,13 +213,14 @@ def main_page():
     2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
     3. Подключение к базе данных
     4. Получение всех пользователей сайта. Сортировка по рейтингу
-    5. Создание словаря для работы с переменными в html коде
+    5. Создание форм для регистрации и авторизации пользователя
+    6. Создание словаря для работы с переменными в html коде
         'title'            - Заголовок страницы
         'style'            - Названия файлов, в которых храняться стили для данной страницы
         'path_for_style'   - Путь к папке со стилями
         'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
         'users'            - Все пользователи, отсортированные по рейтингу
-    6. Рендеринг
+    7. Рендеринг
 '''
 @application.route('/rating')
 def rating():
@@ -202,64 +232,44 @@ def rating():
     all_users = session.query(User).all()                                                              # 4
     all_users.sort(key=lambda x: (-x.rating, x.surname.lower() + x.name.lower(), x.nickname.lower()))  # 4
 
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
+    registerForm = RegisterForm()          # 5
+    loginForm = LoginForm()                # 5
 
-    param = fill_dict(                     # 5
+    param = fill_dict(                     # 6
         title='Главная страница',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForRating/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForRating/',
         style_mobile=config["PATH"]['to_css_mobile'] + 'styleForRatingMobile.css',
         users=all_users)
 
-    return render_template('rating.html', **param, formLogin=loginForm, formRegister=registerForm)  # 6
+    return render_template('rating.html', **param, formLogin=loginForm, formRegister=registerForm)  # 7
 
 
 '''
     Авторизации на сайте.
-    1. Проверка была ли начата игра текущим пользователем
-    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
-    3. Подключение к базе данных
-    4. Если выполнен POST запрос
-    5. Проверяем правильно ли введены данные
-    6. Выводим сообщение, если непрвильно введены данные
-    7. Переход на главную страницу
+    1. Подключение к базе данных
+    2-4. Если был произведён POST запрос, то проверяем введённые данные и авторизуем пользователя.
+    5. Иначе переносим на главную страницу
 '''
 @application.route('/login', methods=['POST', 'GET'])
 def login():
-    if return_to_game():                   # 1
-        return redirect('/current_game')   # 2
+    session = db_session.create_session()  # 1
 
-    session = db_session.create_session()  # 3
+    if request.method == 'POST':           # 2
+        user = session.query(User).filter(User.email == request.form['email']).first()  # 3
 
-    if request.method == 'POST':          # 4
-        user = session.query(User).filter(User.email == request.form['email']).first()  # 5
-
-        if user.check_password(request.form['psw']):
+        if user.check_password(request.form['psw']):                                    # 4
             login_user(user)
             return redirect('/')
-    return redirect('/')                                                          # 7
+    return redirect('/')                                                                 # 5
 
 
 '''
-    Страница регистрации на сайте.
-    1. Проверка была ли начата игра текущим пользователем
-    2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
-    3. Подключение к базе данных
-    4. Создание словаря для работы с переменными в html коде
-        'title'            - Заголовок страницы
-        'style'            - Названия файлов, в которых храняться стили для данной страницы
-        'path_for_style'   - Путь к папке со стилями
-        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
-    5. Создание формы для авторизации пользователя
-    6. Проверка, была ли отправлена форма.
-    7. Проверка есть ли пользователь с таким же email
-    8. Проверка есть ли пользователь с таким же ником
-    9. Создание нового пользователя, коммит
-об ошибке и предложено ввести данные ещё раз.
-    10. Если пользователь указал аватар, то установить его, иначе стандартный
-    11. Перемещаем пользователя в стартовое меню для выбора игры
-    12. Рендеринг
+    Регистрация на сайте.
+    1. Подключение к базе данных
+    2-4. Если был произведён POST запрос, то проверяем введённые данные и авторизуем пользователя. 
+(регистрация происходит при помощи POST запроса, сюда пользователь попадает уже после создания аккаунта)
+    5. Иначе переносим на главную страницу
 '''
 @application.route('/register', methods=['POST', 'GET'])
 def register():
@@ -274,25 +284,34 @@ def register():
     return redirect('/')
 
 
-
+'''
+    Смена аватара пользователя.
+    1. Проверка на авторизацию и пользователь только себе сможет сменить аватар
+    2. Подключение к базе данных
+    3. Получаем пользователя из БД
+    4. Если пользователь найден, то 
+    5-7. Если у пользователя была уже своя аватарка, то удаляем старую и сохраняем новую с id пользователя и 
+текущем временем. Сохраняем.
+    8. Обновляем страницу
+'''
 @application.route('/edit_avatar/<int:id_>', methods=['POST'])
 def edit_avatar(id_):
 
-    if current_user.is_authenticated and current_user.id == id_:
+    if current_user.is_authenticated and current_user.id == id_:                            # 1
 
-        session = db_session.create_session()  # 3
+        session = db_session.create_session()                                               # 2
 
-        user = session.query(User).filter(User.id == current_user.id).first()
+        user = session.query(User).filter(User.id == current_user.id).first()               # 3
 
-        if user:
-            if user.avatar != '/static/img/users_avatars/no_photo.png':
+        if user:                                                                            # 4
+            if user.avatar != '/static/img/users_avatars/no_photo.png':                     # 5
                 os.remove(user.avatar[1:])
-            user.avatar = f'/static/img/users_avatars/{user.id}+{get_time()}.png'
-            with open(user.avatar[1:], 'wb') as f1:
+            user.avatar = f'/static/img/users_avatars/{user.id}+{get_time()}.png'           # 6
+            with open(user.avatar[1:], 'wb') as f1:                                         # 7
                 f1.write(request.files['edit_avatar'].read())
 
             session.commit()
-        return redirect('/user_info/' + current_user.nickname)
+        return redirect('/user_info/' + current_user.nickname)                              # 8
     return redirect('/')
 
 
@@ -302,8 +321,10 @@ def edit_avatar(id_):
     2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
     3. Подключение к базе данных
     4. В пути указывается никнейм пользователя, чей это профиль
-    5. Получаем пользователя из БД, чей это профиль
-    6. Создание словаря для работы с переменными в html коде
+    5. Получаем пользователя из БД, чей это профиль. Получаем все категории
+    6. Создание форм для регистрации и авторизации пользователя, создания вопроса
+    7. Заполнение формы для добавления вопроса
+    8. Создание словаря для работы с переменными в html коде
         'title'            - Заголовок страницы
         'style'            - Названия файлов, в которых храняться стили для данной страницы
         'path_for_style'   - Путь к папке со стилями
@@ -312,7 +333,7 @@ def edit_avatar(id_):
         'games'            - Игры пользователя, чей это профиль
         'procent_win'      - Процент побед
         'procent_def'      - Процент поражений
-    7. Рендеринг
+    9. Рендеринг
 '''
 @application.route('/user_info/<string:user>')  # 4
 def user_info(user):
@@ -322,19 +343,19 @@ def user_info(user):
     session = db_session.create_session()   # 3
 
     user = session.query(User).filter(User.nickname == user).first()  # 5
-    categories = session.query(Category).all()  # 4
+    categories = session.query(Category).all()                        # 5
 
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
+    registerForm = RegisterForm()                # 6
+    loginForm = LoginForm()                      # 6
 
-    addQuestForm = AddQuestionForm()
+    addQuestForm = AddQuestionForm()             # 6
 
-    addQuestForm.category.choices = [(category.name, category.name) for category in categories[1:]]  # 8
-    addQuestForm.category.default = categories[1].name  # 9
+    addQuestForm.category.choices = [(category.id, category.name) for category in categories[1:]]  # 7
+    addQuestForm.category.default = categories[1].name                                               # 7
     addQuestForm.type.choices = [('change', 'С вариантами'), ('write','С вводом ответа'), ('all', 'И так и так')]
     addQuestForm.complexity.choices = [('1', 'Новичок'), ('2', 'Любитель'), ('3',  'Профи')]
 
-    param = fill_dict(                      # 6
+    param = fill_dict(                           # 8
         title='Профиль',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForUserInfo/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForUserInfo/',
@@ -344,15 +365,16 @@ def user_info(user):
         procent_win=user.get_procent_win(),
         procent_def=100 - user.get_procent_win())
 
-    return render_template('user_info.html', **param, formLogin=loginForm, formRegister=registerForm, formAddQuest=addQuestForm)  # 7
+    return render_template('user_info.html', **param, formLogin=loginForm, formRegister=registerForm, formAddQuest=addQuestForm)  # 9
 
 
 '''
     Страница информации о сайте.
     1. Проверка была ли начата игра текущим пользователем
     2. Если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
-    3. В пути указывается катнгория игры, которую выбрал пользователь
-    4-5. Если пользователь выбрал сложность и тип вопроса, то переходим к старту игры
+    3. Создание форм для регистрации и авторизации пользователя
+    4. В пути указывается катнгория игры, которую выбрал пользователь
+    5. Если пользователь выбрал сложность и тип вопроса, то переходим к старту игры
     6. Подключение к базе данных
     7. Создание словаря для работы с переменными в html коде
         'title'            - Заголовок страницы
@@ -361,15 +383,15 @@ def user_info(user):
         'category'         - Выбранная пользователем категория
     8. Рендеринг
 '''
-@application.route('/game/<int:id_>', methods=['POST', 'GET'])  # 3
+@application.route('/game/<int:id_>', methods=['POST', 'GET'])  # 4
 def game(id_):
     if return_to_game():                    # 1
         return redirect('/current_game')    # 2
 
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
+    registerForm = RegisterForm()           # 3
+    loginForm = LoginForm()                 # 3
 
-    if request.method == 'POST':             # 4
+    if request.method == 'POST':            # 5
         return redirect(f'/start_game/{str(id_)}+{str(request.form["complexity"])}+{str(request.form["type"])}')  # 5
 
     session = db_session.create_session()   # 6
@@ -421,12 +443,10 @@ def game(id_):
     20. Переходим на страницу игры
 '''
 @application.route('/start_game/<int:id_>+<int:comp_>+<type>', methods=['POST', 'GET'])
+@login_required
 def start_game(id_, comp_, type):  # 3
     if return_to_game():                   # 1
         return redirect('/current_game')   # 1
-
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
 
     quests = []                                # 4
     if current_user.is_authenticated:          # 5
@@ -556,6 +576,7 @@ def start_game(id_, comp_, type):  # 3
     41. Если игрок не зарегистрирован, то переводим его на страницу регистрации
 '''
 @application.route('/current_game', methods=['POST', 'GET'])
+@login_required
 def current_game():
     if current_user.is_authenticated:                           # 1
         session = db_session.create_session()                   # 2
@@ -568,9 +589,6 @@ def current_game():
 
         cur_quest_id = this_game_data['questions'][this_game_data['current_question']]       # 6
         this_question = session.query(Question).filter(Question.id == cur_quest_id).first()  # 7
-
-        registerForm = RegisterForm()
-        loginForm = LoginForm()
 
         if this_game_data['quest_or_next'] == 'quest':  # 8
 
@@ -626,7 +644,7 @@ def current_game():
                 save_json(data, config['PATH']['games'])                       # 22
                 return redirect('/current_game')       # 23
             elif request.method == 'GET':
-                return render_template('current_game.html', **param, formLogin=loginForm, formRegister=registerForm)  # 24
+                return render_template('current_game.html', **param)  # 24
         else:
             param = fill_dict(  # 25
                 title='Ответ',
@@ -645,7 +663,7 @@ def current_game():
                 last_answer=this_game_data['last_answer'])
 
             if request.method == 'GET':                                 # 26
-                return render_template('next_game.html', **param, formLogin=loginForm, formRegister=registerForm)       # 26
+                return render_template('next_game.html', **param)       # 26
             elif request.method == 'POST':                         # 27
                 this_game_data['quest_or_next'] = 'quest'          # 28
                 this_game_data['current_question'] += 1            # 29
@@ -659,7 +677,7 @@ def current_game():
                     user.all_games += 1                                                                # 33
                     user.wins += param['defeat'] != 6                                                  # 34
                     user.defeats += param['win'] != 6                                                  # 34
-                    add_rating = 20 * int(this_game_data['complexity']) if param['defeat'] != 6 \
+                    add_rating = 20 * int(this_game_data['complexity']) + 40 if param['defeat'] != 6 \
                         else param['win'] * int(this_game_data['complexity'])
                     user.rating += add_rating                                                         # 35
 
@@ -680,7 +698,7 @@ def current_game():
                 else:                                     # 40
                     return redirect('/end_game/201+' + str(add_rating))      # 40
     else:
-        return redirect('/login')    # 41
+        return redirect('/')    # 41
 
 
 '''
@@ -692,16 +710,15 @@ def current_game():
         'style'            - Названия файлов, в которых храняться стили для данной страницы
         'path_for_style'   - Путь к папке со стилями
         'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'add_rating'       - Сколько было получено рейтинга за игрц
         'why'              - Результат игры
     3. Рендеринг
 '''
 @application.route('/end_game/<why>+<int:add_rating>')
+@login_required
 def end_game(why, add_rating):
     if return_to_game():                  # 1
         return redirect('/current_game')  # 1
-
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
 
     param = fill_dict(  # 2
         title='Конец игры',
@@ -711,7 +728,7 @@ def end_game(why, add_rating):
         add_rating=add_rating,
         why='Вы победили! Результат записан' if why == '200' else 'Вы проиграли! Результат записан')
 
-    return render_template('end_game.html', **param, formLogin=loginForm, formRegister=registerForm)  # 3
+    return render_template('end_game.html', **param)  # 3
 
 
 '''
@@ -744,12 +761,10 @@ def end_game(why, add_rating):
         15. Предлагаем игроку войти
 '''
 @application.route('/check_quests', methods=['POST', 'GET'])
+@login_required
 def check_quests():
     if return_to_game():                      # 1
         return redirect('/current_game')      # 1
-
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
 
     form = CheckQuestionForm()                                            # 2
     if current_user.is_authenticated and current_user.state == 'admin':   # 3
@@ -797,7 +812,7 @@ def check_quests():
             form.wrong_answer1.default = temp[1]                                             # 12
             form.wrong_answer2.default = temp[2]                                             # 12
             form.wrong_answer3.default = temp[3]                                             # 12
-            return render_template('check_quests.html', form=form, **param, formLogin=loginForm, formRegister=registerForm)    # 13
+            return render_template('check_quests.html', form=form, **param)    # 13
         else:
             return ''' 
                 <script>
@@ -813,42 +828,15 @@ def check_quests():
     Страница выбора игры.
     1. Проверка была ли начата игра текущим пользователем, 
 если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
-    2. Создание словаря для работы с переменными в html коде
-        'title'            - Заголовок страницы
-        'style'            - Названия файлов, в которых храняться стили для данной страницы
-        'path_for_style'   - Путь к папке со стилямии
-        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
-    3. Рендеринг
-'''
-@application.route('/change_play/')
-def change_play():
-    if return_to_game():                  # 1
-        return redirect('/current_game')  # 1
-
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
-
-    param = fill_dict(  # 2
-        title='Выбор игры',
-        style=os.listdir(config["PATH"]['to_css'] + 'styleForChangePlay/'),
-        path_for_style=config["PATH"]['to_css'] + 'styleForChangePlay/',
-        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css')
-
-    return render_template('change_play.html', **param, formLogin=loginForm, formRegister=registerForm)   # 3
-
-
-'''
-    Страница выбора игры.
-    1. Проверка была ли начата игра текущим пользователем, 
-если у текущего пользователя есть незаконченная игра, то он будет должен ее доиграть
-    2. Подключение к базе данных
-    3. Создание словаря для работы с переменными в html коде
+    2. Подключение к базе данных и получение новости
+    3. Создание форм для регистрации и авторизации пользователя
+    4. Создание словаря для работы с переменными в html коде
         'title'            - Заголовок страницы
         'style'            - Названия файлов, в которых храняться стили для данной страницы
         'path_for_style'   - Путь к папке со стилями
         'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
-        'new'              - Новость
-    4. Рендеринг
+        'new'              - Новость (Заголовок, текст, заголовок в новости, картинка)
+    5. Рендеринг
 '''
 @application.route('/news/<int:id_>')
 def one_new(id_):
@@ -856,13 +844,12 @@ def one_new(id_):
         return redirect('/current_game')   # 1
 
     session = db_session.create_session()  # 2
+    new = session.query(News).filter(News.id == id_).first() # 2
 
-    registerForm = RegisterForm()
-    loginForm = LoginForm()
+    registerForm = RegisterForm()          # 3
+    loginForm = LoginForm()                # 3
 
-    new = session.query(News).filter(News.id == id_).first()
-
-    param = fill_dict(                     # 3
+    param = fill_dict(                     # 4
         title='Новость',
         style=os.listdir(config["PATH"]['to_css'] + 'styleForOneNew/'),
         path_for_style=config["PATH"]['to_css'] + 'styleForOneNew/',
@@ -872,72 +859,93 @@ def one_new(id_):
              'small_caption': new.text.split('!@#$%')[0],
              'image': new.image})
 
-    return render_template('one_new.html', **param, formLogin=loginForm, formRegister=registerForm)  # 4
+    return render_template('one_new.html', **param, formLogin=loginForm, formRegister=registerForm)  # 5
 
 
+'''
+    Рассылка новостей на почту.
+    1. Если пользователь авторизован и имеет статус админ
+    2. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилями
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'new'              - Новость (Заголовок, текст, заголовок в новости, картинка)
+    3. Подключение к базе данны
+    4. POST запрос пользователя
+    5. Получение всех пользователей, кто дал согласие на рассылку новостей
+    6. Получение сервера отсылки
+    7. Получение данных почты сайта
+    8. Получение из формы текст письма
+    9. Отправитель
+    10. Заголовок
+    11. Проход по всем пользователям
+    12. Получаем из файла шаблон письма
+    13. Форматирование шаблона (вставка текста, имени)
+    14. Настройка письма (Отправитель, получатель и т.д.)
+    15. Отправка письма
+    16. Выход из почты
+    17. Возвращение в админку
+    18. Рендеринг
+'''
 @application.route('/send_message', methods=['POST', 'GET'])
+@login_required
 def send_message():
 
-    if current_user.is_authenticated and current_user.state == 'admin':
-
-        registerForm = RegisterForm()
-        loginForm = LoginForm()
-
-        param = fill_dict(  # 3
+    if current_user.is_authenticated and current_user.state == 'admin':  # 1
+        param = fill_dict(                                               # 2
             title='Рассылка',
             style=os.listdir(config["PATH"]['to_css'] + 'styleForSendMessage/'),
             path_for_style=config["PATH"]['to_css'] + 'styleForSendMessage/',
             style_mobile=config["PATH"]['to_css_mobile'] + 'styleForsendMessageMobile.css')
 
-        session = db_session.create_session()
+        session = db_session.create_session()                            # 3
 
-        if request.method == 'POST':
-            recipients = [[user.nickname, user.email] for user in session.query(User).filter(User.agree_newsletter == 1).all()]
+        if request.method == 'POST':                 # 4
+            recipients = [[user.nickname, user.email]                                                  # 5
+                          for user in session.query(User).filter(User.agree_newsletter == 1).all()]    # 5
 
-            server = 'smtp.mail.ru'
+            server = config['INFO']['server_email']              # 6
 
-            user = os.getenv("EMAIL")
-            password = os.getenv("PASSWORD")
+            user = os.getenv("EMAIL")                            # 7
+            password = os.getenv("PASSWORD")                     # 7
 
-            text_message = request.form['text_message']
+            text_message = request.form['text_message']          # 8
             text = ''
-            sender = user
-            subject = 'Откройте письмо! У нас для вас новость!'
+            sender = user                                        # 9
+            subject = 'Откройте письмо! У нас для вас новость!'  # 10
 
-            for recipient in recipients:
+            mail = smtplib.SMTP_SSL(server)   # 16
+            mail.login(user, password)        # 16
 
-                with open(config['INFO']['message'], 'r', encoding='utf-8') as f:
-                    html = f.read()
+            for recipient in recipients:                                            # 11
 
-                html = html.replace('/n', '')
-                html = html.replace('!@#$%name!@#$%', recipient[0])
-                html = html.replace('!@#$%text!@#$%', text_message)
+                with open(config['INFO']['message'], 'r', encoding='utf-8') as f:     # 12
+                    html = f.read()                                                   # 12
 
-                msg = MIMEMultipart('alternative')
-                msg['Subject'] = subject
-                msg['From'] = 'NothingNowhereNowhen <' + sender + '>'
-                msg['To'] = recipient[1]
-                msg['Reply-To'] = sender
-                msg['Return-Path'] = sender
-                msg['X-Mailer'] = 'Python/' + (python_version())
+                html = html.replace('/n', '')                             # 13
+                html = html.replace('!@#$%name!@#$%', recipient[0])       # 13
+                html = html.replace('!@#$%text!@#$%', text_message)       # 13
 
-                part_text = MIMEText(text, 'plain')
-                part_html = MIMEText(html, 'html')
+                msg = MIMEMultipart('alternative')                        # 14
+                msg['Subject'] = subject                                  # 14
+                msg['From'] = 'NothingNowhereNowhen <' + sender + '>'     # 14
+                msg['To'] = recipient[1]                                  # 14
+                msg['Reply-To'] = sender                                  # 14
+                msg['Return-Path'] = sender                               # 14
+                msg['X-Mailer'] = 'Python/' + (python_version())          # 14
 
-                if request.files.get('file_message'):
-                    img = MIMEImage(request.files['file_message'].read())
-                    msg.attach(img)
+                part_text = MIMEText(text, 'plain')                       # 14
+                part_html = MIMEText(html, 'html')                        # 14
 
-                msg.attach(part_text)
-                msg.attach(part_html)
+                msg.attach(part_text)              # 14
+                msg.attach(part_html)              # 14
 
-                mail = smtplib.SMTP_SSL(server)
-                mail.login(user, password)
-                mail.sendmail(sender,  recipient[1], msg.as_string())
-                mail.quit()
-            return redirect('/adminka')
+                mail.sendmail(sender,  recipient[1], msg.as_string())  # 15
+            mail.quit()                                                # 16
+            return redirect('/adminka')         # 17
 
-        return render_template('send_message.html', **param, formLogin=loginForm, formRegister=registerForm)
+        return render_template('send_message.html', **param)  # 18
     else:
         return redirect('/login')
 
@@ -953,10 +961,9 @@ def send_message():
     3. Рендеринг
 '''
 @application.route('/adminka/')
+@login_required
 def adminka():
     if current_user.is_authenticated and current_user.state == 'admin':  # 1
-        registerForm = RegisterForm()
-        loginForm = LoginForm()
 
         param = fill_dict(  # 2
             title='Админка',
@@ -964,21 +971,32 @@ def adminka():
             path_for_style=config["PATH"]['to_css'] + 'styleForAdminka/',
             style_mobile=config["PATH"]['to_css_mobile'] + 'styleForChangePlayMobile.css')
 
-        return render_template('adminka.html', **param, formLogin=loginForm, formRegister=registerForm)   # 3
+        return render_template('adminka.html', **param)   # 3
     return redirect('/')
 
 
+'''
+    База вопросов.
+    1. Проверка зашёл ли админ
+    2. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилямии
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'categories'       - Все категории (Кроме общей)
+        'quests'           - Все вопросы и информация о них
+    3. Рендеринг
+'''
 @application.route('/admin_quests/')
+@login_required
 def admin_quests():
-    if current_user.is_authenticated and current_user.state == 'admin':  # 1
 
-        registerForm = RegisterForm()
-        loginForm = LoginForm()
+    if current_user.is_authenticated and current_user.state == 'admin':  # 1
 
         session = db_session.create_session()
         categories = session.query(Category).all()
         quests = session.query(Question).all()
-        param = fill_dict(  # 2
+        param = fill_dict(                                               # 2
             title='Редактировать вопросы',
             style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminQuests/'),
             path_for_style=config["PATH"]['to_css'] + 'styleForAdminQuests/',
@@ -993,24 +1011,35 @@ def admin_quests():
                      'wrong_answer1': x.answers.split('!@#$%')[1],
                      'wrong_answer2': x.answers.split('!@#$%')[2],
                      'wrong_answer3': x.answers.split('!@#$%')[3],
-                     'type': config['TYPE_QUESTION'][str(x.type)],
-                     'comp': config['COMP_QUESTION'][str(x.complexity)]} for x in quests])
+                     'type': config['TYPE_QUESTION'][str(x.type)],                          # Перевод типа в текст
+                     'comp': config['COMP_QUESTION'][str(x.complexity)]} for x in quests])  # Перевод сложности в текст
 
-        return render_template('admin_quests.html', **param, formLogin=loginForm, formRegister=registerForm)   # 3
+        return render_template('admin_quests.html', **param)   # 3
     return redirect('/')
 
 
+'''
+    База пользователей.
+    1. Проверка зашёл ли админ
+    2. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилямии
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+        'categories'       - Все категории (Кроме общей)
+        'users'           - Все вопросы и информация о ниъ
+    3. Рендеринг
+'''
 @application.route('/admin_users/')
+@login_required
 def admin_users():
+
     if current_user.is_authenticated and current_user.state == 'admin':  # 1
 
         session = db_session.create_session()
 
-        registerForm = RegisterForm()
-        loginForm = LoginForm()
-
         users = session.query(User).all()
-        param = fill_dict(  # 2
+        param = fill_dict(                                               # 2
             title='Редактировать пользователей',
             style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminUsers/'),
             path_for_style=config["PATH"]['to_css'] + 'styleForAdminUsers/',
@@ -1022,7 +1051,7 @@ def admin_users():
                     'email': x.email,
                     'rating': x.rating,
                     'start_date': x.start_date,
-                    'state': config['ADMIN_STATE'][x.state],
+                    'state': config['ADMIN_STATE'][x.state],  # Перевод статуса в слова
                     'all_games': x.all_games,
                     'wins': x.wins,
                     'defeats': x.defeats,
@@ -1030,46 +1059,61 @@ def admin_users():
                     'avatar': x.avatar,
                     'agree_newsletter': x.agree_newsletter} for x in users])
 
-        return render_template('admin_users.html', **param, formLogin=loginForm, formRegister=registerForm)   # 3
+        return render_template('admin_users.html', **param)   # 3
     return redirect('/')
 
 
+'''
+    Добавление новости.
+    1. Проверка зашёл ли админ
+    2. Создание словаря для работы с переменными в html коде
+        'title'            - Заголовок страницы
+        'style'            - Названия файлов, в которых храняться стили для данной страницы
+        'path_for_style'   - Путь к папке со стилямии
+        'style_for_mobile' - Путь к файлу с css стилями для мобильного устройства
+    3. POST запрос
+    4. Создание вопроса и сохранение его в БД (Главный заголовок, заголовок + '!@#$%' + текст новости)
+    5. Добавление картинки к новости, если она была добавлена
+    6. Рендеринг
+'''
 @application.route('/admin_add_news/', methods=['POST', 'GET'])
+@login_required
 def admin_add_news():
-    if current_user.is_authenticated and current_user.state == 'admin':  # 1
+    if current_user.is_authenticated and current_user.state == 'admin':                   # 1
 
         session = db_session.create_session()
 
-        registerForm = RegisterForm()
-        loginForm = LoginForm()
-
-        param = fill_dict(  # 2
+        param = fill_dict(                                                                # 2
             title='Добавить новость',
             style=os.listdir(config["PATH"]['to_css'] + 'styleForAdminAddNews/'),
             path_for_style=config["PATH"]['to_css'] + 'styleForAdminAddNews/',
             style_mobile=config["PATH"]['to_css_mobile'] + 'styleForAdminNewMobile.css')
 
-        if request.method == 'POST':
-            new = News()
-            new.caption = request.form['main_input_header_admin_add_news']
-            new.text = request.form['input_header_admin_add_news'] + '!@#$%' + request.form['input_admin_add_news']
+        if request.method == 'POST':                       # 3
+            new = News()                                                                                             # 4
+            new.caption = request.form['main_input_header_admin_add_news']                                           # 4
+            new.text = request.form['input_header_admin_add_news'] + '!@#$%' + request.form['input_admin_add_news']  # 4
 
-            session.add(new)
-            session.commit()
+            session.add(new)  # 4
+            session.commit()  # 4
 
-            if request.files.get('file'):
-                f = request.files['file']
-                new.image = f'/static/img/news/{new.id}.png'
-                with open(new.image[1:], 'wb') as f1:
-                    f1.write(f.read())
-            else:
-                new.image = ''
-            session.commit()
+            if request.files.get('file'):                        # 5
+                f = request.files['file']                        # 5
+                new.image = f'/static/img/news/{new.id}.png'     # 5
+                with open(new.image[1:], 'wb') as f1:            # 5
+                    f1.write(f.read())                           # 5
+            else:                                                # 5
+                new.image = ''                                   # 5
+            session.commit()                                     # 5
 
-        return render_template('admin_add_news.html', **param, formLogin=loginForm, formRegister=registerForm)
+        return render_template('admin_add_news.html', **param)  # 6
     return redirect('/')
 
 
+'''
+    Отправка POST, PUT, GET, DELETE запросов для работы с вопросами с использованием ТОКЕНА.
+    Вызов этих страниц происходит в коде html (js)
+'''
 @application.route('/check_edit_or_show_quest/<id_>', methods=['POST', 'PUT', 'GET', 'DELETE'])
 @login_required
 def check_edit_or_show_quest(id_):
@@ -1084,7 +1128,12 @@ def check_edit_or_show_quest(id_):
          return requests.post(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/add_quest', data=request.form, files=request.files).json()
 
 
+'''
+    Отправка POST, PUT, GET, DELETE запросов для работы с пользователями с использованием ТОКЕНА.
+    Вызов этих страниц происходит в коде html (js)
+'''
 @application.route('/check_edit_or_show_users/<id_>', methods=['POST', 'PUT', 'GET', 'DELETE'])
+@login_required
 def check_edit_or_show_users(id_):
     if current_user.is_authenticated and current_user.state == 'admin':
         if request.method == 'PUT':
@@ -1095,6 +1144,19 @@ def check_edit_or_show_users(id_):
             return requests.get(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/users').json()
     if request.method == 'POST':
         return requests.post(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/add_user', data=request.form, files=request.files).json()
+
+
+'''
+    Отправка POST, PUT, GET, DELETE запросов для работы с новостями с использованием ТОКЕНА.
+    Вызов этих страниц происходит в коде html (js)
+'''
+@application.route('/check_edit_news/<id_>', methods=['POST', 'PUT', 'GET', 'DELETE'])
+@login_required
+def check_edit_news(id_):
+    if current_user.is_authenticated and current_user.state == 'admin':
+        if request.method == 'DELETE':
+            return requests.delete(config['PATH']['href'] + f'/api/{ os.getenv("TOKEN") }/news/' + id_).json()
+
 
 ''' 
     Запуск приложения. Сайт открывается на http://127.0.0.1:5000/ 

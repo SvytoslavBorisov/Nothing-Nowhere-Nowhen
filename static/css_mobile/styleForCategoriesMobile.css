@@ -7,14 +7,15 @@
     overflow: hidden;
     width: 95%;
     margin: auto;
+    margin-bottom: 10px;
 }
 
 #categoriesName {
-    font-size: 40px;
+    font-size: 35px;
 }
 
 #categoriesDescription {
-    font-size: 28px;
+    font-size: 27px;
 }
 
 .hr_slider_news, .hr_news_lenta {
