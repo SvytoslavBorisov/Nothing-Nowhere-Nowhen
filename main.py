@@ -1173,4 +1173,4 @@ def check_edit_news(id_):
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 '''
 
-application.run()
+#application.run()
