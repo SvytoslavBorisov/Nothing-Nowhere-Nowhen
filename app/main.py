@@ -1173,5 +1173,4 @@ def check_edit_news(id_):
     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 '''
 
-if __name__ == "__main__":
-   application.run(port=8080)
+application.run(port=8080)
