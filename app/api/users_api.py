@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
-from data.users import User
-from data import db_session
+from app.data.users import User
+from app.data import db_session
 from werkzeug.security import generate_password_hash
-from secondary_functions import get_time
+from app.secondary_functions import get_time
 import os
 import configparser
 

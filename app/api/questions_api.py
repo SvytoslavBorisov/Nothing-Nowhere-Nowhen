@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, request
-from data.questions import Question
-from data.categories import Category
-from data import db_session
+from app.data.questions import Question
+from app.data.categories import Category
+from app.data import db_session
 import os
-from secondary_functions import get_time
+from app.secondary_functions import get_time
 import configparser
 
 '''Cоздаём объекта парсера. Читаем конфигурационный файл'''

@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
-from data.news import News
-from data import db_session
+from app.data.news import News
+from app.data import db_session
 import os
 import configparser
 
