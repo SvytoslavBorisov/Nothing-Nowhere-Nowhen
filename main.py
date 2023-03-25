@@ -1,6 +1,8 @@
 '''Библиотека FLASK'''
-from flask import Flask, render_template, redirect, request, make_response, jsonify
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask import Flask, render_template
+    #,\
+    #redirect, request, make_response, jsonify
+#from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 import requests
 
 # '''Классы для работы с таблицами Базы Данных(папка data)'''
@@ -47,10 +49,10 @@ import requests
 '''Запуск приложения FLASK'''
 app = Flask(__name__)
 
-'''Настройка приложения для того, чтобы можно было сохранять русские символы в json'''
-app.config.update(
-    JSON_AS_ASCII=False
-)
+# '''Настройка приложения для того, чтобы можно было сохранять русские символы в json'''
+# app.config.update(
+#     JSON_AS_ASCII=False
+# )
 
 # '''Регистрация API в приложении'''
 # app.register_blueprint(questions_api.blueprint)
@@ -197,18 +199,19 @@ def main_page():
     # loginForm = LoginForm()                # 5
     #
     # print([new.id for new in session.query(News).all()])
-    param = fill_dict(                     # 6
-        title='Главная страница',
-        style=os.listdir(config["PATH"]['to_css'] + 'styleForMainPage/'),
-        path_for_style=config["PATH"]['to_css'] + 'styleForMainPage/',
-        style_mobile=config["PATH"]['to_css_mobile'] + 'styleForMainPageMobile.css'
-        #,news=[[new.text.split('!@#$%')[1], new.image, new.caption, new.id] for new in session.query(News).all()],
-        #users=all_users
-    )
-
-    return render_template('main_page.html', **param,
+    # param = fill_dict(                     # 6
+    #     title='Главная страница',
+    #     style=os.listdir(config["PATH"]['to_css'] + 'styleForMainPage/'),
+    #     path_for_style=config["PATH"]['to_css'] + 'styleForMainPage/',
+    #     style_mobile=config["PATH"]['to_css_mobile'] + 'styleForMainPageMobile.css'
+    #     #,news=[[new.text.split('!@#$%')[1], new.image, new.caption, new.id] for new in session.query(News).all()],
+    #     #users=all_users
+    # )
+    print('fsdfds')
+    return render_template('main_page.html')
+                           # , **param,
                            #formLogin=loginForm, formRegister=registerForm
-                           )  # 7
+                           #)  # 7
 
 #
 # '''
@@ -1176,5 +1179,8 @@ def main_page():
 #     ИЛИ на сайте https://nothing-nowhere-nowhen.ru
 # '''
 
-if __name__ == "__main__":
-   app.run(port=8080)
+
+# if __name__ == "__main__":
+#    app.run(port=8080)
+
+app.run()
