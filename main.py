@@ -81,7 +81,7 @@ def logout():
 
 
 '''Эта настройка защитит наше приложение от межсайтовой подделки запросов'''
-application.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
 '''
