@@ -1,0 +1,12 @@
+#text_about_us {
+    width: 70%;
+    background: rgb(255, 255, 255);
+    overflow: hidden;
+    margin: auto;
+    height: 100%;
+}
+
+#div_about_site {
+    background: white;
+    padding-top: 20px;
+}

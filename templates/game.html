@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div id="main_div_game">
+        <h1 class='header' id="header_game">Выбрана категория:</h1>
+        <h2 style="color: rgb(200, 200, 200); text-align: center;" id="header_category">{{ category.name }}</h2>
+        <div id="links">
+            <form class="login_form" method="post">
+                <div id="change_type_and_comp">
+                    <div id="change_comp">
+                        <div class="form-group">
+                            <h3 id="header_comp">Выберите сложность</h3>
+                            <div class="form-check-comp">
+                              <input class="form-check-input" type="radio" name="complexity" id="one" value="1" checked>
+                              <label class="form-check-label" for="one">
+                                Новичок
+                              </label>
+                            </div>
+                            <div class="form-check-comp">
+                              <input class="form-check-input" type="radio" name="complexity" id="two" value="2">
+                              <label class="form-check-label" for="two">
+                                Любитель
+                              </label>
+                            </div>
+                            <div class="form-check-comp">
+                              <input class="form-check-input" type="radio" name="complexity" id="three" value="3">
+                              <label class="form-check-label" for="three">
+                                Профессионал
+                              </label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="change_type">
+                        <div class="form-group">
+                            <h3 id="header_type">Выберите тип</h3>
+                            <div class="form-check-type">
+                              <input class="form-check-input" type="radio" name="type" id="change" value="change" checked>
+                              <label class="form-check-label" for="change">
+                                С вариантами
+                              </label>
+                            </div>
+                            <div class="form-check-type">
+                              <input class="form-check-input" type="radio" name="type" id="write" value="write">
+                              <label class="form-check-label" for="write">
+                                С вводом
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" id="button_submit">
+                    Начать игру
+                </button>
+            </form>
+
+            <div id="login_div">
+                Передумали?
+                <a href="/categories" id="a_for_login">
+                    Вернуться к категориям
+                </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

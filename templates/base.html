@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="/static/img/icons/icon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForBody.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForContent.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForNavigatorDivs.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForLogin.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForRegister.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForText.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styleForNavigator/styleForImages.css">
+    {% for item in style %}
+        <link rel="stylesheet" href="/{{ path_for_style + item }}" type="text/css">
+    {% endfor %}
+    <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 980px)" href="/static/css_mobile/styleForHeaderMobile.css">
+    <link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 980px)" href="{{ style_mobile }}">
+    <title>{{ title }} | Играть в интеллектуальную бесплатную онлайн игру-викторину Ничто? Нигде? Никогда?</title>
+    <meta name="Description" content="Играть в бесплатную онлайн-викторину Ничто? Нигде? Кокогда?"/>
+</head>
+<body>
+    <div id="top_menuDiv">
+        <a href="/">
+            <div id="title_div">
+                <p id="heading">Ничто? Нигде? Никогда?</p>
+            </div>
+        </a>
+        <div id="all_navigator_div">
+            <a href="/change_play">
+                <div class="navigator_div" id="navigator_div2">
+                    <p class="navigator_p">Играть</p>
+                </div>
+            </a>
+            <div class="navigator_div" id="navigator_div3">
+                <p class="navigator_p">Рейтинг</p>
+            </div>
+            {% if current_user.is_authenticated %}
+                <a class="navbar-brand" href="/user_info/{{ current_user.id }}">
+                    <div class="navigator_div" id="navigator_div4">
+                        <img src="{{ current_user.avatar }}" alt="" width="40px" height="40px" id="user_avatar_navigator">
+                        {% if current_user.nickname[6] %}
+                            <p class="navigator_p" id="user_nickname_p">{{ current_user.nickname[:6] + '...' }}</p>
+                        {% else %}
+                            <p class="navigator_p" id="user_nickname_p">{{ current_user.nickname[:6] }}</p>
+                        {% endif %}
+                    </div>
+                </a>
+            {% else %}
+                <div class="navigator_div" id="navigator_div5" onclick="document.getElementById('main_div_form_login').style.display='block';
+                                                                        document.body.style.overflow = 'hidden';
+                                                                        document.body.style.marginRight = '15px';">
+                    <p class="navigator_p" id="user_nickname_p" >Войти</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <script src="/static/scripts/jquery.js"></script>
+    <script src="/static/scripts/scriptForBase.js"></script>
+    <div id="main">
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    {% if not current_user.is_authenticated %}
+        <div id="main_div_form_login" class="modal" style="overflow-y: scroll; height: 100vh;">
+
+      <form class="modal-content animate" action="/login" method="post" id="form_check_user" style="height: auto;">
+
+        <div class="div_form_login">
+            {{ formLogin.hidden_tag() }}
+            {{ formLogin.csrf_token }}
+
+            <div class="container_cancel">
+                <button type="button" onclick="document.getElementById('main_div_form_login').style.display='none';
+                                                                        document.body.style.overflow = 'scroll';
+                                                document.body.style.marginRight = '0px';" class="cancelbtn">X</button>
+            </div>
+
+            <div>
+                <label for="input_email">
+                    <b>Почта</b>
+                </label>
+                <input type="text" placeholder="Введите почту" name="email" id="input_email" required>
+            </div>
+
+            <div>
+                <label for="input_psw"><b>Пароль</b></label>
+                <input type="password" placeholder="Введите пароль" name="psw" id="input_psw" required>
+            </div>
+
+            <div id="duv_login_submit">
+                <button type="button" onclick="checkUser()">Войти</button>
+                <button type="button" onclick="document.getElementById('main_div_form_register').style.display='block';
+                                               document.getElementById('main_div_form_login').style.display='none';">Зарегистрироваться</button>
+            </div>
+        </div>
+          <button id="post_form_login" style="display: none;">skf[jgn[oer</button>
+      </form>
+    </div>
+
+    <div id="main_div_form_register" class="modal" style="overflow-y: scroll; height: 100vh;">
+
+      <form class="modal-content animate" id="form_add_user" method="post" action="/register" enctype="multipart/form-data" style="height: auto;">
+
+        <div class="div_form_login">
+
+            <div class="container_cancel">
+              <button type="button" onclick="document.getElementById('main_div_form_register').style.display='none';
+                                                                        document.body.style.overflow = 'scroll';
+                                                document.body.style.marginRight = '0px';" class="cancelbtn">X</button>
+          </div>
+
+            {{ formRegister.hidden_tag() }}
+            {{ formRegister.csrf_token }}
+            <div class="div_label_and_input">
+                <div class="register_label" id="register_label_top">{{ formRegister.email.label }}</div>
+                <div class="register_input_div">{{ formRegister.email(class="register_input", type="email") }}</div>
+                {% for error in formRegister.email.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+            <div class="div_label_and_input">
+                <div class="register_label">{{ formRegister.surname.label }}</div>
+                <div class="register_input_div">{{ formRegister.surname(class="register_input", maxlength="50") }}</div>
+                {% for error in formRegister.surname.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+            <div class="div_label_and_input">
+               <div class="register_label">{{ formRegister.name.label }}</div>
+                <div class="register_input_div">{{ formRegister.name(class="register_input", maxlength="50") }}</div>
+                {% for error in formRegister.name.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+            <div class="div_label_and_input">
+                <div class="register_label">{{ formRegister.nickname.label }}</div>
+                <div class="register_input_div">{{ formRegister.nickname(class="register_input", maxlength="50") }}</div>
+                {% for error in formRegister.nickname.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+
+            <div class="div_label_and_input">
+                <div class="register_label">Выберите аватар</div>
+                <input type="file" id="photo" name="file" class="register_input" accept="image/*">
+                <div style="width: 100%; margin: auto; text-align: center;">
+                    <img src="" alt="" id="image_user" style="width: 250px; height: 250px; color: black;">
+                </div>
+                <script>
+                    $('#photo').change(function () {
+                        var input = $(this)[0];
+                        if (input.files && input.files[0]) {
+                            if (input.files[0].type.match('image.*')) {
+                                var reader = new FileReader();
+                                reader.onload = function (e) {
+                                    $('#image_user').attr('src', e.target.result);
+                                }
+                                reader.readAsDataURL(input.files[0]);
+                            } else {
+                                console.log('ошибка, не изображение');
+                            }
+                        } else {
+                            console.log('хьюстон у нас проблема');
+                        }
+                    });
+                </script>
+            </div>
+
+            <div class="div_label_and_input">
+                <div class="register_label">{{ formRegister.link_vk.label }}</div>
+                <div class="register_input_div">{{ formRegister.link_vk(class="register_input") }}</div>
+                {% for error in formRegister.link_vk.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+
+            <div class="div_label_and_input">
+                <div class="register_label" id="top_from_photo">{{ formRegister.password.label }}</div>
+                <div class="register_input_div">{{ formRegister.password(class="register_input", type="password") }}</div>
+                {% for error in formRegister.password.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+
+            <div class="div_label_and_input">
+                <div class="register_label">{{ formRegister.password_again.label }}</div>
+                <div class="register_input_div">{{ formRegister.password_again(class="register_input", type="password", id="register_input_bottom") }}</div>
+                {% for error in formRegister.password_again.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+
+            <div class="div_label_and_input">
+                <input type="checkbox" checked="checked" name="remember" id='check_box_remember'>
+                <div id="div_label_for_remembers">
+                    <label id='label_remember'>Согласие на рассылку новостей</label>
+                </div>
+
+            </div>
+
+          <div id="div_container2">
+              <button type="button" onclick="addUser()">Зарегистрироваться</button>
+              <button type="button" onclick="document.getElementById('main_div_form_login').style.display='block'; document.getElementById('main_div_form_register').style.display='none'">Войти</button>
+          </div>
+
+        </div>
+          <button id="post_form_register" style="display: none;"></button>
+      </form>
+
+    </div>
+
+    <script>
+
+        function checkUser() {
+            var form = document.getElementById('form_check_user');
+
+            fetch('/api/check_user', {
+              method: 'POST',
+              body: new FormData(form)
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((myjson) => {
+                if (typeof myjson['errors'] !== "undefined") {
+                    alert(myjson['errors']);
+                }
+                else {
+                    $('#post_form_login').trigger('click');
+                }
+                });
+
+
+        };
+
+        function addUser() {
+            var form = document.getElementById('form_add_user');
+
+            fetch('/check_edit_or_show_users/1', {
+              method: 'POST',
+              body: new FormData(form)
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((myjson) => {
+                if (typeof myjson['errors'] !== "undefined") {
+                    alert(myjson['errors']);
+                }
+                else {
+                    $('#post_form_register').trigger('click');
+                }
+
+                });
+
+        };
+
+    </script>
+    {% endif %}
+    <script>
+        window.onresize = function () {
+            if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+                document.getElementById('top_menuDiv').style.width = String(document.documentElement.clientWidth) + 'px';
+                document.getElementById('all_navigator_div').style.width = String(document.documentElement.clientWidth - 400) + 'px';
+            };};
+    </script>
+
+</body>
+</html>

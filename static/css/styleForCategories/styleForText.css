@@ -1,0 +1,23 @@
+#header_categories {
+    margin: 0px;
+    margin-top: 15px;
+    height: 100%;
+}
+
+#categoriesName {
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 3%;
+    margin-top: 2.5%;
+}
+
+#categoriesDescription {
+    margin-left: 3%;
+    margin-top: 0.5%;
+    margin-bottom: 2.5%;
+}
+
+#playCategory {
+    text-decoration: none;
+    color: black;
+}

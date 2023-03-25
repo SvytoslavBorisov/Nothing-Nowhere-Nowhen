@@ -1,0 +1,15 @@
+#header_rating {
+    text-align: center;
+    color: white;
+    font-size: 35px;
+    margin-top: 10px;
+}
+
+#a_lenta_rating {
+    text-decoration: none;
+}
+
+#a_lenta_rating:hover {
+    text-decoration: underline;
+    color: white;
+}

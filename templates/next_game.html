@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="game_div">
+            <div id="main_div_info">
+                <h1 id="h1_quest">Вопрос №{{ current_number_quest + 1 }}</h1>
+                <div id="player_icon_name">
+                    <img id="player_icon" src="{{ current_user.avatar }}" width="100px" height="100px">
+                    {% if current_user.nickname[9] %}
+                        <p class="player_name">{{ current_user.nickname[:9] + '...' }}</p>
+                    {% else %}
+                        <p class="player_name">{{ current_user.nickname[:11] }}</p>
+                    {% endif %}
+                </div>
+                <div id="opp_icon_name">
+                    <img id="opponent_icon" src="{{ user.avatar }}" width="100px" height="100px">
+                    {% if user.nickname[8] %}
+                        <p class="player_name">{{ user.nickname[:8] + '...' }}</p>
+                    {% else %}
+                        <p class="player_name">{{ user.nickname[:11] }}</p>
+                    {% endif %}
+                </div>
+                <h2 id="progress_h2">{{ win }}:{{ defeat }}</h2>
+                <h2 id="category">Категория: {{ question.orm_with_category.name }}</h2>
+                {% if result == 'Вы ответили правильно' %}
+                    <div id="result_yes">{{ result }}</div>
+                {% else %}
+                    <div id="result_no">{{ result }}</div>
+                {% endif %}
+            </div>
+            <div id="main_div_questions">
+                <div id="div_question">
+                     {% if image_question == ' ' %}
+                        <p id="question">{{ question.text }}</p>
+                    {% else %}
+                        <div id="div_question_text">
+                            <p id="question">{{ question.text }}</p>
+                        </div>
+                        <div id="div_question_image_image">
+                            <p class="temp_p">
+                                <img src="{{ image_question }}" alt="" id="question_image">
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div id="div_answer">
+                    <p id="right_answer">Правильный ответ: {{ question.right_answer.split('!@#$%')[0] }}</p>
+                </div>
+                <div id="div_right_answer">
+                    {% if last_answer != ' ' %}
+                        <p id="answer">Ваш ответ: {{ last_answer }}</p>
+                    {% else %}
+                        <p id="answer">Вы не дали ответ</p>
+                    {% endif %}
+                </div>
+                {% if question.comment != "" %}
+                    <h3 id="h3_comment">Комментарий</h3>
+                    <div id="comment">
+                        {{ question.comment }}
+                    </div>
+                {% endif %}
+                <form class="login_form" method="post" enctype="multipart/form-data">
+                    <div id="button">
+                        <script>
+                            function gg(){
+                                $( '#b_answer_question_next').css('visibility', 'hidden');
+                            }
+                        </script>
+                        <input type="submit" value="Далее" id="b_answer_question_next" onclick="gg()">
+                    </div>
+                </form>
+            </div>
+    </div>
+    <script src="/static/scripts/scriptForCurrentGame.js"></script>                <script>
+                    if ( $( window ).width() > 980 | !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+                            $('#game_div').height(Math.max($('#main_div_info').height(), $('#main_div_questions').height()));
+                            $('#main_div_questions').height(Math.max($('#main_div_info').height(), $('#main_div_questions').height()));
+                            $('#main_div_info').height(Math.max($('#main_div_info').height(), $('#main_div_questions').height()));
+                         };
+                </script>
+{% endblock %}

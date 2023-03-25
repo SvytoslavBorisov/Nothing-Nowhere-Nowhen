@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="main_div">
+        <h1 class='header' id="header_categories">Редактировать или Удалить вопрос из игры</h1>
+        <div id="main_div_quests">
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="login_label" id="login_label_top">{{ form.text.label }}</div>
+                <div class="login_area_div">{{ form.text(class="login_area", id="text") }}</div>
+                <script>
+                    $( '#text' ).text('{{ form.text.default }}');
+                </script>
+                {% for error in form.text.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+                <img src="{{ quest.images }}" alt="" style="width: 100%;">
+                
+                <div class="login_label">{{ form.answer.label }}</div>
+                <div class="login_input_div">{{ form.answer(class="login_input", id='answer') }}</div>
+                <script>
+                    $( '#answer' ).text('{{ form.answer.default }}');
+                </script>
+                {% for error in form.answer.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+                <div class="login_label">{{ form.comment.label }}</div>
+                <div class="login_area_div">{{ form.comment(class="login_area", id='comment') }}</div>
+                <script>
+                    $( '#comment' ).text('{{ form.comment.default }}');
+                </script>
+                {% for error in form.comment.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+                <div class="login_label">{{ form.category.label }}</div>
+                <div class="login_input_div">{{ form.category(class="login_input", id='categories')}}</div>
+                <script>
+                    $('#categories option:contains("{{ form.category.default }}")').prop('selected', true);
+                </script>
+                {% for error in form.category.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+                <div class="login_label">{{ form.type.label }}</div>
+                <div class="login_input_div">{{ form.type(class="login_input", id='type')}}</div>
+                <script>
+                    $('#type option:contains("{{ form.type.default }}")').prop('selected', true);
+                </script>
+                {% for error in form.type.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+                <div class="login_label">{{ form.comp.label }}</div>
+                <div class="login_input_div">{{ form.comp(class="login_input", id='comp')}}</div>
+                <script>
+                    $('#comp option:contains("{{ form.comp.default }}")').prop('selected', true);
+                </script>
+                {% for error in form.comp.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+                <div class="login_label">{{ form.wrong_answer1.label }}</div>
+                <div class="login_input_div">{{ form.wrong_answer1(class="login_input", id='wrong_answer1') }}</div>
+                <script>
+                    $( '#wrong_answer1' ).text('{{ form.wrong_answer1.default }}');
+                </script>
+                {% for error in form.wrong_answer1.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+                <div class="login_input_div">{{ form.wrong_answer2(class="login_input", id='wrong_answer2') }}</div>
+                <script>
+                    $( '#wrong_answer2' ).text('{{ form.wrong_answer2.default }}');
+                </script>
+                {% for error in form.wrong_answer2.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+                <div class="login_input_div">{{ form.wrong_answer3(class="login_input", id='wrong_answer3') }}</div>
+                <script>
+                    $( '#wrong_answer3' ).text('{{ form.wrong_answer3.default }}');
+                </script>
+                {% for error in form.wrong_answer3.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+                <div id="login_button">{{ form.submit(type="submit", class="btn btn-primary", id='button_loginIN') }}</div>
+                <div id="login_button1">{{ form.submitOUT(type="submit", class="btn btn-primary", id='button_loginOUT') }}</div>
+                <div>{{ message }}</div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

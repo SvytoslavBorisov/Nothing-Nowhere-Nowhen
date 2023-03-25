@@ -1,0 +1,73 @@
+#a_for_login {
+    text-decoration: none;
+    color: red;
+}
+
+.register_label {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    padding-left: 0px;
+    margin: 0 auto;
+    color: black;
+    font-size: 25px;
+}
+
+#register_input_label {
+    background-color: rgb(220, 16, 16);
+    width: 100%;
+    padding-top: 0px;
+    padding-bottom: 6px;
+    height: 100%;
+    margin: auto;
+    color: black;
+}
+
+#check_box_remember {
+    color: black;
+}
+
+#label_remember {
+    color: black;
+}
+
+.register_input {
+    padding-left: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 0px;
+    font-size: 20px;
+    width: calc(100% - 2px);
+    border: 1px solid black;
+    outline: none;
+    color: black;
+}
+
+label {
+    padding-left: 20px;
+}
+
+#main_div_user_info input[type=text], #main_div_user_info input[type=password] {
+    margin: 0px;
+    padding-left: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 0px;
+    font-size: 20px;
+    width: calc(100% - 2px);
+    box-sizing: inherit;
+    border: 1px solid black;
+    outline: none;
+}
+
+#register_label_top {
+    border-radius: 10px 10px 0 0;
+}
+
+#register_input_bottom {
+    border-radius: 0 0 10px 10px;
+}
+
+#message {
+    text-align: center;
+}

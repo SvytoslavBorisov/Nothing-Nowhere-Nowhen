@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="main_div_new">
+        <h1 id="header_one_news">{{ new['caption'] }}</h1>
+        <img src="{{ new['image'] }}" alt="" style="max-width: 100%; width: 100%;" id="image_one_new">
+
+        <script>
+            $('#image_one_new').height($('#main_div_new').width() * 0.30);
+        </script>
+
+        <div id="div_new">
+            <h2 id="h2_new_caption">{{ new['small_caption'] }}</h2>
+            <p id="p_new_text">{{ new['text'] }}</p>
+        </div>
+    </div>
+    <script src="/static/scripts/scriptForOneNew.js"></script>
+{% endblock %}

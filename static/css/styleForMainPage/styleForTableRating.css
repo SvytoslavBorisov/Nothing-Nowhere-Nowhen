@@ -1,0 +1,38 @@
+td, th {
+    border: 3px white rgb(70, 70, 70);
+    border-left: 0px;
+    height: 70px;
+    color: black;
+}
+
+td {
+    border-top: 0px;
+    font-size: 30px;
+}
+
+th {
+    background: #FDB913;
+    color: white;
+    font-size: 35px;
+}
+
+.user_div {
+    text-align: center;
+    color: #FFF;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    width: 80%;
+    cursor: pointer;
+}
+
+#rating_div {
+    font-size: 20px;
+    color: rgb(200, 200, 200);
+    background: white;
+    margin: 0 auto;
+    margin-top: 20px;
+    width: 80%;
+    border-radius: 2px;
+    border-spacing: 0px;
+}

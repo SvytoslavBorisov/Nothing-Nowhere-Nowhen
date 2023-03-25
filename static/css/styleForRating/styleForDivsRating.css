@@ -1,0 +1,26 @@
+#div_rating {
+    background: rgb(16, 16, 16);
+    overflow: hidden;
+    width: 100%;
+    padding-bottom: 40px;
+}
+
+.hr_slider_news, .hr_news_lenta {
+    background: #FDB913;
+    height: 5px;
+    width: 90%;
+    border: 0px;
+    border-radius: 100px;
+    margin: auto;
+    padding: 0px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    background-image: -webkit-linear-gradient(left, rgb(150, 150, 150), #FDB913, rgb(150, 150, 150));
+    background-image: -moz-linear-gradient(left, rgb(200, 200, 200), #FDB913, rgb(200, 200, 200));
+    background-image: -ms-linear-gradient(left, rgb(200, 200, 200), #FDB913, rgb(200, 200, 200));
+    background-image: -o-linear-gradient(left, rgb(200, 200, 200), #FDB913, grgb(200, 200, 200));
+}
+
+.hr_news_lenta {
+    width: 20%;
+}

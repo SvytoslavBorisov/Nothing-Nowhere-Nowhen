@@ -1,0 +1,86 @@
+#b_answer_question, #b_answer_question_next {
+    width: 150px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background: linear-gradient(to top, rgb(200, 50, 50), rgb(255, 0, 0));
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    text-shadow: rgba(0,0,0,0.5) 0px 2px 2px;
+}
+
+#b_answer_question:hover, #b_answer_question_next:hover {
+    background: linear-gradient(to top, rgb(250, 50, 50), rgb(255, 0, 0));
+}
+
+#div_progressbar {
+    margin: auto;
+}
+
+#progressbar {
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: calc(100% - 100px);
+    background: none;
+}
+
+::-webkit-progress-value { // - изменение стилей индикатора
+    background: background: -webkit-linear-gradient(#4c4, #8f8 50%, #4c4); // - для chrome
+                background: -moz-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: -o-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: linear-gradient(#4c4, #8f8 50%, #4c4);
+    border-radius: 5px;
+}
+
+::-webkit-progress-bar { // - изменение стилей фона
+    border-radius: 5px;
+    background: linear-gradient(to top, rgb(35, 35, 35), rgb(40, 40, 40));
+}
+
+::-o-progress-value { // - изменение стилей индикатора
+    background: background: -webkit-linear-gradient(#4c4, #8f8 50%, #4c4); // - для chrome
+                background: -moz-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: -o-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: linear-gradient(#4c4, #8f8 50%, #4c4);
+    border-radius: 5px;
+}
+
+::-o-progress-bar { // - изменение стилей фона
+    border-radius: 5px;
+    background: linear-gradient(to top, rgb(35, 35, 35), rgb(40, 40, 40));
+}
+
+::-moz-progress-value { // - изменение стилей индикатора
+    background: background: -webkit-linear-gradient(#4c4, #8f8 50%, #4c4); // - для chrome
+                background: -moz-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: -o-linear-gradient(#4c4, #8f8 50%, #4c4);
+                background: linear-gradient(#4c4, #8f8 50%, #4c4);
+    border-radius: 5px;
+}
+
+::-moz-progress-bar { // - изменение стилей фона
+    border-radius: 5px;
+    background: linear-gradient(to top, rgb(35, 35, 35), rgb(40, 40, 40));
+}
+
+.checkbox {
+    cursor: pointer;
+    width: 310px;
+    height: 60px;
+    opacity: 0;
+    position: absolute;
+}
+
+#input_text {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 20px;
+    width: 90%;
+    border-radius: 1px;
+    outline: none;
+}

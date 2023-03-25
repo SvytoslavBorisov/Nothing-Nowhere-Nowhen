@@ -1,0 +1,47 @@
+#register_div {
+    font-size: 20px;
+    color: rgb(200, 200, 200);
+    background-color: #FDB913;
+    margin: 0 auto;
+    width: 60%;
+    padding-top: 20px;
+    border-radius: 15px;
+    padding-bottom: 30px;
+}
+
+.register_input_div {
+    width: 100%;
+    margin: auto;
+}
+
+#login_div {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#photo {
+    padding: 0px
+}
+
+#photo_div {
+    width: 100%;
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    margin: 0 auto;
+}
+
+#photo_div:active {
+    background-color: rgb(190, 0, 0);
+}
+
+.div_label_and_input {
+   width: 90%;
+   margin: auto;
+}

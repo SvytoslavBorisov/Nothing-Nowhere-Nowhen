@@ -1,0 +1,41 @@
+#login_div {
+    font-size: 20px;
+    color: rgb(200, 200, 200);
+    background-color: rgb(70, 70, 70);
+    margin: 0 auto;
+    width: 70%;
+    padding-top: 40px;
+    padding-bottom: 30px;
+    border-radius: 35px;
+}
+
+.div_login_input_div_and_login_label_top {
+    width: 90%;
+    margin: 0 auto;
+}
+
+
+#register_div {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.hr_slider_news, .hr_news_lenta {
+    background: #FDB913;
+    height: 5px;
+    width: 90%;
+    border: 0px;
+    border-radius: 100px;
+    margin: auto;
+    padding: 0px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    background-image: -webkit-linear-gradient(left, rgb(150, 150, 150), #FDB913, rgb(150, 150, 150));
+    background-image: -moz-linear-gradient(left, rgb(200, 200, 200), #FDB913, rgb(200, 200, 200));
+    background-image: -ms-linear-gradient(left, rgb(200, 200, 200), #FDB913, rgb(200, 200, 200));
+    background-image: -o-linear-gradient(left, rgb(200, 200, 200), #FDB913, grgb(200, 200, 200));
+}
+
+.hr_news_lenta {
+    width: 20%;
+}

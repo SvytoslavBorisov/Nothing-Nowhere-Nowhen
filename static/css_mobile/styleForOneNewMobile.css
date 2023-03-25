@@ -1,0 +1,42 @@
+#text_new {
+    width: 100%;
+    background: rgb(255, 255, 255);
+    border-radius: 25px;
+    overflow: hidden;
+    margin: auto;
+    border: 4px outset black;
+    height: 100%;
+    min-height: 200px;
+}
+
+#header_one_news {
+    margin: 0px;
+    margin-top: 200px;
+    margin-bottom: 15px;
+    height: 100%;
+    color: white;
+    text-align: center;
+}
+
+#div_new {
+    background: white;
+    margin: 0px;
+}
+
+#h2_new_caption {
+    font-size: 35px;
+    color: black;
+    margin: 0px;
+    text-align:center;
+    padding: 15px;
+}
+
+#p_new_text {
+    font-size: 35px;
+    color: black;
+    margin: 0px;
+    text-indent: 30px;
+    padding: 10px;
+    padding-left: 1%;
+    padding-right: 1%;
+}

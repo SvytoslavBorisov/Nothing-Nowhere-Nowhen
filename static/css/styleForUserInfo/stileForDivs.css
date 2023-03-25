@@ -1,0 +1,138 @@
+#main_div_user_info {
+    margin: auto;
+    margin-top: 77px;
+    width: 740px;
+    border: 4px outset black;
+    background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
+    border-radius: 5px;
+    height: 100%;
+}
+
+#div_user_games_and_info {
+    height: 100%;
+}
+
+#user_root {
+    width: 217px;
+    padding-left: 7px;
+    float: left;
+}
+
+#user_info {
+    margin-top: 25px;
+    margin-left: 25px;
+    padding-bottom: 5px;
+    width: 473px;
+
+    color: white;
+    border-radius: 5px;
+    border: 4px solid gray;
+    float: left;
+    background: linear-gradient(to top, rgb(70, 70, 70), rgb(50, 50, 50));
+}
+
+.top_line_user_info {
+   width: 460px;
+   color: rgb(50, 50, 50);
+   margin-left: 5px;
+   margin-top: 15px;
+   float: left;
+}
+
+#user_avatar_and_root {
+   width: 217px;
+   background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
+   float: left;
+   border-radius: 5px;
+   margin-right: 0px;
+   height: 100%;
+}
+
+#user_root {
+   float:left;
+   border-radius: 10px;
+   margin-left: 10px;
+   margin-top: 10px;
+   background: linear-gradient(to top, rgb(30, 30, 30), rgb(70, 70, 70));
+   border: 1px solid gray;
+}
+
+#addQuestion {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    width: 200px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    background: linear-gradient(to top, #FDB913, #FFC920);
+    border: none;
+    box-shadow: 0 3px 0 #FDB913;
+    outline: none;
+}
+
+#logout {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    width: 200px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background: linear-gradient(to top, #FDB913, #FFC920);
+    border: none;
+    box-shadow: 0 3px 0 #FDB913;
+    outline: none;
+    text-align: center;
+}
+
+#admin {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    width: 200px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background: linear-gradient(to top, #FDB913, #FFC920);
+    border: none;
+    box-shadow: 0 3px 0 #FDB913;
+    outline: none;
+    text-align: center;
+}
+
+#addQuestion:hover, #logout:hover, #admin:hover {
+    background: linear-gradient(to top, #FFC920, #FDB913);
+}
+
+#logout:active, #addQuestion:active, #admin:hover  {
+    background-color: linear-gradient(to top, #FFC920, #FDB913);
+}
+
+#div_user_games {
+    margin-top: 25px;
+    margin-left: 25px;
+    padding-bottom: 5px;
+    width: 473px;
+    color: white;
+    height: 250px;
+    border-radius: 12px 12px 12px 12px;
+    border: 4px solid gray;
+    float: left;
+    overflow-y: scroll;
+    background: linear-gradient(to top, rgb(70, 70, 70), rgb(50, 50, 50));
+    scrollbar-face-color:#5997CA;
+    scrollbar-shadow-color: #ffffff;
+    scrollbar-highlight-color: #ffffff;
+    scrollbar-3dlight-color: #5997CA;
+    scrollbar-darkshadow-color: #5997CA;
+    scrollbar-track-color: #F6F6F6;
+    scrollbar-arrow-color: #F6F6F6;
+}
+
+
+#div_user_games_and_info {
+    float: left;
+    width: 473px;
+}

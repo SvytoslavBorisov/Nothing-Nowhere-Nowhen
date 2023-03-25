@@ -1,0 +1,24 @@
+.p_text {
+    padding: 5px;
+    font-size: 20px;
+    text-indent: 25px;
+    margin: 0px;
+}
+
+.h2_text {
+    margin: 0;
+    text-align: center;
+    margin-top: 5px;
+}
+
+#p_text_2 {
+    width: calc(100% - 146px);
+    float:left;
+}
+
+#header_about_site {
+    text-align: center;
+    color: white;
+    font-size: 35px;
+    margin: 0px;
+}

@@ -1,0 +1,18 @@
+#header_change {
+    margin: 0px;
+    margin-top: 15px;
+    color: white;
+    text-align:center;
+}
+
+.categoriesName {
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 3%;
+    margin-top: 2.5%;
+}
+
+.playCategory {
+    text-decoration: none;
+    color: black;
+}

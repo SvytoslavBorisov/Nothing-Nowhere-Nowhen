@@ -1,0 +1,44 @@
+.header {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    margin-top: 101px;
+}
+
+#heading {
+    margin: 0px;
+    padding-top: 20px;
+    padding-bottom: 16px;
+    text-align: center;
+    font-size: 30px;
+    color: black;
+    transform: skewX(-10deg);
+}
+
+.navigator_p {
+    font-size: 22px;
+    margin: 0px;
+    text-align: center;
+    vertical-align: bottom;
+    color: black;
+    transform: skewX(-10deg);
+}
+
+.navigator_div:hover p{
+    color: #000;
+    text-decoration: underline;
+}
+
+#user_nickname_p {
+    padding-top: 10px;
+    text-align: center;
+    transform: skewX(+10deg);
+}
+
+#p_name {
+    width: 100%;
+    float: left;
+    color: white;
+    text-align: center;
+    margin: 0px;
+    font-size: 15px;
+}

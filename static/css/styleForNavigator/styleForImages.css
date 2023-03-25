@@ -1,0 +1,7 @@
+#user_avatar_navigator {
+    border-radius: 100px;
+    border: 2px solid gray;
+    box-shadow: 0 0 7px #666;
+    float: left;
+    transform: skewX(+10deg);
+}

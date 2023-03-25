@@ -1,0 +1,174 @@
+#register_div {
+    font-size: 20px;
+    color: rgb(200, 200, 200);
+    background-color: #FDB913;
+    margin: 0 auto;
+    width: 100%;
+    padding-top: 20px;
+    border-radius: 0px;
+    padding-bottom: 30px;
+}
+
+.register_input_div {
+    width: 100%;
+    margin: auto;
+}
+
+#login_div {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#photo {
+    padding: 0px;
+    height: 65px;
+    font-size: 50px;
+}
+
+#photo_div {
+    width: 100%;
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    border: none;
+    box-shadow: 0 3px 0 rgb(190, 0, 0);
+    outline: none;
+    margin: 0 auto;
+}
+
+#photo_div:active {
+    background-color: rgb(190, 0, 0);
+}
+
+.div_label_and_input {
+   width: 99%;
+   margin: auto;
+}
+
+#header_add_question {
+    margin-bottom: 15px;
+}
+
+#button_registerIN {
+    width: 85%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 50px;
+    color: black;
+    background-color:  white;
+    border: none;
+    box-shadow: 0 3px 0 rgb(0, 0, 0);
+    outline: none;
+    height: 95px;
+}
+
+#button_registerIN:active {
+    background-color: rgb(190, 190, 0);
+}
+
+#register_button {
+    margin-top: 15px;
+    text-align: center;
+}
+
+#a_for_login {
+    text-decoration: none;
+    color: red;
+}
+
+.register_label {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    padding-left: 10px;
+    margin: 0 auto;
+    color: black;
+    font-size: 45px;
+    font-weight: bold;
+}
+
+#register_input_label {
+    background-color: rgb(220, 16, 16);
+    width: 100%;
+    padding-top: 0px;
+    padding-bottom: 6px;
+    height: 100%;
+    margin: auto;
+    color: black;
+}
+
+#check_box_remember {
+    color: black;
+}
+
+#label_remember {
+    color: black;
+}
+
+.register_input {
+    padding-left: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 0px;
+    font-size: 20px;
+    width: calc(100% - 2px);
+    max-width: calc(100% - 2px);
+    border: 1px solid black;
+    outline: none;
+    color: black;
+}
+
+label {
+    padding-left: 0px;
+}
+
+#register_div input[type=text], #register_div input[type=password] {
+    margin: 0px;
+    padding-left: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 0px;
+    font-size: 40px;
+    width: calc(100% - 2px);
+    max-width: calc(100% - 2px);
+    box-sizing: inherit;
+    border: 1px solid black;
+    outline: none;
+
+}
+
+#register_label_top {
+    border-radius: 10px 10px 0 0;
+}
+
+#register_input_bottom {
+    border-radius: 0 0 10px 10px;
+}
+
+#message {
+    text-align: center;
+}
+
+#email {
+    height: 75px;
+    font-size: 40px;
+}
+
+#label_remember {
+    font-size: 30px;
+}
+
+#check_box_remember {
+    height: 50px;
+    width: 50px;
+    margin: 10px;
+    background: green;
+    color: green;
+}
+
+#header_register {
+    margin-bottom: 10px;
+}

@@ -1,0 +1,389 @@
+body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#div_admin_quests_show {
+    overflow: hidden;
+}
+
+.form_question_edit_redactor {
+    text-align: center;
+    margin: auto;
+    height: 100%;
+    min-height: 50px;
+    width: 100%;
+}
+
+.form_questions_edit_redactor_image {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+
+
+.form_question_edit_redactor textarea, .form_question_edit_redactor select{
+    width: 90%;
+    max-width: 90%;
+    min-width: 90%;
+    height: 50px;
+    font-size: 25px;
+    margin-top: 10px;
+    overflow-y: hidden;
+}
+
+.form_question_edit_redactor input {
+    width: 90%;
+    max-width: 90%;
+    min-width: 90%;
+    height: 50px;
+    font-size: 25px;
+    margin-top: 10px;
+    overflow-y: hidden;
+    color: white;
+}
+
+.image_quest_form {
+    color: black;
+    margin: 10px;
+    font-size: 20px;
+}
+
+.label_question_edit_redactor {
+    color: black;
+    font-size: 30px;
+}
+
+.div_question_edit {
+    color: black;
+    background: white;
+    margin: 0px;
+    margin-top: 10px;
+    height: 60px;
+    line-height: 60px;
+    width: 100%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#header_admin_quests {
+    text-align: center;
+    color: white;
+    font-size: 45px;
+    margin-top: 80px;
+    margin-bottom: 10px;
+}
+
+.p_text_quest_text {
+    font-size: 25px;
+    margin: 0px;
+}
+
+.p_text_quest_id {
+    font-size: 25px;
+    margin: 0px;
+}
+
+.p_text_quest_category {
+    font-size: 25px;
+    margin: 0px;
+}
+
+#div_admin_quests {
+    margin: auto;
+    text-align: center;
+}
+
+.h2_text_quest_id {
+    color: black;
+    width: 10%;
+    float: left;
+    text-align: center;
+    margin: 0px;
+}
+
+.h2_text_quest_text {
+    color: black;
+    width: 55%;
+    float: left;
+    text-align: center;
+    margin: 0px;
+}
+
+.h2_text_quest_category {
+    color: black;
+    width: 35%;
+    float: left;
+    text-align: center;
+    margin: 0px;
+}
+
+.div_question_edit_title {
+    width: 100%;
+    color: black;
+    height: 50px;
+    font-size: 35px;
+    line-height: 50px;
+    background: #FDB913;
+    overflow: hidden;
+}
+
+.div_quests_edit_redactor {
+
+}
+
+.p_text_quest_id {
+    width: 10%;
+    float: left;
+    text-align: center;
+}
+
+.p_text_quest_text {
+    width: 55%;
+    float: left;
+    text-align: center;
+}
+
+.p_text_quest_category {
+    width: 35%;
+    float: left;
+    text-align: center;
+}
+
+#div_input_search {
+    background: rgb(16, 16, 16);
+}
+
+#div_input_search input {
+    width: 100%;
+    height: 42px;
+    padding-left: 10px;
+    border: 2px solid #7BA7AB;
+    font-size: 25px;
+    outline: none;
+    background: #F9F0DA;
+    color: #9E9C9C;
+}
+
+.div_select_admin_quests {
+   margin: 0px;
+   width: 50%;
+   float: left;
+   height: 35px;
+   margin-bottom: 10px;
+}
+
+#select_category, #select_comp {
+   width: 100%;
+   font-size: 20px;
+   height: 40px;
+}
+
+input[type=text], input[type=password], input[type=email] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    z-index: 5;
+    font-size: 20px;
+}
+
+b {
+    font-size: 25px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px auto;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    z-index: 5;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+button:hover {
+    opacity: 0.8;
+    z-index: 5;
+}
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+    z-index: 5;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+    z-index: 5;
+}
+
+.div_form_login, .container_cancel {
+    padding: 20px;
+    padding-top: 0px;
+    z-index: 5;
+}
+
+.container_cancel {
+    float: right;
+    width: 100%;
+    padding: 0px;
+}
+
+.cancelbtn {
+    width: auto;
+    background-color: #f44336;
+    z-index: 5;
+    float: right;
+    overflow: hidden;
+    margin: 0px;
+    padding: 2px 10px;
+    border-radius: 5px;
+    margin-right: 0px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+    z-index: 5;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 0px;
+    z-index: 5;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 1% auto 1% auto;
+    border: 1px solid #888;
+    width: 70%;
+    z-index: 5;
+    border-radius: 10px;
+}
+
+#div_container {
+    width: 100%;
+    margin: auto;
+}
+
+#div_container_1 {
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px auto;
+    border: none;
+    cursor: pointer;
+    z-index: 5;
+    font-size: 20px;
+}
+
+#div_container_2 {
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px auto;
+    border: none;
+    cursor: pointer;
+    z-index: 5;
+    font-size: 20px;
+}
+
+#a_container {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+}
+
+#a_container:hover {
+    text-decoration: underline;
+}
+
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+    z-index: 5;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)}
+    to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+    from {transform: scale(0)}
+    to {transform: scale(1)}
+}
+
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+
+.modal::-webkit-scrollbar-button {
+    background-image:url('');
+    background-repeat:no-repeat;
+    width:6px;
+    height:0px;
+}
+
+.modal::-webkit-scrollbar-track {
+    background: white;
+}
+
+.modal::-webkit-scrollbar-thumb {
+    background: #FFC920;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+.modal::-webkit-resizer{
+    background-image:url('');
+    background-repeat:no-repeat;
+    width:7px;
+    height:0px;
+}
+
+.modal::-webkit-scrollbar{
+    width: 15px;
+    padding: 100px;
+}

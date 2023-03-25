@@ -1,0 +1,339 @@
+#main_div_user_info {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: auto;
+    margin-top: 192px;
+    width: 100%;
+    border: 0px;
+    background: white;
+    height:100%;
+}
+
+#main, #content {
+    background: white;
+}
+
+#div_user_games_and_info {
+    height: 100%;
+    background: rgb(16, 16, 16);
+    float: left;
+    width: 100%;
+}
+
+#user_avatar_img {
+    width: 250px;
+    height: 250px;
+    border-radius: 200px;
+    margin-left: calc(50% - 125px);
+    margin-top: 25px;
+    border: 5px solid gray;
+    float: left;
+}
+
+#user_avatar {
+    width: 35%;
+    height: 100%;
+    float: left;
+    text-align: center;
+}
+
+#user_avatar_and_root {
+   width: 100%;
+   background: white;
+   float: left;
+   border-radius: 0px;
+   margin-right: 0px;
+   height: 50%;
+   border-bottom: 5px solid black;
+   margin-top: 20px;
+   padding-bottom: 20px;
+}
+
+#user_root {
+   border-radius: 10px;
+   margin-top: 10px;
+   border: 0px;
+   width: 65%;
+   text-align: center;
+   margin: auto;
+   background: none;
+   padding-left: 0px;
+   padding-right: 0px;
+   float: right;
+}
+
+#addQuestion {
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 0px;
+    width: 90%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 50px;
+    color: black;
+    background: linear-gradient(to top, #FDB913, #FFC920);
+    border: none;
+    outline: none;
+    box-shadow: none;
+    height: 75px;
+    line-height: 75px;
+}
+
+#logout {
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 0px;
+    width: 90%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 50px;
+    color: black;
+    background: linear-gradient(to top, #FDB913, #FFC920);
+    border: none;
+    outline: none;
+    text-align: center;
+    height: 75px;
+    box-shadow: none;
+    line-height: 75px;
+}
+
+#admin {
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 0px;
+    width: 90%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 50px;
+    color: black;
+    background: linear-gradient(to top, #FDB913, #FFC920);
+    border: none;
+    outline: none;
+    text-align: center;
+    box-shadow: none;
+    height: 75px;
+    line-height: 75px;
+}
+
+.top_line_user_info {
+    width: 100%;
+}
+
+#user_info {
+    margin: 0px;
+    padding: 0px;
+    padding-bottom: 5px;
+    width: 100%;
+    color: rgb(16, 16, 16);
+    float: left;
+    border-radius: 0px;
+    border: 0px;
+    background: rgb(250, 250, 250);
+    padding-bottom: 20px;
+
+}
+
+#div_user_games {
+    margin: 0px;
+    padding:0px;
+    padding-top: 10px;
+    width: 100%;
+    height: 500px;
+    background: rgb(16, 16, 16);
+    border-radius: 0px;
+    border: 0px;
+    overflow-y: scroll;
+}
+
+#table_games {
+    width: 99%;
+    margin: auto;
+    padding: 0px;
+}
+
+#p_games {
+    margin-top: -10px;
+    padding: 0px;
+    font-size: 60px;
+    text-align: center;
+    padding-top: 15px;
+    margin-bottom: 10px;
+}
+
+#a_vk {
+    text-decoration: none;
+    color: black;
+    font-size: 40px;
+}
+
+#user_info_p_name {
+    padding: 0px;
+    font-size: 50px;
+    text-align: center;
+    padding-top: 15px;
+}
+
+#user_info_p_rating, #user_info_p_email, #user_info_p_vk {
+    margin: 0px;
+    padding: 0px;
+    font-size: 40px;
+    padding-left: 10px;
+    width: 100%;
+    float: left;
+    padding-top: 5px;
+}
+
+#p_statistic {
+    font-size: 45px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.p_windef {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 30px;
+}
+
+.p_procent {
+   padding-left: 0px;
+   padding-top: 10px;
+   font-size: 18px;
+}
+
+.sector {
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform-origin: left bottom;
+}
+
+.container:after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: white;
+  border-radius: 50%;
+}
+
+.container1:after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: white;
+  border-radius: 50%;
+}
+
+.container1, .container {
+  width: 200px;
+  height: 200px;
+}
+
+.container1 {
+    margin-left: 0px;
+}
+.container {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+#p_statistic {
+    font-size: 50px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.p_windef {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 40px;
+}
+
+.p_procent {
+    margin-top: 65px;
+    font-size: 40px;
+}
+
+#wins_cont {
+    margin-left: 20%;
+}
+
+#defeats_cont {
+    margin-left: 80px;
+}
+
+td, tr {
+    border: 0px;
+    cellspacing: 2px;
+    font-size: 42px;
+    border-collapse: collapse;
+    background: white;
+    color: black;
+    text-align:center;
+}
+
+th {
+    background: #FDB913;
+}
+
+#header_table_number, #header_table_category, #header_table_result, #header_table_date {
+    width: 5px;
+    border: 2px solid rgb(70, 70, 70);
+    cellspacing: 0px;
+    border-collapse: collapse;
+    font-size: 50px;
+}
+
+
+#div_user_games::-webkit-scrollbar-button {
+    background-image:url('');
+    background-repeat:no-repeat;
+    width:6px;
+    height:0px;
+    visibility: visible;
+}
+
+#div_user_games::-webkit-scrollbar-track {
+    background: #32312e;
+    box-shadow:0px 0px 3px #000 inset;
+    visibility: visible;
+    border-radius: 15px;
+}
+
+#div_user_games::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 5px;
+    background: #FDB913;
+    box-shadow:0px 1px 1px #fff inset;
+    background-position:center;
+    background-repeat:no-repeat;
+    border-radius: 15px;
+    visibility: visible;
+    height: 80px;
+}
+
+#div_user_games::-webkit-resizer{
+    background-image:url('');
+    background-repeat:no-repeat;
+    width:10px;
+    height:0px;
+    border-radius: 15px;
+    visibility: visible;
+}
+
+#div_user_games::-webkit-scrollbar{
+    width: 30px;
+    border-radius: 15px;
+    padding: 100px;
+    visibility: visible;
+}
+
+#user_info_p_name {
+    padding: 0px;
+}
+
+#nickname {
+    color: #FDB913;
+}
